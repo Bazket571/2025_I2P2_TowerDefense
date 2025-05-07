@@ -116,7 +116,7 @@ void Enemy::Update(float deltaTime) {
 }
 void Enemy::Draw() const {
     Sprite::Draw();
-    if (PlayScene::DebugMode) {
+    if (PlayScene::DebugMode || Engine::GameEngine::GetInstance().GetSettings().DrawBoundingBox) {
         // Draw collision radius.
         al_draw_circle(Position.x, Position.y, CollisionRadius, al_map_rgb(255, 0, 0), 2);
     }

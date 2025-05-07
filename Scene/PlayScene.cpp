@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "Enemy/Enemy.hpp"
+#include "Enemy/PlaneEnemy.hpp"
 #include "Enemy/SoldierEnemy.hpp"
 #include "Enemy/TankEnemy.hpp"
 #include "Engine/AudioHelper.hpp"
@@ -40,7 +41,7 @@ const Engine::Point PlayScene::EndGridPoint = Engine::Point(MapWidth, MapHeight 
 const std::vector<int> PlayScene::code = {
     ALLEGRO_KEY_UP, ALLEGRO_KEY_UP, ALLEGRO_KEY_DOWN, ALLEGRO_KEY_DOWN,
     ALLEGRO_KEY_LEFT, ALLEGRO_KEY_RIGHT, ALLEGRO_KEY_LEFT, ALLEGRO_KEY_RIGHT,
-    ALLEGRO_KEY_B, ALLEGRO_KEY_A, ALLEGRO_KEYMOD_SHIFT, ALLEGRO_KEY_ENTER
+    ALLEGRO_KEY_B, ALLEGRO_KEY_A, ALLEGRO_KEY_LSHIFT, ALLEGRO_KEY_ENTER
 };
 Engine::Point PlayScene::GetClientSize() {
     return Engine::Point(MapWidth * BlockSize, MapHeight * BlockSize);
@@ -145,7 +146,7 @@ void PlayScene::Update(float deltaTime) {
                 delete UIGroup;
                 delete imgTarget;*/
                 // Win.
-                Engine::GameEngine::GetInstance().ChangeScene("win-scene");
+                Engine::GameEngine::GetInstance().ChangeScene("win");
             }
             continue;
         }
@@ -161,8 +162,9 @@ void PlayScene::Update(float deltaTime) {
                 EnemyGroup->AddNewObject(enemy = new SoldierEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
                 break;
             // TODO HACKATHON-3 (2/3): Add your new enemy here.
-            // case 2:
-            //     ...
+            case 2:
+                EnemyGroup->AddNewObject(enemy = new PlaneEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
+                break;
             case 3:
                 EnemyGroup->AddNewObject(enemy = new TankEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
                 break;
@@ -262,6 +264,16 @@ void PlayScene::OnKeyDown(int keyCode) {
         keyStrokes.push_back(keyCode);
         if (keyStrokes.size() > code.size())
             keyStrokes.pop_front();
+        int cur = 0;
+        for(int key : keyStrokes){
+            if(key == code[cur]){
+                cur++;
+            }
+            else break;
+        }
+        if(cur == code.size()){
+            PlayScene::TriggerCheat();
+        }
     }
     if (keyCode == ALLEGRO_KEY_Q) {
         // Hotkey for MachineGunTurret.
@@ -277,6 +289,7 @@ void PlayScene::OnKeyDown(int keyCode) {
 }
 void PlayScene::Hit() {
     lives--;
+    UILives->Text = std::to_string(lives);
     if (lives <= 0) {
         Engine::GameEngine::GetInstance().ChangeScene("lose");
     }
@@ -413,10 +426,16 @@ std::vector<std::vector<int>> PlayScene::CalculateBFSDistance() {
     // Reverse BFS to find path.
     std::vector<std::vector<int>> map(MapHeight, std::vector<int>(std::vector<int>(MapWidth, -1)));
     std::queue<Engine::Point> que;
+    std::array<Engine::Point,2> deltas;
+    deltas[0] = Engine::Point(0, -1);
+    deltas[1] = Engine::Point(-1, 0);
+    //deltas[2] = Engine::Point(-1, -1);
     // Push end point.
     // BFS from end point.
     if (mapState[MapHeight - 1][MapWidth - 1] != TILE_DIRT)
         return map;
+    
+    //TODO Objective location, change this to blue box
     que.push(Engine::Point(MapWidth - 1, MapHeight - 1));
     map[MapHeight - 1][MapWidth - 1] = 0;
     while (!que.empty()) {
@@ -425,6 +444,28 @@ std::vector<std::vector<int>> PlayScene::CalculateBFSDistance() {
         // TODO PROJECT-1 (1/1): Implement a BFS starting from the most right-bottom block in the map.
         //               For each step you should assign the corresponding distance to the most right-bottom block.
         //               mapState[y][x] is TILE_DIRT if it is empty.
+        for(auto delta : deltas){
+            if((p+delta).x < 0 || (p+delta).y < 0) continue;
+            if(mapState[p.y + delta.y][p.x + delta.x] == TILE_OCCUPIED) continue;
+            if(map[p.y + delta.y][p.x + delta.x] < 0){
+                que.push(p + delta);
+                map[p.y + delta.y][p.x + delta.x] = map[p.y][p.x] + 1;
+            }
+            else{
+                map[p.y + delta.y][p.x + delta.x] = std::min(map[p.y][p.x]+ 1, map[p.y + delta.y][p.x + delta.x]);
+            }
+        }
     }
     return map;
+}
+
+void PlayScene::TriggerCheat()
+{
+    Engine::LOG(Engine::INFO) << "Triggering cheat";
+    EarnMoney(10000);
+    Enemy* enemy;
+    const Engine::Point SpawnCoordinate = Engine::Point(SpawnGridPoint.x * BlockSize + BlockSize / 2, SpawnGridPoint.y * BlockSize + BlockSize / 2);
+    EnemyGroup->AddNewObject(enemy = new PlaneEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
+    enemy->UpdatePath(mapDistance);
+    enemy->Update(ticks);
 }

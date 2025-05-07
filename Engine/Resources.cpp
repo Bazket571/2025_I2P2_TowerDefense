@@ -4,6 +4,7 @@
 #include <list>
 #include <string>
 #include <utility>
+#include <lunasvg.h>
 
 #include "Engine/Allegro5Exception.hpp"
 #include "LOG.hpp"
@@ -53,8 +54,10 @@ namespace Engine {
             } else ++it;
         }
     }
-
+    
     std::shared_ptr<ALLEGRO_BITMAP> Resources::GetBitmap(std::string name) {
+        if(name.substr(name.length() - 3) == "svg") return Resources::GetSVG(name);
+
         if (bitmaps.count(name) != 0)
             return bitmaps[name];
         std::string bitmapPath = bitmapPathPrefix + name;
@@ -64,7 +67,38 @@ namespace Engine {
         bitmaps[name] = std::shared_ptr<ALLEGRO_BITMAP>(bmp, al_destroy_bitmap);
         return bitmaps[name];
     }
-    std::shared_ptr<ALLEGRO_BITMAP> Resources::GetBitmap(std::string name, int width, int height) {
+    std::shared_ptr<ALLEGRO_BITMAP> Resources::GetSVG(std::string name, int width, int height){
+        std::string whiteFill = R"CSS(
+            *{
+                fill: #FFFFFFFF;
+            }
+        )CSS";
+
+        if (bitmaps.count(name) != 0)
+        return bitmaps[name];
+
+        std::string bitmapPath = bitmapPathPrefix + name;
+        auto document = lunasvg::Document::loadFromFile(bitmapPath);
+        if(!document) throw Allegro5Exception(("failed to load image: " + bitmapPath).c_str());
+        document->applyStyleSheet(whiteFill);
+        auto bitmap = document->renderToBitmap(width, height, 0x000000FF);
+        ALLEGRO_BITMAP *al_bmp = al_create_bitmap(bitmap.width(), bitmap.height());
+        ALLEGRO_LOCKED_REGION* al_bmp_mem = al_lock_bitmap(al_bmp, ALLEGRO_PIXEL_FORMAT_ABGR_8888, ALLEGRO_LOCK_READWRITE);
+
+        for(int i = 0; i < bitmap.height(); i++){
+            memcpy((uint8_t*)al_bmp_mem->data + i * al_bmp_mem->pitch,
+                    bitmap.data() + i * bitmap.stride(),
+                    bitmap.width() * al_bmp_mem->pixel_size);
+        }
+
+        al_unlock_bitmap(al_bmp);
+        bitmaps[name] = std::shared_ptr<ALLEGRO_BITMAP>(al_bmp, al_destroy_bitmap);
+        return bitmaps[name];
+    }
+    std::shared_ptr<ALLEGRO_BITMAP> Resources::GetBitmap(std::string name, int width, int height)
+    {
+        if(name.substr(name.length() - 3) == "svg") return Resources::GetSVG(name, width, height);
+
         std::string idx = name + '?' + std::to_string(width) + 'x' + std::to_string(height);
         if (bitmaps.count(idx) != 0)
             return bitmaps[idx];

@@ -8,6 +8,22 @@
 
 namespace Engine {
     Image::Image(std::string img, float x, float y, float w, float h, float anchorX, float anchorY) : IObject(x, y, w, h, anchorX, anchorY) {
+        if(img.substr(img.length() - 3) == "svg"){
+            if (Size.x == 0 && Size.y == 0) {
+                bmp = Resources::GetInstance().GetSVG(img);
+                Size.x = GetBitmapWidth();
+                Size.y = GetBitmapHeight();
+            } else if (Size.x == 0) {
+                bmp = Resources::GetInstance().GetSVG(img);
+                Size.x = GetBitmapWidth() * Size.y / GetBitmapHeight();
+            } else if (Size.y == 0) {
+                bmp = Resources::GetInstance().GetSVG(img);
+                Size.y = GetBitmapHeight() * Size.x / GetBitmapWidth();
+            } else /* Size.x != 0 && Size.y != 0 */ {
+                bmp = Resources::GetInstance().GetSVG(img, Size.x, Size.y);
+            }
+            return;
+        }
         if (Size.x == 0 && Size.y == 0) {
             bmp = Resources::GetInstance().GetBitmap(img);
             Size.x = GetBitmapWidth();

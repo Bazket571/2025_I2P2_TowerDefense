@@ -73,6 +73,7 @@ namespace Engine {
         /// <param name="height">The target height that we want the image to be resized to.</param>
         /// <returns>The smart pointer of the bitmap.</returns>
         std::shared_ptr<ALLEGRO_BITMAP> GetBitmap(std::string name, int width, int height);
+        std::shared_ptr<ALLEGRO_BITMAP> GetSVG(std::string name, int width = -1, int height = -1);
         /// <summary>
         /// Get font pointer by name. The file should be put under "resources/fonts/".
         /// </summary>

@@ -24,6 +24,8 @@ add_executable(2025_I2P2_TowerDefense
     # TODO HACKATHON-3 (3/3): Add the new enemy source files here
     Enemy/Enemy.cpp
     Enemy/Enemy.hpp
+    Enemy/PlaneEnemy.cpp
+    Enemy/PlaneEnemy.hpp
     Enemy/SoldierEnemy.cpp
     Enemy/SoldierEnemy.hpp
     Enemy/TankEnemy.cpp
@@ -97,6 +99,9 @@ add_executable(2025_I2P2_TowerDefense
     
     main.cpp
 )
+
+add_subdirectory(lunasvg)
+target_link_libraries(2025_I2P2_TowerDefense lunasvg::lunasvg)
 
 IF (WIN32)
     set(BUILD_SHARED_LIBS false)
