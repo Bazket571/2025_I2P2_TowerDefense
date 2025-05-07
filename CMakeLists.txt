@@ -101,7 +101,8 @@ add_executable(2025_I2P2_TowerDefense
 )
 
 add_subdirectory(lunasvg)
-target_link_libraries(2025_I2P2_TowerDefense lunasvg::lunasvg)
+add_subdirectory(spine-runtimes/spine-cpp)
+target_link_libraries(2025_I2P2_TowerDefense lunasvg::lunasvg spine-cpp)
 
 IF (WIN32)
     set(BUILD_SHARED_LIBS false)
