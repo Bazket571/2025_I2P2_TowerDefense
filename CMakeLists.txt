@@ -51,6 +51,8 @@ add_executable(2025_I2P2_TowerDefense
     Engine/Point.hpp
     Engine/Resources.cpp
     Engine/Resources.hpp
+    Engine/Settings.cpp
+    Engine/Settings.hpp
     Engine/Sprite.cpp
     Engine/Sprite.hpp
     
@@ -61,6 +63,8 @@ add_executable(2025_I2P2_TowerDefense
     Scene/PlayScene.hpp
     Scene/StageSelectScene.cpp
     Scene/StageSelectScene.hpp
+    Scene/SettingsScene.cpp
+    Scene/SettingsScene.hpp
     Scene/StartScene.cpp
     Scene/StartScene.h
     Scene/WinScene.cpp

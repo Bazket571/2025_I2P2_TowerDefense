@@ -5,6 +5,7 @@
 #include <unordered_map>
 
 #include "Point.hpp"
+#include "Settings.hpp"
 
 /// <summary>
 /// All general classes are under this namespace for clarity.
@@ -22,6 +23,8 @@ namespace Engine {
         bool freeMemoryOnSceneChanged{};
         // Max delta time for update multiplier. If delta time exceeds this threshold, lag occurs.
         float deltaTimeThreshold{};
+        // Current settings for the game
+        Settings settings;
         // All scenes are stored in hash table for easy access.
         // Reference: Data Structure - Hash table
         std::unordered_map<std::string, IScene *> scenes;
@@ -150,6 +153,11 @@ namespace Engine {
         /// </summary>
         /// <returns>Returns whether key is down or not.</returns>
         bool IsKeyDown(int keyCode) const;
+        /// <summary>
+        ///
+        ///
+        Settings& GetSettings();
+            
         /// <summary>
         /// Typical function to retrieve Singleton instance and supports lazy initialization.
         /// </summary>

@@ -7,11 +7,13 @@
 #include "Engine/GameEngine.hpp"
 #include "Engine/Point.hpp"
 #include "Engine/Resources.hpp"
+#include "Engine/LOG.hpp"
 #include "PlayScene.hpp"
 #include "Scene/SettingsScene.hpp"
 #include "UI/Component/ImageButton.hpp"
 #include "UI/Component/Label.hpp"
 #include "UI/Component/Slider.hpp"
+#include "SettingsScene.hpp"
 
 void SettingsScene::Initialize() {
     int w = Engine::GameEngine::GetInstance().GetScreenSize().x;
@@ -24,6 +26,11 @@ void SettingsScene::Initialize() {
     btn->SetOnClickCallback(std::bind(&SettingsScene::BackOnClick, this, 1));
     AddNewControlObject(btn);
     AddNewObject(new Engine::Label("Back", "pirulen.ttf", 48, halfW, halfH * 3 / 2, 0, 0, 0, 255, 0.5, 0.5));
+
+    Engine::ImageButton *boundingBox;
+    boundingBox = new Engine::ImageButton("stage-select/dirt.png", "stage-select/floor.png", halfW - 200, halfH * 3 / 2 + 75, 400, 100);
+    boundingBox->SetOnClickCallback(std::bind(&SettingsScene::ToggleBoundingBoxClick, this));
+    AddNewControlObject(boundingBox);
 
     Slider *sliderBGM, *sliderSFX;
     sliderBGM = new Slider(40 + halfW - 95, halfH - 50 - 2, 190, 4);
@@ -47,9 +54,14 @@ void SettingsScene::Terminate() {
 void SettingsScene::BackOnClick(int stage) {
     Engine::GameEngine::GetInstance().ChangeScene("start");
 }
+void SettingsScene::ToggleBoundingBoxClick()
+{
+    Engine::GameEngine::GetInstance().GetSettings().ToggleBoundingBox();
+}
 void SettingsScene::BGMSlideOnValueChanged(float value) {
     AudioHelper::ChangeSampleVolume(bgmInstance, value);
     AudioHelper::BGMVolume = value;
+    //Engine::LOG(Engine::INFO) << "Change BGM volume to " << value;
 }
 void SettingsScene::SFXSlideOnValueChanged(float value) {
     AudioHelper::SFXVolume = value;
