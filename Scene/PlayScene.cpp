@@ -477,9 +477,5 @@ void PlayScene::TriggerCheat()
 {
     Engine::LOG(Engine::INFO) << "Triggering cheat";
     EarnMoney(10000);
-    Enemy* enemy;
-    const Engine::Point SpawnCoordinate = Engine::Point(SpawnGridPoint.x * BlockSize + BlockSize / 2, SpawnGridPoint.y * BlockSize + BlockSize / 2);
-    EnemyGroup->AddNewObject(enemy = new PlaneEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
-    enemy->UpdatePath(mapDistance);
-    enemy->Update(ticks);
+    EffectGroup->AddNewObject(new Plane());
 }
