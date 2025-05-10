@@ -1,5 +1,6 @@
 #ifndef PLAYSCENE_HPP
 #define PLAYSCENE_HPP
+
 #include <allegro5/allegro_audio.h>
 #include <list>
 #include <memory>
@@ -35,8 +36,10 @@ protected:
 public:
     static bool DebugMode;
     static const std::vector<Engine::Point> directions;
-    static const int MapWidth, MapHeight;
-    static const int BlockSize;
+    static int MapWidth, MapHeight;
+    static const int MapWidthRatio, MapHeightRatio;
+    static const int WindowWidth, WindowHeight;
+    static int BlockSize;
     static const float DangerTime;
     static const Engine::Point SpawnGridPoint;
     static const Engine::Point EndGridPoint;

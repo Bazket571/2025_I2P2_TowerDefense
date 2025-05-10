@@ -1,3 +1,5 @@
+//#define ALLEGRO_UNSTABLE
+
 #include <algorithm>
 #include <allegro5/allegro.h>
 #include <cmath>
@@ -7,6 +9,7 @@
 #include <queue>
 #include <string>
 #include <vector>
+#include <array>
 
 #include "Enemy/Enemy.hpp"
 #include "Enemy/PlaneEnemy.hpp"
@@ -33,8 +36,10 @@
 
 bool PlayScene::DebugMode = false;
 const std::vector<Engine::Point> PlayScene::directions = { Engine::Point(-1, 0), Engine::Point(0, -1), Engine::Point(1, 0), Engine::Point(0, 1) };
-const int PlayScene::MapWidth = 20, PlayScene::MapHeight = 13;
-const int PlayScene::BlockSize = 64;
+const int PlayScene::MapWidthRatio = 5, PlayScene::MapHeightRatio = 3;
+int PlayScene::MapWidth = 0, PlayScene::MapHeight = 0;
+int PlayScene::BlockSize = 32;
+const int PlayScene::WindowWidth = (64*20), PlayScene::WindowHeight = 64*12;
 const float PlayScene::DangerTime = 7.61;
 const Engine::Point PlayScene::SpawnGridPoint = Engine::Point(-1, 0);
 const Engine::Point PlayScene::EndGridPoint = Engine::Point(MapWidth, MapHeight - 1);
@@ -305,29 +310,35 @@ void PlayScene::ReadMap() {
     std::string filename = std::string("Resource/map") + std::to_string(MapId) + ".txt";
     // Read map file.
     char c;
+    //TODO MapData has 2 states only, change this
     std::vector<bool> mapData;
     std::ifstream fin(filename);
+    MapWidth = MapHeight = 0;
     while (fin >> c) {
         switch (c) {
             case '0': mapData.push_back(false); break;
             case '1': mapData.push_back(true); break;
             case '\n':
             case '\r':
-                if (static_cast<int>(mapData.size()) / MapWidth != 0)
-                    throw std::ios_base::failure("Map data is corrupted.");
+                MapHeight++;
+                if(MapWidth == 0) 
+                    MapWidth = static_cast<int>(mapData.size());
+                //Validate map is a rectangle
+                else if(static_cast<int>(mapData.size()) != MapWidth * MapHeight) 
+                    throw std::ios_base::failure("Map data is corrupted.");;
                 break;
             default: throw std::ios_base::failure("Map data is corrupted.");
         }
     }
     fin.close();
-    // Validate map data.
-    if (static_cast<int>(mapData.size()) != MapWidth * MapHeight)
-        throw std::ios_base::failure("Map data is corrupted.");
     // Store map in 2d array.
+    // Test Change buffer depth
+    //al_set_new_bitmap_depth(16);
     mapState = std::vector<std::vector<TileType>>(MapHeight, std::vector<TileType>(MapWidth));
     for (int i = 0; i < MapHeight; i++) {
         for (int j = 0; j < MapWidth; j++) {
             const int num = mapData[i * MapWidth + j];
+            //TODO Map has only 2 states, change this
             mapState[i][j] = num ? TILE_FLOOR : TILE_DIRT;
             if (num)
                 TileMapGroup->AddNewObject(new Engine::Image("play/floor.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
@@ -335,6 +346,9 @@ void PlayScene::ReadMap() {
                 TileMapGroup->AddNewObject(new Engine::Image("play/dirt.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
         }
     }
+    //al_set_new_bitmap_depth(0);
+    //Change blockSize according to aspect ratio
+
 }
 void PlayScene::ReadEnemyWave() {
     std::string filename = std::string("Resource/enemy") + std::to_string(MapId) + ".txt";

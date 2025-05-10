@@ -57,6 +57,8 @@ add_executable(2025_I2P2_TowerDefense
     Engine/Settings.hpp
     Engine/Sprite.cpp
     Engine/Sprite.hpp
+    Engine/spine/spine.cpp
+    Engine/spine/spine.hpp
     
     # TODO HACKATHON-2 (3/3): Add the new scene source files here
     Scene/LoseScene.cpp
@@ -108,7 +110,7 @@ IF (WIN32)
     set(BUILD_SHARED_LIBS false)
     find_package(allegro REQUIRED PATHS allegro)
     if(MSVC)
-        target_compile_options(2025_I2P2_TowerDefense PUBLIC /MT)
+        #target_compile_options(2025_I2P2_TowerDefense PUBLIC /MT)
         target_compile_options(2025_I2P2_TowerDefense PUBLIC /ZI)
     endif()
     add_custom_command(TARGET 2025_I2P2_TowerDefense POST_BUILD
