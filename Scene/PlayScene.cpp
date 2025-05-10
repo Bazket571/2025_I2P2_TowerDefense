@@ -294,7 +294,7 @@ void PlayScene::OnKeyDown(int keyCode) {
 }
 void PlayScene::Hit() {
     lives--;
-    UILives->Text = std::to_string(lives);
+    UILives->Text = "Life " + std::to_string(lives);
     if (lives <= 0) {
         Engine::GameEngine::GetInstance().ChangeScene("lose");
     }
@@ -440,7 +440,7 @@ std::vector<std::vector<int>> PlayScene::CalculateBFSDistance() {
     // Reverse BFS to find path.
     std::vector<std::vector<int>> map(MapHeight, std::vector<int>(std::vector<int>(MapWidth, -1)));
     std::queue<Engine::Point> que;
-    std::array<Engine::Point,2> deltas;
+    std::array<Engine::Point, 2> deltas;
     deltas[0] = Engine::Point(0, -1);
     deltas[1] = Engine::Point(-1, 0);
     //deltas[2] = Engine::Point(-1, -1);
@@ -458,9 +458,12 @@ std::vector<std::vector<int>> PlayScene::CalculateBFSDistance() {
         // TODO PROJECT-1 (1/1): Implement a BFS starting from the most right-bottom block in the map.
         //               For each step you should assign the corresponding distance to the most right-bottom block.
         //               mapState[y][x] is TILE_DIRT if it is empty.
-        for(auto delta : deltas){
+        for(auto delta : directions){
             if((p+delta).x < 0 || (p+delta).y < 0) continue;
+            if ((p + delta).x >= MapWidth || (p + delta).y >= MapHeight) continue;
             if(mapState[p.y + delta.y][p.x + delta.x] == TILE_OCCUPIED) continue;
+            if (mapState[p.y + delta.y][p.x + delta.x] == TILE_FLOOR) 
+                continue;
             if(map[p.y + delta.y][p.x + delta.x] < 0){
                 que.push(p + delta);
                 map[p.y + delta.y][p.x + delta.x] = map[p.y][p.x] + 1;
