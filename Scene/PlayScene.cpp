@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 #include <array>
+#include <sstream>
 
 #include "Enemy/Enemy.hpp"
 #include "Enemy/PlaneEnemy.hpp"
@@ -309,26 +310,27 @@ void PlayScene::EarnMoney(int money) {
 void PlayScene::ReadMap() {
     std::string filename = std::string("Resource/map") + std::to_string(MapId) + ".txt";
     // Read map file.
-    char c;
     //TODO MapData has 2 states only, change this
     std::vector<bool> mapData;
     std::ifstream fin(filename);
     MapWidth = MapHeight = 0;
-    while (fin >> c) {
-        switch (c) {
+    while (1) {
+        std::string line;
+        std::getline(fin, line);
+        if (line.length() == 0) break;
+        for(char c : line) {
+            switch (c) {
             case '0': mapData.push_back(false); break;
             case '1': mapData.push_back(true); break;
-            case '\n':
-            case '\r':
-                MapHeight++;
-                if(MapWidth == 0) 
-                    MapWidth = static_cast<int>(mapData.size());
-                //Validate map is a rectangle
-                else if(static_cast<int>(mapData.size()) != MapWidth * MapHeight) 
-                    throw std::ios_base::failure("Map data is corrupted.");;
-                break;
             default: throw std::ios_base::failure("Map data is corrupted.");
+            }
         }
+        MapHeight++;
+        if (MapWidth == 0)
+            MapWidth = static_cast<int>(mapData.size());
+        //Validate map is a rectangle
+        else if (static_cast<int>(mapData.size()) != MapWidth * MapHeight)
+            throw std::ios_base::failure("Map data is not rectangular.");;
     }
     fin.close();
     // Store map in 2d array.
