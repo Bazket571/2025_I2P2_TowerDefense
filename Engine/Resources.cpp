@@ -55,19 +55,19 @@ namespace Engine {
         }
     }
     
-    std::shared_ptr<ALLEGRO_BITMAP> Resources::GetBitmap(std::string name) {
+    std::shared_ptr<ALLEGRO_BITMAP> Resources::GetBitmap(std::string name, std::string pathPrefix) {
         if(name.substr(name.length() - 3) == "svg") return Resources::GetSVG(name);
 
         if (bitmaps.count(name) != 0)
             return bitmaps[name];
-        std::string bitmapPath = bitmapPathPrefix + name;
+        std::string bitmapPath = pathPrefix + name;
         ALLEGRO_BITMAP *bmp = al_load_bitmap(bitmapPath.c_str());
         if (!bmp) throw Allegro5Exception(("failed to load image: " + bitmapPath).c_str());
         LOG(INFO) << "Loaded Resource<image>: " << bitmapPath;
         bitmaps[name] = std::shared_ptr<ALLEGRO_BITMAP>(bmp, al_destroy_bitmap);
         return bitmaps[name];
     }
-    std::shared_ptr<ALLEGRO_BITMAP> Resources::GetSVG(std::string name, int width, int height){
+    std::shared_ptr<ALLEGRO_BITMAP> Resources::GetSVG(std::string name, int width, int height, std::string pathPrefix){
         std::string whiteFill = R"CSS(
             *{
                 fill: #FFFFFFFF;
@@ -77,7 +77,7 @@ namespace Engine {
         if (bitmaps.count(name) != 0)
         return bitmaps[name];
 
-        std::string bitmapPath = bitmapPathPrefix + name;
+        std::string bitmapPath = pathPrefix + name;
         auto document = lunasvg::Document::loadFromFile(bitmapPath);
         if(!document) throw Allegro5Exception(("failed to load image: " + bitmapPath).c_str());
         document->applyStyleSheet(whiteFill);
@@ -95,14 +95,14 @@ namespace Engine {
         bitmaps[name] = std::shared_ptr<ALLEGRO_BITMAP>(al_bmp, al_destroy_bitmap);
         return bitmaps[name];
     }
-    std::shared_ptr<ALLEGRO_BITMAP> Resources::GetBitmap(std::string name, int width, int height)
+    std::shared_ptr<ALLEGRO_BITMAP> Resources::GetBitmap(std::string name, int width, int height, std::string pathPrefix)
     {
         if(name.substr(name.length() - 3) == "svg") return Resources::GetSVG(name, width, height);
 
         std::string idx = name + '?' + std::to_string(width) + 'x' + std::to_string(height);
         if (bitmaps.count(idx) != 0)
             return bitmaps[idx];
-        std::string bitmapPath = bitmapPathPrefix + name;
+        std::string bitmapPath = pathPrefix + name;
         ALLEGRO_BITMAP *bmp = al_load_bitmap(bitmapPath.c_str());
         if (!bmp) throw Allegro5Exception(("failed to load image: " + bitmapPath).c_str());
 

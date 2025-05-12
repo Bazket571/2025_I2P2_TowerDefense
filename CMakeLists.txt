@@ -57,6 +57,8 @@ add_executable(2025_I2P2_TowerDefense
     Engine/Settings.hpp
     Engine/Sprite.cpp
     Engine/Sprite.hpp
+    Engine/spine/spine.cpp
+    Engine/spine/spine.hpp
     
     # TODO HACKATHON-2 (3/3): Add the new scene source files here
     Scene/LoseScene.cpp
@@ -101,10 +103,10 @@ add_executable(2025_I2P2_TowerDefense
 )
 
 add_subdirectory(lunasvg)
-target_link_libraries(2025_I2P2_TowerDefense lunasvg::lunasvg)
+add_subdirectory(spine-runtimes/spine-cpp spine-runtimes)
+target_link_libraries(2025_I2P2_TowerDefense lunasvg::lunasvg spine-cpp)
 
 IF (WIN32)
-    set(BUILD_SHARED_LIBS false)
     find_package(allegro REQUIRED PATHS allegro)
     if(MSVC)
         target_compile_options(2025_I2P2_TowerDefense PUBLIC /ZI)

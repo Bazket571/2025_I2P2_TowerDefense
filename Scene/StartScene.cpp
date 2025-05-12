@@ -2,7 +2,6 @@
 // Created by Hsuan on 2024/4/10.
 //
 
-#include "StartScene.h"
 #include <allegro5/allegro_audio.h>
 #include <functional>
 #include <memory>
@@ -12,6 +11,7 @@
 #include "Engine/GameEngine.hpp"
 #include "Engine/Point.hpp"
 #include "Engine/Resources.hpp"
+#include "Engine/spine/spine.hpp"
 #include "PlayScene.hpp"
 #include "Scene/StartScene.h"
 #include "UI/Component/ImageButton.hpp"
@@ -37,6 +37,12 @@ void StartScene::Initialize() {
     btn->SetOnClickCallback(std::bind(&StartScene::SettingsOnClick, this, 2));
     AddNewControlObject(btn);
     AddNewObject(new Engine::Label("Settings", "pirulen.ttf", 48, halfW, halfH * 3 / 2, 0, 0, 0, 255, 0.5, 0.5));
+
+    Engine::SpineSprite* supremeLeader;
+    supremeLeader = new Engine::SpineSprite("amiya/build_char_002_amiya.skel", "amiya/build_char_002_amiya.atlas", 600, 600);
+    supremeLeader->state->setAnimation(1, "Relax", true);
+    AddNewObject(supremeLeader);
+
 }
 void StartScene::Terminate() {
     IScene::Terminate();
