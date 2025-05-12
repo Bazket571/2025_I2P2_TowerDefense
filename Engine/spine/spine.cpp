@@ -47,7 +47,7 @@ Engine::SpineSprite::SpineSprite(std::string skeletonFile, std::string atlasFile
 	spine::Atlas *atlas = new spine::Atlas((pathPrefix + atlasFile).c_str(), &textureLoader);
 	spine::SkeletonBinary skeletonBinary(atlas);
 	//TODO scale
-	skeletonBinary.setScale(1);
+	skeletonBinary.setScale(scale);
 	spine::SkeletonData* skeletonData = skeletonBinary.readSkeletonDataFile((pathPrefix + skeletonFile).c_str());
 	setUsePremultipliedAlpha(true);
 

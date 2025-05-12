@@ -39,8 +39,8 @@ void StartScene::Initialize() {
     AddNewObject(new Engine::Label("Settings", "pirulen.ttf", 48, halfW, halfH * 3 / 2, 0, 0, 0, 255, 0.5, 0.5));
 
     Engine::SpineSprite* supremeLeader;
-    supremeLeader = new Engine::SpineSprite("amiya/build_char_002_amiya.skel", "amiya/build_char_002_amiya.atlas", 600, 600);
-    supremeLeader->state->setAnimation(1, "Relax", true);
+    supremeLeader = new Engine::SpineSprite("amiya/build_char_002_amiya.skel", "amiya/build_char_002_amiya.atlas", 600, 600, 0.5);
+    supremeLeader->state->setAnimation(1, "Interact", true);
     AddNewObject(supremeLeader);
 
 }
