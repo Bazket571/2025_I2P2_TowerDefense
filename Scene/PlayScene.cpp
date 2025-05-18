@@ -322,6 +322,9 @@ void PlayScene::ReadMap() {
             switch (c) {
             case '0': mapData.push_back(false); break;
             case '1': mapData.push_back(true); break;
+            case '\r':
+            case '\n':
+                break;
             default: throw std::ios_base::failure("Map data is corrupted.");
             }
         }
