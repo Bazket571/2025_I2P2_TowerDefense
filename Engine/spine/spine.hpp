@@ -11,21 +11,21 @@
 #include <allegro5/allegro_primitives.h>
 
 namespace Engine {
-    //Rough sketch class from documentation
+    /// <summary>
+    /// An animated image exported from Spine2D
+    /// </summary>
     class SpineSprite : public Engine::IObject {
         static const std::string spinePathPrefix;
         mutable spine::SkeletonClipping clipper;
         mutable bool usePremultipliedAlpha;
         mutable bool ownsAnimationStateData;
         mutable spine::Vector<float> worldVertices;
-        mutable spine::Vector<spine::Color> tempColors;
         mutable spine::Vector<uint16_t> quadIndices;
+        mutable std::vector<ALLEGRO_VERTEX> vertexArray;
 
     public:
         spine::Skeleton* skeleton;
         spine::AnimationState* state;
-        spine::VertexEffect* vertexEffect;
-        mutable std::vector<ALLEGRO_VERTEX> vertexArray;
         float timeScale;
 
         SpineSprite(std::string skeletonFile, std::string atlasFile,

@@ -55,8 +55,6 @@ Engine::SpineSprite::SpineSprite(std::string skeletonFile, std::string atlasFile
 	skeleton = new spine::Skeleton(skeletonData);
 	state = new spine::AnimationState(new spine::AnimationStateData(skeletonData));
 
-	tempColors.ensureCapacity(16);
-
 	quadIndices.add(0);
 	quadIndices.add(1);
 	quadIndices.add(2);
@@ -77,8 +75,7 @@ void Engine::SpineSprite::Update(float deltaTime)
 	state->update(deltaTime * timeScale);
 	state->apply(*skeleton);
 	skeleton->update(deltaTime * timeScale);
-	skeleton->setX(Position.x);
-	skeleton->setY(Position.y);
+	skeleton->setPosition(Position.x, Position.y);
 	skeleton->updateWorldTransform();
 }
 
@@ -237,7 +234,7 @@ void Engine::SpineSprite::Draw() const
 	//target.draw(*vertexArray, states);
 	clipper.clipEnd();
 
-	if (vertexEffect != 0) vertexEffect->end();	
+	//if (vertexEffect != 0) vertexEffect->end();	
 	al_set_blender(prevOp, prevSrc, prevDst);
 	vertexArray.clear();
 	IObject::Draw();
