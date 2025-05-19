@@ -40,6 +40,7 @@ namespace Engine {
         if (!al_install_mouse()) throw Allegro5Exception("failed to install mouse");
 
         // Setup game display.
+        al_set_new_display_option(ALLEGRO_DEPTH_SIZE, 16, ALLEGRO_SUGGEST);
         display = al_create_display(screenW, screenH);
         if (!display) throw Allegro5Exception("failed to create display");
         al_set_window_title(display, title);
