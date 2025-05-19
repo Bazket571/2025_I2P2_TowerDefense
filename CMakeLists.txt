@@ -59,6 +59,9 @@ add_executable(2025_I2P2_TowerDefense
     Engine/Sprite.hpp
     Engine/spine/spine.cpp
     Engine/spine/spine.hpp
+
+    Operator/Operator.cpp
+    Operator/Operator.hpp
     
     # TODO HACKATHON-2 (3/3): Add the new scene source files here
     Scene/LoseScene.cpp
@@ -127,6 +130,7 @@ ELSE()
         Allegro::allegro_primitives 
         Allegro::allegro_image 
         Allegro::allegro_audio 
-        Allegro::allegro_acodec)
+        Allegro::allegro_acodec
+        Allegro::allegro_color)
     target_link_libraries(2025_I2P2_TowerDefense ${ALLEGRO5_LIBRARIES})
 ENDIF()

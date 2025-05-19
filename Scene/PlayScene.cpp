@@ -445,10 +445,6 @@ std::vector<std::vector<int>> PlayScene::CalculateBFSDistance() {
     // Reverse BFS to find path.
     std::vector<std::vector<int>> map(MapHeight, std::vector<int>(std::vector<int>(MapWidth, -1)));
     std::queue<Engine::Point> que;
-    std::array<Engine::Point, 2> deltas;
-    deltas[0] = Engine::Point(0, -1);
-    deltas[1] = Engine::Point(-1, 0);
-    //deltas[2] = Engine::Point(-1, -1);
     // Push end point.
     // BFS from end point.
     if (mapState[MapHeight - 1][MapWidth - 1] != TILE_DIRT)
