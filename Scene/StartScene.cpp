@@ -17,6 +17,7 @@
 #include "UI/Component/ImageButton.hpp"
 #include "UI/Component/Label.hpp"
 #include "UI/Component/Slider.hpp"
+#include "StartScene.h"
 
 // TODO HACKATHON-2 (1/3): You can imitate the 2 files: 'StartScene.hpp', 'StartScene.cpp' to implement your SettingsScene.
 void StartScene::Initialize() {
@@ -38,6 +39,11 @@ void StartScene::Initialize() {
     AddNewControlObject(btn);
     AddNewObject(new Engine::Label("Settings", "pirulen.ttf", 48, halfW, halfH * 3 / 2, 0, 0, 0, 255, 0.5, 0.5));
 
+    btn = new Engine::ImageButton("stage-select/dirt.png", "stage-select/floor.png", halfW - 200, halfH * 3 / 2 + 100, 400, 100);
+    btn->SetOnClickCallback(std::bind(&StartScene::ScoreOnClick, this));
+    AddNewControlObject(btn);
+    AddNewObject(new Engine::Label("Score", "pirulen.ttf", 48, halfW, halfH * 3 / 2 + 150, 0, 0, 0, 255, 0.5, 0.5));
+
     Engine::SpineSprite* supremeLeader;
     supremeLeader = new Engine::SpineSprite("amiya/build_char_002_amiya.skel", "amiya/build_char_002_amiya.atlas", 600, 600, 0.5);
     supremeLeader->state->setAnimation(1, "Interact", true);
@@ -52,4 +58,9 @@ void StartScene::PlayOnClick(int stage) {
 }
 void StartScene::SettingsOnClick(int stage) {
     Engine::GameEngine::GetInstance().ChangeScene("settings");
+}
+
+void StartScene::ScoreOnClick()
+{
+    Engine::GameEngine::GetInstance().ChangeScene("score");
 }
