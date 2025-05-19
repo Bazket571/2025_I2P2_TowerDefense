@@ -21,9 +21,11 @@ namespace Engine {
 class PlayScene final : public Engine::IScene {
 private:
     enum TileType {
-        TILE_DIRT,
-        TILE_FLOOR,
-        TILE_OCCUPIED,
+        TILE_LOW,
+        TILE_HIGH,
+        TILE_SPAWN,
+        TILE_OBJECTIVE,
+        TILE_OCCUPIED
     };
     ALLEGRO_SAMPLE_ID bgmId;
     std::shared_ptr<ALLEGRO_SAMPLE_INSTANCE> deathBGMInstance;
@@ -41,8 +43,8 @@ public:
     static const int WindowWidth, WindowHeight;
     static int BlockSize;
     static const float DangerTime;
-    static const Engine::Point SpawnGridPoint;
-    static const Engine::Point EndGridPoint;
+    static Engine::Point SpawnGridPoint;
+    static Engine::Point EndGridPoint;
     static const std::vector<int> code;
     int MapId;
     float ticks;

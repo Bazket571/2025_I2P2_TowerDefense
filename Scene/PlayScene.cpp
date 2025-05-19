@@ -40,11 +40,11 @@ bool PlayScene::DebugMode = false;
 const std::vector<Engine::Point> PlayScene::directions = { Engine::Point(-1, 0), Engine::Point(0, -1), Engine::Point(1, 0), Engine::Point(0, 1) };
 const int PlayScene::MapWidthRatio = 5, PlayScene::MapHeightRatio = 3;
 int PlayScene::MapWidth = 0, PlayScene::MapHeight = 0;
-int PlayScene::BlockSize = 32;
+int PlayScene::BlockSize = 64;
 const int PlayScene::WindowWidth = (64*20), PlayScene::WindowHeight = 64*12;
 const float PlayScene::DangerTime = 7.61;
-const Engine::Point PlayScene::SpawnGridPoint = Engine::Point(-1, 0);
-const Engine::Point PlayScene::EndGridPoint = Engine::Point(MapWidth, MapHeight - 1);
+Engine::Point PlayScene::SpawnGridPoint = Engine::Point(0, 0);
+Engine::Point PlayScene::EndGridPoint = Engine::Point(MapWidth, MapHeight - 1);
 const std::vector<int> PlayScene::code = {
     ALLEGRO_KEY_UP, ALLEGRO_KEY_UP, ALLEGRO_KEY_DOWN, ALLEGRO_KEY_DOWN,
     ALLEGRO_KEY_LEFT, ALLEGRO_KEY_RIGHT, ALLEGRO_KEY_LEFT, ALLEGRO_KEY_RIGHT,
@@ -312,7 +312,7 @@ void PlayScene::ReadMap() {
     std::string filename = std::string("Resource/map") + std::to_string(MapId) + ".txt";
     // Read map file.
     //TODO MapData has 2 states only, change this
-    std::vector<bool> mapData;
+    std::vector<TileType> mapData;
     std::ifstream fin(filename);
     MapWidth = MapHeight = 0;
     while (1) {
@@ -321,8 +321,10 @@ void PlayScene::ReadMap() {
         if (line.length() == 0) break;
         for(char c : line) {
             switch (c) {
-            case '0': mapData.push_back(false); break;
-            case '1': mapData.push_back(true); break;
+            case '0': mapData.push_back(TILE_LOW); break;
+            case '1': mapData.push_back(TILE_HIGH); break;
+            case 's': mapData.push_back(TILE_SPAWN); break;
+            case 'o': mapData.push_back(TILE_OBJECTIVE); break;
             case '\r':
             case '\n':
                 break;
@@ -343,13 +345,29 @@ void PlayScene::ReadMap() {
     mapState = std::vector<std::vector<TileType>>(MapHeight, std::vector<TileType>(MapWidth));
     for (int i = 0; i < MapHeight; i++) {
         for (int j = 0; j < MapWidth; j++) {
-            const int num = mapData[i * MapWidth + j];
+            mapState[i][j] = mapData[i * MapWidth + j];
+            
             //TODO Map has only 2 states, change this
-            mapState[i][j] = num ? TILE_FLOOR : TILE_DIRT;
-            if (num)
-                TileMapGroup->AddNewObject(new Engine::Image("play/floor.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
-            else
-                TileMapGroup->AddNewObject(new Engine::Image("play/dirt.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+            switch(mapState[i][j]){
+                case TILE_LOW:
+                    TileMapGroup->AddNewObject(new Engine::Image("play/floor.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+                    break;
+                case TILE_HIGH:
+                    TileMapGroup->AddNewObject(new Engine::Image("play/dirt.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+                    break;
+                case TILE_SPAWN:
+                    SpawnGridPoint = Engine::Point(j, i);
+                    TileMapGroup->AddNewObject(new Engine::Image("play/sand.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+                    break;
+                case TILE_OBJECTIVE:
+                    EndGridPoint = Engine::Point(j, i);
+                    TileMapGroup->AddNewObject(new Engine::Image("play/sand.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+                    TileMapGroup->AddNewObject(new Engine::Image("play/turret-fire.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+                    break;
+                default:
+                    TileMapGroup->AddNewObject(new Engine::Image("play/dirt.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+                    break;
+            }
         }
     }
     //al_set_new_bitmap_depth(0);
@@ -457,12 +475,11 @@ std::vector<std::vector<int>> PlayScene::CalculateBFSDistance() {
     std::queue<Engine::Point> que;
     // Push end point.
     // BFS from end point.
-    if (mapState[MapHeight - 1][MapWidth - 1] != TILE_DIRT)
-        return map;
+    
     
     //TODO Objective location, change this to blue box
-    que.push(Engine::Point(MapWidth - 1, MapHeight - 1));
-    map[MapHeight - 1][MapWidth - 1] = 0;
+    que.push(EndGridPoint);
+    map[EndGridPoint.y][EndGridPoint.x] = 0;
     while (!que.empty()) {
         Engine::Point p = que.front();
         que.pop();
@@ -473,7 +490,7 @@ std::vector<std::vector<int>> PlayScene::CalculateBFSDistance() {
             if((p+delta).x < 0 || (p+delta).y < 0) continue;
             if ((p + delta).x >= MapWidth || (p + delta).y >= MapHeight) continue;
             if(mapState[p.y + delta.y][p.x + delta.x] == TILE_OCCUPIED) continue;
-            if (mapState[p.y + delta.y][p.x + delta.x] == TILE_FLOOR) 
+            if (mapState[p.y + delta.y][p.x + delta.x] == TILE_HIGH) 
                 continue;
             if(map[p.y + delta.y][p.x + delta.x] < 0){
                 que.push(p + delta);
