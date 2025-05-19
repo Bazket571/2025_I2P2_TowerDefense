@@ -46,6 +46,7 @@ public:
     static Engine::Point SpawnGridPoint;
     static Engine::Point EndGridPoint;
     static const std::vector<int> code;
+    static int score;
     int MapId;
     float ticks;
     float deathCountDown;
@@ -60,6 +61,7 @@ public:
     Group *UIGroup;
     Engine::Label *UIMoney;
     Engine::Label *UILives;
+    Engine::Label *UIScore;
     Engine::Image *imgTarget;
     Engine::Sprite *dangerIndicator;
     Turret *preview;
@@ -80,6 +82,7 @@ public:
     void Hit();
     int GetMoney() const;
     void EarnMoney(int money);
+    void AddScore(int point);
     void ReadMap();
     void ReadEnemyWave();
     void ConstructUI();

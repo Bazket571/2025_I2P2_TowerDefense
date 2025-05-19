@@ -45,6 +45,12 @@ void Enemy::Hit(float damage) {
         for (auto &it : lockedBullets)
             it->Target = nullptr;
         getPlayScene()->EarnMoney(money);
+
+        int blockSize = getPlayScene()->BlockSize;
+        Engine::Point curPos = Position / blockSize;
+        int score = getPlayScene()->CalculateBFSDistance()[curPos.y][curPos.x];
+        getPlayScene()->AddScore(score);
+
         getPlayScene()->EnemyGroup->RemoveObject(objectIterator);
         AudioHelper::PlayAudio("explosion.wav");
     }

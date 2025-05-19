@@ -41,7 +41,8 @@ const std::vector<Engine::Point> PlayScene::directions = { Engine::Point(-1, 0),
 const int PlayScene::MapWidthRatio = 5, PlayScene::MapHeightRatio = 3;
 int PlayScene::MapWidth = 0, PlayScene::MapHeight = 0;
 int PlayScene::BlockSize = 64;
-const int PlayScene::WindowWidth = (64*20), PlayScene::WindowHeight = 64*12;
+int PlayScene::score = 0;
+const int PlayScene::WindowWidth = (64*21), PlayScene::WindowHeight = 64*13;
 const float PlayScene::DangerTime = 7.61;
 Engine::Point PlayScene::SpawnGridPoint = Engine::Point(0, 0);
 Engine::Point PlayScene::EndGridPoint = Engine::Point(MapWidth, MapHeight - 1);
@@ -61,6 +62,7 @@ void PlayScene::Initialize() {
     lives = 10;
     money = 150;
     SpeedMult = 1;
+    score = 0;
     // Add groups from bottom to top.
     AddNewObject(TileMapGroup = new Group());
     AddNewObject(GroundEffectGroup = new Group());
@@ -308,7 +310,13 @@ void PlayScene::EarnMoney(int money) {
     this->money += money;
     UIMoney->Text = std::string("$") + std::to_string(this->money);
 }
-void PlayScene::ReadMap() {
+void PlayScene::AddScore(int point)
+{
+    this->score += point;
+    UIScore->Text = std::string("Score ") + std::to_string(this->score);
+}
+void PlayScene::ReadMap()
+{
     std::string filename = std::string("Resource/map") + std::to_string(MapId) + ".txt";
     // Read map file.
     //TODO MapData has 2 states only, change this
@@ -372,7 +380,6 @@ void PlayScene::ReadMap() {
     }
     //al_set_new_bitmap_depth(0);
     //Change blockSize according to aspect ratio
-
 }
 void PlayScene::ReadEnemyWave() {
     std::string filename = std::string("Resource/enemy") + std::to_string(MapId) + ".txt";
@@ -393,25 +400,27 @@ void PlayScene::ConstructUI() {
     UIGroup->AddNewObject(new Engine::Label(std::string("Stage ") + std::to_string(MapId), "pirulen.ttf", 32, 1294, 0));
     UIGroup->AddNewObject(UIMoney = new Engine::Label(std::string("$") + std::to_string(money), "pirulen.ttf", 24, 1294, 48));
     UIGroup->AddNewObject(UILives = new Engine::Label(std::string("Life ") + std::to_string(lives), "pirulen.ttf", 24, 1294, 88));
+    UIGroup->AddNewObject(UIScore = new Engine::Label(std::string("Score ") + std::to_string(score), "pirulen.ttf", 24, 1294, 128));
+
     TurretButton *btn;
     // Button 1
     btn = new TurretButton("play/floor.png", "play/dirt.png",
-                           Engine::Sprite("play/tower-base.png", 1294, 136, 0, 0, 0, 0),
-                           Engine::Sprite("play/turret-1.png", 1294, 136 - 8, 0, 0, 0, 0), 1294, 136, MachineGunTurret::Price);
+                           Engine::Sprite("play/tower-base.png", 1294, 176, 0, 0, 0, 0),
+                           Engine::Sprite("play/turret-1.png", 1294, 176 - 8, 0, 0, 0, 0), 1294, 176, MachineGunTurret::Price);
     // Reference: Class Member Function Pointer and std::bind.
     btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 0));
     UIGroup->AddNewControlObject(btn);
     // Button 2
     btn = new TurretButton("play/floor.png", "play/dirt.png",
-                           Engine::Sprite("play/tower-base.png", 1370, 136, 0, 0, 0, 0),
-                           Engine::Sprite("play/turret-2.png", 1370, 136 - 8, 0, 0, 0, 0), 1370, 136, LaserTurret::Price);
+                           Engine::Sprite("play/tower-base.png", 1370, 176, 0, 0, 0, 0),
+                           Engine::Sprite("play/turret-2.png", 1370, 176 - 8, 0, 0, 0, 0), 1370, 176, LaserTurret::Price);
     btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 1));
     UIGroup->AddNewControlObject(btn);
 
     // Button 3
     btn = new TurretButton("play/floor.png", "play/dirt.png",
-                           Engine::Sprite("play/tower-base.png", 1446, 136, 0, 0, 0, 0),
-                           Engine::Sprite("play/turret-3.png", 1446, 136 - 8, 0, 0, 0, 0), 1446, 136, HomingTurret::Price);
+                           Engine::Sprite("play/tower-base.png", 1446, 176, 0, 0, 0, 0),
+                           Engine::Sprite("play/turret-3.png", 1446, 176 - 8, 0, 0, 0, 0), 1446, 176, HomingTurret::Price);
     btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 2));
     UIGroup->AddNewControlObject(btn);
 
