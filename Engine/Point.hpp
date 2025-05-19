@@ -7,17 +7,16 @@ namespace Engine {
     /// </summary>
     struct Point {
         // The coordinates of the point.
-        float x, y;
+        float x, y, z;
         /// <summary>
         /// Construct a Point with coordinate (0, 0).
         /// </summary>
-        explicit Point();
         /// <summary>
         /// Construct a Point with coordinate (x, y).
         /// </summary>
         /// <param name="x">X coordinate of the point</param>
         /// <param name="y">Y coordinate of the point</param>
-        explicit Point(float x, float y);
+        Point(float x = 0, float y = 0, float z = 0);
         /// <summary>
         /// Compare between Points.
         /// </summary>
@@ -59,6 +58,7 @@ namespace Engine {
         /// <param name="rhs">The second vector.</param>
         /// <returns>The inner product.</returns>
         float Dot(const Point &rhs) const;
+        Point Cross(const Point &rhs) const;
         /// <summary>
         /// Make point act like vector and get the squared magnitude.
         /// </summary>
