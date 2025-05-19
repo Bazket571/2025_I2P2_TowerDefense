@@ -16,6 +16,8 @@ file(COPY Resource DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 add_executable(2025_I2P2_TowerDefense
     Bullet/Bullet.cpp
     Bullet/Bullet.hpp
+    Bullet/HomingBullet.cpp
+    Bullet/HomingBullet.hpp
     Bullet/FireBullet.cpp
     Bullet/FireBullet.hpp
     Bullet/LaserBullet.cpp
@@ -85,6 +87,8 @@ add_executable(2025_I2P2_TowerDefense
     Turret/Turret.hpp
     Turret/TurretButton.cpp
     Turret/TurretButton.hpp
+    Turret/HomingTurret.cpp
+    Turret/HomingTurret.hpp
 
     UI/Animation/DirtyEffect.cpp
     UI/Animation/DirtyEffect.hpp
