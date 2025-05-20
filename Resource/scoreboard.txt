@@ -1,12 +1,12 @@
-XiaoMin 10
-DaNiu 30
-KaiJie 20
-XiaoMei 10
-XiaoHua 15
-MeiHua 20
-DaHua 30
-DaMei 40
-DaWang 50
-XiaoWang 60
-XiaoLiang 70
-Daniel 80
+XiaoMin 10 0
+DaNiu 30 0
+KaiJie 20 0
+XiaoMei 10 0
+XiaoHua 15 0
+MeiHua 20 0
+DaHua 30 0
+DaMei 40 0
+DaWang 50 0
+XiaoWang 60 0
+XiaoLiang 70 0
+Daniel 80 0

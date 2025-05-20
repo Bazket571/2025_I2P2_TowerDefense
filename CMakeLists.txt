@@ -6,12 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 include_directories(.)
 include_directories(Resource)
 
-file(COPY Resource/audios DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-file(COPY Resource/fonts DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-file(COPY Resource/images DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-file(COPY Resource DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 #Using namespace to copy libraries
-#file(COPY allegro_monolith-5.2.dll DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 add_executable(2025_I2P2_TowerDefense
     Bullet/Bullet.cpp
@@ -110,6 +105,10 @@ add_executable(2025_I2P2_TowerDefense
     
     main.cpp
 )
+
+add_custom_command(TARGET 2025_I2P2_TowerDefense PRE_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+                    ${CMAKE_SOURCE_DIR}/Resource $<TARGET_FILE_DIR:2025_I2P2_TowerDefense>)
 
 add_subdirectory(lunasvg)
 add_subdirectory(spine-runtimes/spine-cpp spine-runtimes)
