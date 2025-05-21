@@ -29,6 +29,7 @@
 #include "UI/Animation/DirtyEffect.hpp"
 #include "UI/Animation/Plane.hpp"
 #include "UI/Component/Label.hpp"
+#include <Turret/DefenderTurret.hpp>
 
 // TODO HACKATHON-4 (1/3): Trace how the game handles keyboard input.
 // TODO HACKATHON-4 (2/3): Find the cheat code sequence in this file.
@@ -101,8 +102,10 @@ void PlayScene::Update(float deltaTime) {
     else if (deathCountDown != -1)
         SpeedMult = 1;
     // Calculate danger zone.
+    // Unblock all enemies
     std::vector<float> reachEndTimes;
     for (auto &it : EnemyGroup->GetObjects()) {
+        dynamic_cast<Enemy *>(it)->blocked = false;
         reachEndTimes.push_back(dynamic_cast<Enemy *>(it)->reachEndTime);
     }
     // Can use Heap / Priority-Queue instead. But since we won't have too many enemies, sorting is fast enough.
@@ -233,11 +236,12 @@ void PlayScene::OnMouseUp(int button, int mx, int my) {
     const int x = mx / BlockSize;
     const int y = my / BlockSize;
     if (button & 1) {
-        if (mapState[y][x] != TILE_OCCUPIED) {
+        if (mapState[y][x] != TILE_OCCUPIED_TURRET) {
             if (!preview)
                 return;
             // Check if valid.
-            if (!CheckSpaceValid(x, y)) {
+            auto result = CheckSpaceValid(x, y, TILE_OCCUPIED_TURRET);
+            if (!result.first) {
                 Engine::Sprite *sprite;
                 GroundEffectGroup->AddNewObject(sprite = new DirtyEffect("play/target-invalid.png", 1, x * BlockSize + BlockSize / 2, y * BlockSize + BlockSize / 2));
                 sprite->Rotation = 0;
@@ -259,8 +263,12 @@ void PlayScene::OnMouseUp(int button, int mx, int my) {
             preview->Update(0);
             // Remove Preview.
             preview = nullptr;
+            
+            mapState[y][x] |= TILE_OCCUPIED_TURRET;
+            mapDistance = result.second;
+            for (auto &it : EnemyGroup->GetObjects())
+                dynamic_cast<Enemy *>(it)->UpdatePath(mapDistance);
 
-            mapState[y][x] = TILE_OCCUPIED;
             OnMouseMove(mx, my);
         }
     }
@@ -320,7 +328,7 @@ void PlayScene::ReadMap()
     std::string filename = std::string("Resource/map") + std::to_string(MapId) + ".txt";
     // Read map file.
     //TODO MapData has 2 states only, change this
-    std::vector<TileType> mapData;
+    std::vector<int> mapData;
     std::ifstream fin(filename);
     MapWidth = MapHeight = 0;
     while (1) {
@@ -350,7 +358,7 @@ void PlayScene::ReadMap()
     // Store map in 2d array.
     // Test Change buffer depth
     //al_set_new_bitmap_depth(16);
-    mapState = std::vector<std::vector<TileType>>(MapHeight, std::vector<TileType>(MapWidth));
+    mapState = std::vector<std::vector<int>>(MapHeight, std::vector<int>(MapWidth));
     for (int i = 0; i < MapHeight; i++) {
         for (int j = 0; j < MapWidth; j++) {
             mapState[i][j] = mapData[i * MapWidth + j];
@@ -393,16 +401,10 @@ void PlayScene::ReadEnemyWave() {
     }
     fin.close();
 }
-void PlayScene::ConstructUI() {
-    // Background
-    UIGroup->AddNewObject(new Engine::Image("play/sand.png", 1280, 0, 320, 832));
-    // Text
-    UIGroup->AddNewObject(new Engine::Label(std::string("Stage ") + std::to_string(MapId), "pirulen.ttf", 32, 1294, 0));
-    UIGroup->AddNewObject(UIMoney = new Engine::Label(std::string("$") + std::to_string(money), "pirulen.ttf", 24, 1294, 48));
-    UIGroup->AddNewObject(UILives = new Engine::Label(std::string("Life ") + std::to_string(lives), "pirulen.ttf", 24, 1294, 88));
-    UIGroup->AddNewObject(UIScore = new Engine::Label(std::string("Score ") + std::to_string(score), "pirulen.ttf", 24, 1294, 128));
-
+//TODO improve(automate) this horrid piece of shit
+void PlayScene::ConstructTurretList(){
     TurretButton *btn;
+
     // Button 1
     btn = new TurretButton("play/floor.png", "play/dirt.png",
                            Engine::Sprite("play/tower-base.png", 1294, 176, 0, 0, 0, 0),
@@ -424,6 +426,24 @@ void PlayScene::ConstructUI() {
     btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 2));
     UIGroup->AddNewControlObject(btn);
 
+    // Button 3
+    btn = new TurretButton("play/floor.png", "play/dirt.png",
+                           Engine::Sprite("play/tower-base.png", 1522, 176, 0, 0, 0, 0),
+                           Engine::Sprite("play/enemy-4.png", 1522, 176, 0, 0, 0, 0), 1522, 176, DefenderTurret::Price);
+    btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 3));
+    UIGroup->AddNewControlObject(btn);
+}
+void PlayScene::ConstructUI() {
+    // Background
+    UIGroup->AddNewObject(new Engine::Image("play/sand.png", 1280, 0, 320, 832));
+    // Text
+    UIGroup->AddNewObject(new Engine::Label(std::string("Stage ") + std::to_string(MapId), "pirulen.ttf", 32, 1294, 0));
+    UIGroup->AddNewObject(UIMoney = new Engine::Label(std::string("$") + std::to_string(money), "pirulen.ttf", 24, 1294, 48));
+    UIGroup->AddNewObject(UILives = new Engine::Label(std::string("Life ") + std::to_string(lives), "pirulen.ttf", 24, 1294, 88));
+    UIGroup->AddNewObject(UIScore = new Engine::Label(std::string("Score ") + std::to_string(score), "pirulen.ttf", 24, 1294, 128));
+
+    ConstructTurretList();
+
     int w = Engine::GameEngine::GetInstance().GetScreenSize().x;
     int h = Engine::GameEngine::GetInstance().GetScreenSize().y;
     int shift = 135 + 25;
@@ -441,6 +461,8 @@ void PlayScene::UIBtnClicked(int id) {
         preview = new LaserTurret(0, 0);
     else if (id == 2 && money >= HomingTurret::Price)
         preview = new HomingTurret(0, 0);
+    else if (id == 3 && money >= DefenderTurret::Price)
+        preview = new DefenderTurret(0, 0, 3);
     if (!preview)
         return;
     preview->Position = Engine::GameEngine::GetInstance().GetMousePosition();
@@ -451,15 +473,21 @@ void PlayScene::UIBtnClicked(int id) {
     OnMouseMove(Engine::GameEngine::GetInstance().GetMousePosition().x, Engine::GameEngine::GetInstance().GetMousePosition().y);
 }
 
-bool PlayScene::CheckSpaceValid(int x, int y) {
+//Should only check if the space is occupied, not occupying the space itself.
+//God please.
+//Do as the function name say.
+std::pair<bool, std::vector<std::vector<int>>> PlayScene::CheckSpaceValid(int x, int y, TileType type) {
+    //Check out of bounds
     if (x < 0 || x >= MapWidth || y < 0 || y >= MapHeight)
-        return false;
+        return {false, {}};
+
+    //Check if blocking all enemies' paths
     auto map00 = mapState[y][x];
-    mapState[y][x] = TILE_OCCUPIED;
+    mapState[y][x] |= type;
     std::vector<std::vector<int>> map = CalculateBFSDistance();
     mapState[y][x] = map00;
     if (map[0][0] == -1)
-        return false;
+        return {false, {}};
     for (auto &it : EnemyGroup->GetObjects()) {
         Engine::Point pnt;
         pnt.x = floor(it->Position.x / BlockSize);
@@ -469,14 +497,9 @@ bool PlayScene::CheckSpaceValid(int x, int y) {
         if (pnt.y < 0) pnt.y = 0;
         if (pnt.y >= MapHeight) pnt.y = MapHeight - 1;
         if (map[pnt.y][pnt.x] == -1)
-            return false;
+            return {false, {}};
     }
-    // All enemy have path to exit.
-    mapState[y][x] = TILE_OCCUPIED;
-    mapDistance = map;
-    for (auto &it : EnemyGroup->GetObjects())
-        dynamic_cast<Enemy *>(it)->UpdatePath(mapDistance);
-    return true;
+    return {true, map};
 }
 std::vector<std::vector<int>> PlayScene::CalculateBFSDistance() {
     // Reverse BFS to find path.
@@ -498,9 +521,9 @@ std::vector<std::vector<int>> PlayScene::CalculateBFSDistance() {
         for(auto delta : directions){
             if((p+delta).x < 0 || (p+delta).y < 0) continue;
             if ((p + delta).x >= MapWidth || (p + delta).y >= MapHeight) continue;
-            if(mapState[p.y + delta.y][p.x + delta.x] == TILE_OCCUPIED) continue;
-            if (mapState[p.y + delta.y][p.x + delta.x] == TILE_HIGH) 
-                continue;
+            //Bypass highground and blocked tiles
+            if(mapState[p.y + delta.y][p.x + delta.x] & TILE_BLOCKED) continue;
+            if (mapState[p.y + delta.y][p.x + delta.x] & TILE_HIGH) continue;
             if(map[p.y + delta.y][p.x + delta.x] < 0){
                 que.push(p + delta);
                 map[p.y + delta.y][p.x + delta.x] = map[p.y][p.x] + 1;

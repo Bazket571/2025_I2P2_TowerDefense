@@ -5,8 +5,9 @@
 
 const int HomingTurret::Price = 100;
 HomingTurret::HomingTurret(float x, float y):
-    Turret("play/tower-base.png", "play/turret-3.png", x, y, 200, Price, 1)
+    Turret("play/tower-base.png", "play/turret-3.png", x, y, 200, Price, 1, 1)
 {
+    tileType = HIGH_TILE;
 }
 
 void HomingTurret::CreateBullet(){

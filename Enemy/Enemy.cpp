@@ -48,7 +48,7 @@ void Enemy::Hit(float damage) {
 
         int blockSize = getPlayScene()->BlockSize;
         Engine::Point curPos = Position / blockSize;
-        int score = getPlayScene()->CalculateBFSDistance()[curPos.y][curPos.x];
+        int score = getPlayScene()->mapDistance[curPos.y][curPos.x];
         getPlayScene()->AddScore(score);
 
         getPlayScene()->EnemyGroup->RemoveObject(objectIterator);
@@ -91,6 +91,10 @@ void Enemy::UpdatePath(const std::vector<std::vector<int>> &mapDistance) {
 void Enemy::Update(float deltaTime) {
     // Pre-calculate the velocity.
     float remainSpeed = speed * deltaTime;
+    if(blocked) {
+        remainSpeed = 0;
+        Velocity = 0;
+    }
     while (remainSpeed != 0) {
         if (path.empty()) {
             // Reach end point.

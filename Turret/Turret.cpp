@@ -15,7 +15,7 @@
 PlayScene *Turret::getPlayScene() {
     return dynamic_cast<PlayScene *>(Engine::GameEngine::GetInstance().GetActiveScene());
 }
-Turret::Turret(std::string imgBase, std::string imgTurret, float x, float y, float radius, int price, float coolDown) : Sprite(imgTurret, x, y), price(price), coolDown(coolDown), imgBase(imgBase, x, y) {
+Turret::Turret(std::string imgBase, std::string imgTurret, float x, float y, float radius, int price, float coolDown, int blockCount) : Sprite(imgTurret, x, y), price(price), coolDown(coolDown), imgBase(imgBase, x, y), blockCount(blockCount) {
     CollisionRadius = radius;
 }
 void Turret::Update(float deltaTime) {
@@ -26,6 +26,7 @@ void Turret::Update(float deltaTime) {
     if (!Enabled)
         return;
     if (Target) {
+        //Check enemy out of range
         Engine::Point diff = Target->Position - Position;
         if (diff.Magnitude() > CollisionRadius) {
             Target->lockedTurrets.erase(lockedTurretIterator);

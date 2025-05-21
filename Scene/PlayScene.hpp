@@ -21,11 +21,12 @@ namespace Engine {
 class PlayScene final : public Engine::IScene {
 private:
     enum TileType {
-        TILE_LOW,
-        TILE_HIGH,
-        TILE_SPAWN,
-        TILE_OBJECTIVE,
-        TILE_OCCUPIED
+        TILE_LOW             = 0b00,
+        TILE_HIGH            = 0b01,
+        TILE_SPAWN           = 0b10,
+        TILE_OBJECTIVE       = 0b11,
+        TILE_BLOCKED         = 0b100, //For roadblocks
+        TILE_OCCUPIED_TURRET = 0b1000
     };
     ALLEGRO_SAMPLE_ID bgmId;
     std::shared_ptr<ALLEGRO_SAMPLE_INSTANCE> deathBGMInstance;
@@ -65,7 +66,7 @@ public:
     Engine::Image *imgTarget;
     Engine::Sprite *dangerIndicator;
     Turret *preview;
-    std::vector<std::vector<TileType>> mapState;
+    std::vector<std::vector<int>> mapState;
     std::vector<std::vector<int>> mapDistance;
     std::list<std::pair<int, float>> enemyWaveData;
     std::list<int> keyStrokes;
@@ -85,9 +86,12 @@ public:
     void AddScore(int point);
     void ReadMap();
     void ReadEnemyWave();
+    void ConstructTurretList();
     void ConstructUI();
     void UIBtnClicked(int id);
-    bool CheckSpaceValid(int x, int y);
+    //Return 1: is space valid
+    //Return 2: calculated BFS path map if space is valid
+    std::pair<bool, std::vector<std::vector<int>>> CheckSpaceValid(int x, int y, TileType type);
     std::vector<std::vector<int>> CalculateBFSDistance();
     void TriggerCheat();
     // void ModifyReadMapTiles();
