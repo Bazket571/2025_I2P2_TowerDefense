@@ -480,6 +480,7 @@ std::pair<bool, std::vector<std::vector<int>>> PlayScene::CheckSpaceValid(int x,
     //Check out of bounds
     if (x < 0 || x >= MapWidth || y < 0 || y >= MapHeight)
         return {false, {}};
+    if(mapState[y][x] == TILE_SPAWN || mapState[y][x] == TILE_OBJECTIVE) return {false, {}};
 
     //Check if blocking all enemies' paths
     auto map00 = mapState[y][x];
