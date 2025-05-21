@@ -108,7 +108,7 @@ add_executable(2025_I2P2_TowerDefense
 
 add_custom_command(TARGET 2025_I2P2_TowerDefense PRE_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy_directory
-                    ${CMAKE_SOURCE_DIR}/Resource $<TARGET_FILE_DIR:2025_I2P2_TowerDefense>)
+                    ${CMAKE_SOURCE_DIR}/Resource $<TARGET_FILE_DIR:2025_I2P2_TowerDefense>/Resource)
 
 add_subdirectory(lunasvg)
 add_subdirectory(spine-runtimes/spine-cpp spine-runtimes)

@@ -9,19 +9,20 @@ namespace Engine {
     void IScene::Terminate() {
         Clear();
     }
-    static void set_perspective_transform(ALLEGRO_BITMAP* bmp)
+    static void set_perspective_transform()
     {
+        ALLEGRO_BITMAP* bmp = al_get_backbuffer(al_get_current_display());
         ALLEGRO_TRANSFORM p;
         float fov = tan(90 * ALLEGRO_PI / 180 / 2);
         float width = al_get_bitmap_width(bmp);
         float height = al_get_bitmap_height(bmp);
         al_set_target_bitmap(bmp);
         al_identity_transform(&p);
-        //al_perspective_transform(&p, -1, aspect_ratio, 1, 1, -aspect_ratio, 1000); //[-1;1]
         al_perspective_transform(&p, -width/2, -height/2, width / 2 / fov, width/2, height/2, 9000);
         al_use_projection_transform(&p);
     }
     float i = 0;
+    float theta = 0;
     void DrawCube(){
         ALLEGRO_STATE state;
         ALLEGRO_TRANSFORM projection, t;
@@ -34,28 +35,23 @@ namespace Engine {
             0, 500, 900,
             0, 0, 0,
             0, 1, 0);
-        set_perspective_transform(al_get_backbuffer(al_get_current_display()));
+        set_perspective_transform();
         al_use_transform(&t);
         i += 0.05;
+        theta += 0.05;
         if(i >= 1) i = 0;
-        std::vector<ALLEGRO_VERTEX> quad{
-            {-500, -200, 0, 0, 0, al_map_rgb_f(1, 0, 0)},
-            {-500, 200, 0, 0, 0, al_map_rgb_f(0, 1, 0)},
-            {500, -200, 0, 0, 0, al_map_rgb_f(0, 0, 1)},
-            {500, 200, 0, 0, 0, al_map_rgb_f(1, 0, 0)}
-        };
-        std::vector<ALLEGRO_VERTEX> quad2{
-            {-100, -100, 30, 0, 0, al_map_rgb_f(1, 1, 1)},
-            {-100, 100, 30, 0, 0, al_map_rgb_f(1, 1, 1)},
-            {100, -100, 30, 0, 0, al_map_rgb_f(1, 1, 1)},
-            {100, 100, 30, 0, 0, al_map_rgb_f(1, 1, 1)}
-        };
-        std::vector<ALLEGRO_VERTEX> quad3{
-            {-100, -100, 0, 0, 0, al_map_rgb_f(i, 1, 1)},
-            {-100, 100, 0, 0, 0, al_map_rgb_f(i, 1, 1)},
-            {100, -100, 0, 0, 0, al_map_rgb_f(i, 1, 1)},
-            {100, 100, 0, 0, 0, al_map_rgb_f(i, 1, 1)}
-        };
+        if (theta >= ALLEGRO_PI * 2) theta = 0;
+        al_identity_transform(&t);
+        al_rotate_transform(&t, theta);
+        al_translate_transform(&t, 500, 0);
+        std::vector<Engine::Point> vertexes{ {-100, -100},{-100, 100},{100, -100},{100, 100}};
+
+        std::vector<ALLEGRO_VERTEX> quad2, quad3;
+        for (auto p : vertexes) {
+            al_transform_coordinates(&t, &p.x, &p.y);
+            quad2.push_back({ p.x, p.y, 50, 0, 0, al_map_rgb_f(1, 1, 1) });
+            quad3.push_back({ p.x, p.y, 0, 0, 0, al_map_rgba_f(1, 1, 1, 0.5) });
+        }
         std::vector<int> indices{0, 1, 2, 2, 3, 1};
 
         al_draw_circle(0, 0, 20, al_map_rgb_f(0, 1, 0), 5);
