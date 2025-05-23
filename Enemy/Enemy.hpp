@@ -22,7 +22,7 @@ protected:
 
 public:
     float reachEndTime;
-    bool blocked;
+    float speedMultiplier;
     std::list<Turret *> lockedTurrets;
     std::list<Bullet *> lockedBullets;
     Enemy(std::string img, float x, float y, float radius, float speed, float hp, int money);

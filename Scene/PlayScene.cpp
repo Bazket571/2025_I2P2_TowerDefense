@@ -102,10 +102,10 @@ void PlayScene::Update(float deltaTime) {
     else if (deathCountDown != -1)
         SpeedMult = 1;
     // Calculate danger zone.
-    // Unblock all enemies
+    // Reset all enemy's speed multiplier
     std::vector<float> reachEndTimes;
     for (auto &it : EnemyGroup->GetObjects()) {
-        dynamic_cast<Enemy *>(it)->blocked = false;
+        dynamic_cast<Enemy *>(it)->speedMultiplier = 1;
         reachEndTimes.push_back(dynamic_cast<Enemy *>(it)->reachEndTime);
     }
     // Can use Heap / Priority-Queue instead. But since we won't have too many enemies, sorting is fast enough.
@@ -241,7 +241,7 @@ void PlayScene::OnMouseUp(int button, int mx, int my) {
                 return;
             // Check if valid.
             auto result = CheckSpaceValid(x, y, TILE_OCCUPIED_TURRET);
-            if (!result.first) {
+            if (!result.first || !(mapState[y][x] & preview->tileType)) {
                 Engine::Sprite *sprite;
                 GroundEffectGroup->AddNewObject(sprite = new DirtyEffect("play/target-invalid.png", 1, x * BlockSize + BlockSize / 2, y * BlockSize + BlockSize / 2));
                 sprite->Rotation = 0;
@@ -480,7 +480,7 @@ std::pair<bool, std::vector<std::vector<int>>> PlayScene::CheckSpaceValid(int x,
     //Check out of bounds
     if (x < 0 || x >= MapWidth || y < 0 || y >= MapHeight)
         return {false, {}};
-    if(mapState[y][x] == TILE_SPAWN || mapState[y][x] == TILE_OBJECTIVE) return {false, {}};
+    if(mapState[y][x] & TILE_SPAWN || mapState[y][x] & TILE_OBJECTIVE) return {false, {}};
 
     //Check if blocking all enemies' paths
     auto map00 = mapState[y][x];

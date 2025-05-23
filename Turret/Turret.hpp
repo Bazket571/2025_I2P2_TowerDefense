@@ -12,15 +12,10 @@ class PlayScene;
 
 class Turret : public Engine::Sprite {
 protected:
-    enum TileType {
-        LOW_TILE,
-        HIGH_TILE
-    };
     int price;
     float coolDown;
     float reload = 0;
     float rotateRadian = 2 * ALLEGRO_PI;
-    TileType tileType;
     int blockCount;
     Sprite imgBase;
     std::list<Turret *>::iterator lockedTurretIterator;
@@ -29,6 +24,7 @@ protected:
     virtual void CreateBullet() = 0;
 
 public:
+    TileType tileType;
     bool Enabled = true;
     bool Preview = false;
     Enemy *Target = nullptr;

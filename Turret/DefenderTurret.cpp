@@ -5,7 +5,7 @@ const int DefenderTurret::Price = 50;
 DefenderTurret::DefenderTurret(float x, float y, int blockCount):
     Turret("play/tower-base.png", "play/enemy-4.png", x, y, 30, Price, 1, blockCount)
 {
-    tileType = LOW_TILE;
+    tileType = TILE_LOW;
 }
 
 //This turret will not attack
@@ -58,6 +58,6 @@ void DefenderTurret::Update(float delta)
 
     //Stop blocked enemies
     for(auto enemy : blocking){
-        enemy->blocked = 1;
+        enemy->speedMultiplier = 0;
     }
 }

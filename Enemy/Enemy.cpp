@@ -34,6 +34,7 @@ void Enemy::OnExplode() {
 Enemy::Enemy(std::string img, float x, float y, float radius, float speed, float hp, int money) : Engine::Sprite(img, x, y), speed(speed), hp(hp), money(money) {
     CollisionRadius = radius;
     reachEndTime = 0;
+    speedMultiplier = 1;
 }
 void Enemy::Hit(float damage) {
     hp -= damage;
@@ -90,10 +91,9 @@ void Enemy::UpdatePath(const std::vector<std::vector<int>> &mapDistance) {
 }
 void Enemy::Update(float deltaTime) {
     // Pre-calculate the velocity.
-    float remainSpeed = speed * deltaTime;
-    if(blocked) {
-        remainSpeed = 0;
-        Velocity = 0;
+    float remainSpeed = speed * speedMultiplier * deltaTime;
+    if (remainSpeed == 0) {
+        Velocity = { 0,0 };
     }
     while (remainSpeed != 0) {
         if (path.empty()) {
