@@ -24,7 +24,7 @@ protected:
     virtual void CreateBullet() = 0;
 
 public:
-    TileType tileType;
+    int tileType;
     bool Enabled = true;
     bool Preview = false;
     Enemy *Target = nullptr;

@@ -81,7 +81,7 @@ namespace Engine {
         auto document = lunasvg::Document::loadFromFile(bitmapPath);
         if(!document) throw Allegro5Exception(("failed to load image: " + bitmapPath).c_str());
         document->applyStyleSheet(whiteFill);
-        auto bitmap = document->renderToBitmap(width, height, 0x000000FF);
+        auto bitmap = document->renderToBitmap(width, height, 0x00000000);
         ALLEGRO_BITMAP *al_bmp = al_create_bitmap(bitmap.width(), bitmap.height());
         ALLEGRO_LOCKED_REGION* al_bmp_mem = al_lock_bitmap(al_bmp, ALLEGRO_PIXEL_FORMAT_ABGR_8888, ALLEGRO_LOCK_READWRITE);
 
@@ -92,6 +92,8 @@ namespace Engine {
         }
 
         al_unlock_bitmap(al_bmp);
+        LOG(INFO) << "Loaded Resource<image>: " << bitmapPath << " scaled to " << width << "x" << height;
+        name += '?' + std::to_string(bitmap.width()) + 'x' + std::to_string(bitmap.height());
         bitmaps[name] = std::shared_ptr<ALLEGRO_BITMAP>(al_bmp, al_destroy_bitmap);
         return bitmaps[name];
     }

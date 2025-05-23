@@ -30,6 +30,7 @@
 #include "UI/Animation/Plane.hpp"
 #include "UI/Component/Label.hpp"
 #include <Turret/DefenderTurret.hpp>
+#include <Turret/FreezeTurret.hpp>
 
 // TODO HACKATHON-4 (1/3): Trace how the game handles keyboard input.
 // TODO HACKATHON-4 (2/3): Find the cheat code sequence in this file.
@@ -431,6 +432,12 @@ void PlayScene::ConstructTurretList(){
                            Engine::Sprite("play/tower-base.png", 1522, 176, 0, 0, 0, 0),
                            Engine::Sprite("play/enemy-4.png", 1522, 176, 0, 0, 0, 0), 1522, 176, DefenderTurret::Price);
     btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 3));
+
+    // Button 4
+    btn = new TurretButton("play/floor.png", "play/dirt.png",
+        Engine::Sprite("play/tower-base.png", 1294, 252, 0, 0, 0, 0),
+        Engine::Sprite("svgs/regular/snowflake.svg", 1294 + 8, 252 + 4, 48, 0, 0, 0), 1294, 252, DefenderTurret::Price);
+    btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 4));
     UIGroup->AddNewControlObject(btn);
 }
 void PlayScene::ConstructUI() {
@@ -463,6 +470,8 @@ void PlayScene::UIBtnClicked(int id) {
         preview = new HomingTurret(0, 0);
     else if (id == 3 && money >= DefenderTurret::Price)
         preview = new DefenderTurret(0, 0, 3);
+    else if (id == 4 && money >= FreezeTurret::Price)
+        preview = new FreezeTurret(0, 0, 0.5);
     if (!preview)
         return;
     preview->Position = Engine::GameEngine::GetInstance().GetMousePosition();

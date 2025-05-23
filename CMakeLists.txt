@@ -106,7 +106,7 @@ add_executable(2025_I2P2_TowerDefense
     UI/Component/Slider.hpp
     
     main.cpp
-)
+    "Turret/FreezeTurret.cpp")
 
 add_custom_command(TARGET 2025_I2P2_TowerDefense PRE_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy_directory

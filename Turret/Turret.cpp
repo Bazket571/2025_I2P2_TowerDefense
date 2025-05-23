@@ -17,6 +17,7 @@ PlayScene *Turret::getPlayScene() {
 }
 Turret::Turret(std::string imgBase, std::string imgTurret, float x, float y, float radius, int price, float coolDown, int blockCount) : Sprite(imgTurret, x, y), price(price), coolDown(coolDown), imgBase(imgBase, x, y), blockCount(blockCount) {
     CollisionRadius = radius;
+    tileType = TILE_LOW | TILE_HIGH;
 }
 void Turret::Update(float deltaTime) {
     Sprite::Update(deltaTime);
