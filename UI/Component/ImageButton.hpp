@@ -11,6 +11,7 @@
 namespace Engine {
     /// <summary>
     /// A clickable button, changes image when mouse move.
+    /// WARNING: Anchor doesn't work on this
     /// </summary>
     class ImageButton : public Image, public IControl {
     protected:

@@ -1,9 +1,11 @@
 #include "ScoreScene.hpp"
+#include <chrono>
 #include <fstream>
 #include <algorithm>
 #include <UI/Component/Label.hpp>
 #include <Engine/GameEngine.hpp>
 #include <Scene/PlayScene.hpp>
+#include "WinScene.hpp"
 
 const int ScoreScene::entriesPerPage = 7;
 const int ScoreScene::scoreboardHeightOffset = 100;
@@ -45,7 +47,7 @@ void ScoreScene::drawScores(int page)
 }
 void ScoreScene::Initialize()
 {
-    score = dynamic_cast<PlayScene*>(Engine::GameEngine::GetInstance().GetScene("play"))->score;
+    int &score = dynamic_cast<PlayScene*>(Engine::GameEngine::GetInstance().GetScene("play"))->score;
     currentPage = 0;
     entries = readScoreFile("Resource/scoreboard.txt");
     int w = Engine::GameEngine::GetInstance().GetScreenSize().x;
@@ -56,6 +58,18 @@ void ScoreScene::Initialize()
     btn->SetOnClickCallback(std::bind(&ScoreScene::BackOnClick, this, 1));
     AddNewControlObject(btn);
     AddNewObject(new Engine::Label("SCOREBOARD", "pirulen.ttf", 48, w / 2, 50, 255, 255, 255, 255, 0.5, 0.5));
+    if (score > 0) {
+        ScoreEntry curr = {
+            dynamic_cast<WinScene*>(Engine::GameEngine::GetInstance().GetScene("win"))->name,
+            score,
+            std::chrono::system_clock::to_time_t(std::chrono::system_clock::now())
+        };
+        entries.push_back(curr);
+        std::sort(entries.begin(), entries.end(), [](const ScoreEntry& a, const ScoreEntry& b) {
+            return a.score > b.score;
+        });
+        score = 0;
+    }
 
     labels.clear();
     labels.resize(entriesPerPage);

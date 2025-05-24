@@ -472,7 +472,7 @@ void PlayScene::UIBtnClicked(int id) {
     else if (id == 3 && money >= DefenderTurret::Price)
         preview = new DefenderTurret(0, 0, 3);
     else if (id == 4 && money >= FreezeTurret::Price)
-        preview = new FreezeTurret(0, 0, 0.5);
+        preview = new FreezeTurret(0, 0, 0.8);
     if (!preview)
         return;
     preview->Position = Engine::GameEngine::GetInstance().GetMousePosition();
