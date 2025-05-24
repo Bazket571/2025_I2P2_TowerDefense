@@ -432,11 +432,12 @@ void PlayScene::ConstructTurretList(){
                            Engine::Sprite("play/tower-base.png", 1522, 176, 0, 0, 0, 0),
                            Engine::Sprite("play/enemy-4.png", 1522, 176, 0, 0, 0, 0), 1522, 176, DefenderTurret::Price);
     btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 3));
+    UIGroup->AddNewControlObject(btn);
 
     // Button 4
     btn = new TurretButton("play/floor.png", "play/dirt.png",
         Engine::Sprite("play/tower-base.png", 1294, 252, 0, 0, 0, 0),
-        Engine::Sprite("svgs/regular/snowflake.svg", 1294 + 8, 252 + 4, 48, 0, 0, 0), 1294, 252, DefenderTurret::Price);
+        Engine::Sprite("svgs/regular/snowflake.svg", 1294 + 8, 252 + 4, 48, 0, 0, 0), 1294, 252, FreezeTurret::Price);
     btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 4));
     UIGroup->AddNewControlObject(btn);
 }
