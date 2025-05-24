@@ -74,10 +74,14 @@ namespace Engine {
             }
         )CSS";
 
-        if (bitmaps.count(name) != 0)
-        return bitmaps[name];
-
         std::string bitmapPath = pathPrefix + name;
+        if (width >= 0 || height >= 0) {
+            name += '?' + std::to_string(width) + 'x' + std::to_string(height);
+        }
+
+        if (bitmaps.count(name) != 0)
+            return bitmaps[name];
+
         auto document = lunasvg::Document::loadFromFile(bitmapPath);
         if(!document) throw Allegro5Exception(("failed to load image: " + bitmapPath).c_str());
         document->applyStyleSheet(whiteFill);
@@ -90,10 +94,8 @@ namespace Engine {
                     bitmap.data() + i * bitmap.stride(),
                     bitmap.width() * al_bmp_mem->pixel_size);
         }
-
         al_unlock_bitmap(al_bmp);
         LOG(INFO) << "Loaded Resource<image>: " << bitmapPath << " scaled to " << width << "x" << height;
-        name += '?' + std::to_string(bitmap.width()) + 'x' + std::to_string(bitmap.height());
         bitmaps[name] = std::shared_ptr<ALLEGRO_BITMAP>(al_bmp, al_destroy_bitmap);
         return bitmaps[name];
     }
