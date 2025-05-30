@@ -21,7 +21,7 @@ namespace Engine {
         al_perspective_transform(&p, -width / 2, -height / 2, width / 2, width / 2, height / 2, 9000);
         al_use_projection_transform(&p);
     }
-    float a = -2000;
+    float a = 0;
     static void set_camera() {
         ALLEGRO_TRANSFORM t;
         Engine::Point vec(0, 3, 6);
@@ -32,7 +32,7 @@ namespace Engine {
             0, 0, 0,
             0, 1, 0);
         set_perspective_transform();
-        a += 10;
+        //a += 10;
         if (a >= 2000) a = -2000;
         al_translate_transform_3d(&t, -800 + a, -416, 0);
         al_rotate_transform_3d(&t, 1, 0, 0, -ALLEGRO_PI / 24);

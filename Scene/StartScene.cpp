@@ -43,6 +43,11 @@ void StartScene::Initialize() {
     btn->SetOnClickCallback(std::bind(&StartScene::ScoreOnClick, this));
     AddNewControlObject(btn);
     AddNewObject(new Engine::Label("Score", "pirulen.ttf", 48, halfW, halfH * 3 / 2 + 150, 0, 0, 0, 255, 0.5, 0.5));
+
+    Engine::SpineSprite* supremeLeader;
+    supremeLeader = new Engine::SpineSprite("amiya/build_char_002_amiya.skel", "amiya/build_char_002_amiya.atlas", halfW, halfH, 0.5, 0.5, 0.5);
+    supremeLeader->state->setAnimation(1, "Interact", true);
+    AddNewObject(supremeLeader);
 }
 void StartScene::Terminate() {
     IScene::Terminate();
