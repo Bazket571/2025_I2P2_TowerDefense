@@ -17,7 +17,7 @@
 #include "UI/Component/ImageButton.hpp"
 #include "UI/Component/Label.hpp"
 #include "UI/Component/Slider.hpp"
-#include "StartScene.h"
+#include "3D/Object3D.hpp"
 
 // TODO HACKATHON-2 (1/3): You can imitate the 2 files: 'StartScene.hpp', 'StartScene.cpp' to implement your SettingsScene.
 void StartScene::Initialize() {
@@ -48,6 +48,7 @@ void StartScene::Initialize() {
     supremeLeader = new Engine::SpineSprite("amiya/build_char_002_amiya.skel", "amiya/build_char_002_amiya.atlas", halfW, halfH, 0.5, 0.5, 0.5);
     supremeLeader->state->setAnimation(1, "Interact", true);
     AddNewObject(supremeLeader);
+    AddNewObject(new Object3D("Resource/Cube.glb", 200, 200, 50, 50));
 }
 void StartScene::Terminate() {
     IScene::Terminate();

@@ -148,16 +148,6 @@ void PlayScene::Update(float deltaTime) {
         ticks += deltaTime;
         if (enemyWaveData.empty()) {
             if (EnemyGroup->GetObjects().empty()) {
-                // Free resources.
-                /*delete TileMapGroup;
-                delete GroundEffectGroup;
-                delete DebugIndicatorGroup;
-                delete TowerGroup;
-                delete EnemyGroup;
-                delete BulletGroup;
-                delete EffectGroup;
-                delete UIGroup;
-                delete imgTarget;*/
                 // Win.
                 Engine::GameEngine::GetInstance().ChangeScene("win");
             }
@@ -518,17 +508,11 @@ std::vector<std::vector<int>> PlayScene::CalculateBFSDistance() {
     std::queue<Engine::Point> que;
     // Push end point.
     // BFS from end point.
-    
-    
-    //TODO Objective location, change this to blue box
     que.push(EndGridPoint);
     map[EndGridPoint.y][EndGridPoint.x] = 0;
     while (!que.empty()) {
         Engine::Point p = que.front();
         que.pop();
-        // TODO PROJECT-1 (1/1): Implement a BFS starting from the most right-bottom block in the map.
-        //               For each step you should assign the corresponding distance to the most right-bottom block.
-        //               mapState[y][x] is TILE_DIRT if it is empty.
         for(auto delta : directions){
             if((p+delta).x < 0 || (p+delta).y < 0) continue;
             if ((p + delta).x >= MapWidth || (p + delta).y >= MapHeight) continue;

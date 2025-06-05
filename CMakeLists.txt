@@ -106,15 +106,19 @@ add_executable(2025_I2P2_TowerDefense
     UI/Component/Slider.hpp
     
     main.cpp
-    "Turret/FreezeTurret.cpp")
+    "Turret/FreezeTurret.cpp"  
+    "3D/Object3D.cpp")
 
 add_custom_command(TARGET 2025_I2P2_TowerDefense PRE_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy_directory
                     ${CMAKE_SOURCE_DIR}/Resource $<TARGET_FILE_DIR:2025_I2P2_TowerDefense>/Resource)
-
+set(TINYGLTF_INSTALL OFF CACHE INTERNAL "" FORCE)
+set(TINYGLTF_BUILD_LOADER_EXAMPLE OFF CACHE INTERNAL "" FORCE)
+set(TINYGLTF_HEADER_ONLY OFF CACHE INTERNAL "" FORCE)
+add_subdirectory(tinygltf)
 add_subdirectory(lunasvg)
 add_subdirectory(spine-runtimes/spine-cpp spine-runtimes)
-target_link_libraries(2025_I2P2_TowerDefense lunasvg::lunasvg spine-cpp)
+target_link_libraries(2025_I2P2_TowerDefense lunasvg::lunasvg spine-cpp tinygltf)
 
 IF (WIN32)
     find_package(allegro REQUIRED PATHS allegro)

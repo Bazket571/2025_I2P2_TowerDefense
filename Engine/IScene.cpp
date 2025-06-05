@@ -71,7 +71,7 @@ namespace Engine {
 
         al_draw_circle(0, 0, 20, al_map_rgb_f(0, 1, 0), 5);
         al_draw_rectangle(0, 0, 1600, 832, al_map_rgb_f(0, 0, 1), 10);
-        al_draw_circle(mouse.x, mouse.y, 10, al_map_rgb_f(1, 0, 0), 5);
+        al_draw_circle(800, 416, 10, al_map_rgb_f(1, 0, 0), 5);
         al_draw_indexed_prim(quad2.data(), nullptr, nullptr, indices.data(), indices.size(), ALLEGRO_PRIM_TRIANGLE_LIST);
         al_draw_indexed_prim(quad3.data(), nullptr, nullptr, indices.data(), indices.size(), ALLEGRO_PRIM_TRIANGLE_LIST);
         al_set_render_state(ALLEGRO_DEPTH_TEST, false);
@@ -81,6 +81,7 @@ namespace Engine {
         al_clear_to_color(al_map_rgb(0, 0, 0));
         al_clear_depth_buffer(1);
         Group::Draw();
+        //al_draw_circle(800, 416, 10, al_map_rgb_f(1, 0, 0), 5);
         //DrawCube();
     }
 }
