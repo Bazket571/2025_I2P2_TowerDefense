@@ -14,7 +14,7 @@ static void set_perspective_transform()
     al_use_projection_transform(&p);
 }
 float a = 0;
-static void set_camera() {
+static ALLEGRO_TRANSFORM set_camera() {
     ALLEGRO_TRANSFORM t;
     Engine::Point vec(0, 3, 6);
     vec = vec.Normalize();
@@ -29,6 +29,7 @@ static void set_camera() {
     al_translate_transform_3d(&t, -800 + a, -416, 0);
     al_rotate_transform_3d(&t, 1, 0, 0, -ALLEGRO_PI / 24);
     al_use_transform(&t);
+    return t;
 }
 float i = 0;
 float theta = 0;
@@ -40,7 +41,7 @@ void DrawCube(std::vector<ALLEGRO_VERTEX> vertices, std::vector<int> indices, AL
         ALLEGRO_STATE_TRANSFORM |
         ALLEGRO_STATE_PROJECTION_TRANSFORM);
     al_set_render_state(ALLEGRO_DEPTH_TEST, true);
-    set_camera();
+    ALLEGRO_TRANSFORM defaultTrans = set_camera();
 
     i += 0.05;
     theta += 0.05;
@@ -48,17 +49,21 @@ void DrawCube(std::vector<ALLEGRO_VERTEX> vertices, std::vector<int> indices, AL
     if (theta >= ALLEGRO_PI * 2) theta = 0;
     Engine::Point mouse = Engine::GameEngine::GetInstance().GetMousePosition();
     //al_transform_coordinates(&t, &mouse.x, &mouse.y);  
-    al_identity_transform(&t);
-    al_scale_transform_3d(&t, 50, 50, 50);
-    al_translate_transform(&t, 800, 416);
-
-    for (auto &p : vertices) {
-        al_transform_coordinates_3d(&t, &p.x, &p.y, &p.z);
+    for (int x = 0; x < 14; x++) {
+        for (int y = 0; y < 8; y++) {
+            al_identity_transform(&t); 
+            al_scale_transform_3d(&t, 50, 50, 50);
+            al_translate_transform_3d(&t, x * 120, y*120, -50 * ((x * y) % 3 == 0));
+            al_compose_transform(&t, &defaultTrans);
+            al_use_transform(&t);
+            al_draw_indexed_prim(vertices.data(), nullptr, texture, indices.data(), indices.size(), ALLEGRO_PRIM_TRIANGLE_LIST);
+        }
     }
-
+    
+    al_use_transform(&defaultTrans);
     al_draw_rectangle(0, 0, 1600, 832, al_map_rgb_f(0, 0, 1), 10);
     al_draw_circle(800, 416, 10, al_map_rgb_f(1, 0, 0), 5);
-    al_draw_indexed_prim(vertices.data(), nullptr, texture, indices.data(), indices.size(), ALLEGRO_PRIM_TRIANGLE_LIST);
+
     al_set_render_state(ALLEGRO_DEPTH_TEST, false);
     al_restore_state(&state);
 }
@@ -126,6 +131,7 @@ inline std::vector<T> Object3D::getFromAccessor(int accessorID) const
 
 void Object3D::Draw() const
 {
+
     DrawCube(vertices, indices, texture.get());
 }
 
