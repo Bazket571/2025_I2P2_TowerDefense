@@ -1,3 +1,5 @@
+#define ALLEGRO_UNSTABLE
+
 #include "Engine/IObject.hpp"
 
 #include <vector>
@@ -18,6 +20,8 @@ public:
 	std::vector<ALLEGRO_VERTEX> vertices;
 	std::vector<int> indices;
 	std::shared_ptr<ALLEGRO_BITMAP> texture;
+	std::shared_ptr<ALLEGRO_BITMAP> depthTexture;
+	std::shared_ptr<ALLEGRO_BITMAP> render;
 
 	Object3D(std::string gltfFile, int x, int y, float scaleX, float scaleY, int anchorX = 0, int anchorY = 0);
 	void Draw() const;

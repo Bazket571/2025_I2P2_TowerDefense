@@ -1,20 +1,43 @@
-#include "Engine/LOG.hpp"
-#include "Object3D.hpp"
-#include "Engine/GameEngine.hpp"
 
-static void set_perspective_transform()
+#include "Object3D.hpp"
+#include "Engine/LOG.hpp"
+#include "Engine/GameEngine.hpp"
+#include "allegro5/allegro_opengl.h"
+
+static ALLEGRO_TRANSFORM perspective_transform()
 {
-    ALLEGRO_BITMAP* bmp = al_get_backbuffer(al_get_current_display());
+    ALLEGRO_BITMAP* bmp = al_get_target_bitmap();
     ALLEGRO_TRANSFORM p;
     float width = al_get_bitmap_width(bmp);
     float height = al_get_bitmap_height(bmp);
-    al_set_target_bitmap(bmp);
     al_identity_transform(&p);
     al_perspective_transform(&p, -width / 2, -height / 2, width / 2, width / 2, height / 2, 9000);
-    al_use_projection_transform(&p);
+    return p;
 }
-float a = 0;
-static ALLEGRO_TRANSFORM set_camera() {
+
+static ALLEGRO_TRANSFORM orthographic_transform()
+{
+    ALLEGRO_BITMAP* bmp = al_get_target_bitmap();
+    ALLEGRO_TRANSFORM p;
+    float width = al_get_bitmap_width(bmp);
+    float height = al_get_bitmap_height(bmp);
+    al_identity_transform(&p);
+    al_orthographic_transform(&p, 0, 0, 5000, 2048, 1536, -5000);
+    return p;
+}
+
+static ALLEGRO_TRANSFORM light_view() {
+    ALLEGRO_TRANSFORM t;
+    Engine::Point vec(1, -3, 3);
+    al_build_camera_transform(&t,
+        vec.x, vec.y, vec.z,
+        0, 0, 0,
+        vec.x, vec.y, 0);
+    al_translate_transform_3d(&t, 1900, 900, 0);
+    return t;
+}
+
+static ALLEGRO_TRANSFORM camera_view() {
     ALLEGRO_TRANSFORM t;
     Engine::Point vec(0, 3, 6);
     vec = vec.Normalize();
@@ -23,40 +46,37 @@ static ALLEGRO_TRANSFORM set_camera() {
         vec.x, vec.y, vec.z,
         0, 0, 0,
         0, 1, 0);
-    set_perspective_transform();
-    //a += 10;
-    if (a >= 2000) a = -2000;
-    al_translate_transform_3d(&t, -800 + a, -416, 0);
+    al_translate_transform_3d(&t, -800, -416, 0);
     al_rotate_transform_3d(&t, 1, 0, 0, -ALLEGRO_PI / 24);
     al_use_transform(&t);
     return t;
 }
-float i = 0;
-float theta = 0;
+float a = 0;
 void DrawCube(std::vector<ALLEGRO_VERTEX> vertices, std::vector<int> indices, ALLEGRO_BITMAP* texture) {
-    ALLEGRO_STATE state;
     ALLEGRO_TRANSFORM t;
-
-    al_store_state(&state, ALLEGRO_STATE_TARGET_BITMAP |
-        ALLEGRO_STATE_TRANSFORM |
-        ALLEGRO_STATE_PROJECTION_TRANSFORM);
     al_set_render_state(ALLEGRO_DEPTH_TEST, true);
-    ALLEGRO_TRANSFORM defaultTrans = set_camera();
+    ALLEGRO_TRANSFORM defaultTrans;
+    al_copy_transform(&defaultTrans, al_get_current_transform());
 
-    i += 0.05;
-    theta += 0.05;
-    if (i >= 1) i = 0;
-    if (theta >= ALLEGRO_PI * 2) theta = 0;
     Engine::Point mouse = Engine::GameEngine::GetInstance().GetMousePosition();
+    
+    al_identity_transform(&t);
+    al_scale_transform_3d(&t, 50, 50, 50);
+    a += 1; if (a > 100) a = 0;
+    al_translate_transform_3d(&t, 0, 0, a);
+    al_compose_transform(&t, &defaultTrans);
+    al_use_transform(&t);
+    al_draw_indexed_prim(vertices.data(), nullptr, texture, indices.data(), indices.size(), ALLEGRO_PRIM_TRIANGLE_LIST);
+
     //al_transform_coordinates(&t, &mouse.x, &mouse.y);  
     for (int x = 0; x < 14; x++) {
         for (int y = 0; y < 8; y++) {
             al_identity_transform(&t); 
             al_scale_transform_3d(&t, 50, 50, 50);
-            al_translate_transform_3d(&t, x * 120, y*120, -50 * ((x * y) % 3 == 0));
+            al_translate_transform_3d(&t, x * 120, y*120, -50 * ((x+y) % 2 == 0));
             al_compose_transform(&t, &defaultTrans);
             al_use_transform(&t);
-            al_draw_indexed_prim(vertices.data(), nullptr, texture, indices.data(), indices.size(), ALLEGRO_PRIM_TRIANGLE_LIST);
+            //al_draw_indexed_prim(vertices.data(), nullptr, texture, indices.data(), indices.size(), ALLEGRO_PRIM_TRIANGLE_LIST);
         }
     }
     
@@ -65,9 +85,7 @@ void DrawCube(std::vector<ALLEGRO_VERTEX> vertices, std::vector<int> indices, AL
     al_draw_circle(800, 416, 10, al_map_rgb_f(1, 0, 0), 5);
 
     al_set_render_state(ALLEGRO_DEPTH_TEST, false);
-    al_restore_state(&state);
 }
-
 
 Object3D::Object3D(std::string gltfFile, int x, int y, float scaleX, float scaleY, int anchorX, int anchorY)
 {
@@ -93,10 +111,24 @@ Object3D::Object3D(std::string gltfFile, int x, int y, float scaleX, float scale
     vertices.clear();
 
     tinygltf::Image image = model.images[0];
+    //al_set_new_bitmap_depth(0);
+
     texture = std::shared_ptr<ALLEGRO_BITMAP>(al_create_bitmap(image.width, image.height), al_destroy_bitmap);
     ALLEGRO_LOCKED_REGION* al_bmp_mem = al_lock_bitmap(texture.get(), ALLEGRO_PIXEL_FORMAT_ABGR_8888, ALLEGRO_LOCK_WRITEONLY);
-    memcpy(al_bmp_mem->data, image.image.data(), image.image.size());
+    //If pitch is negative
+    for (int i = 0; i < image.height; i++) {
+        memcpy((uint8_t*)al_bmp_mem->data + i * al_bmp_mem->pitch,
+            image.image.data() + i * image.width * 4,
+            image.width * al_bmp_mem->pixel_size);
+    }
     al_unlock_bitmap(texture.get());
+
+    al_set_new_bitmap_depth(16);
+    depthTexture = std::shared_ptr<ALLEGRO_BITMAP>(al_create_bitmap(2048, 1536), al_destroy_bitmap);
+    render = std::shared_ptr<ALLEGRO_BITMAP>(al_create_bitmap(Engine::GameEngine::GetInstance().GetScreenWidth(), Engine::GameEngine::GetInstance().GetScreenHeight()), al_destroy_bitmap);
+    al_set_new_bitmap_depth(0);
+    //setupDepthBuffer(depthTexture.get());
+
 
     for (auto mesh : model.meshes) {
         for (auto primitive : mesh.primitives) {
@@ -128,11 +160,32 @@ inline std::vector<T> Object3D::getFromAccessor(int accessorID) const
 	return std::vector<T>(pointer, pointer + accessor.count * typeSize);
 }
 
-
 void Object3D::Draw() const
 {
+    //Transformation are per bitmap
 
+    al_set_target_bitmap(depthTexture.get());
+    al_clear_depth_buffer(1);
+    al_clear_to_color(al_map_rgba_f(0, 1, 0, 0.25));
+    
+    //al_set_render_state(ALLEGRO_WRITE_MASK, ALLEGRO_MASK_DEPTH);
+    al_use_projection_transform(&orthographic_transform());
+    al_use_transform(&light_view());
     DrawCube(vertices, indices, texture.get());
+
+    al_set_render_state(ALLEGRO_WRITE_MASK, ALLEGRO_MASK_RGBA | ALLEGRO_MASK_DEPTH);
+    al_set_target_bitmap(render.get());
+    al_clear_depth_buffer(1);
+    al_clear_to_color(al_map_rgba_f(0, 0, 0, 0));
+    
+    al_use_projection_transform(&perspective_transform());
+    al_use_transform(&camera_view());
+    DrawCube(vertices, indices, texture.get());
+
+    al_set_target_backbuffer(al_get_current_display());
+    al_draw_bitmap(render.get(), 0, 0, 0);
+    al_draw_scaled_bitmap(depthTexture.get(), 0, 0, 2048, 1536, 0, 0, 832, 624, 0);
+    //al_draw_scaled_bitmap(depthTexture.get(), 0, 0, 2048, 2048, 1216, 454, 384, 384, 0);
 }
 
 void Object3D::Update(float delta)
