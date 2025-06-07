@@ -111,7 +111,7 @@ Object3D::Object3D(std::string gltfFile, int x, int y, float scaleX, float scale
     al_unlock_bitmap(texture.get());
 
     al_set_new_bitmap_depth(16);
-    depthTexture = std::shared_ptr<ALLEGRO_BITMAP>(al_create_bitmap(2048, 1536), al_destroy_bitmap);
+    depthbuffer = std::shared_ptr<ALLEGRO_BITMAP>(al_create_bitmap(2048, 1536), al_destroy_bitmap);
     render = std::shared_ptr<ALLEGRO_BITMAP>(al_create_bitmap(Engine::GameEngine::GetInstance().GetScreenWidth(), Engine::GameEngine::GetInstance().GetScreenHeight()), al_destroy_bitmap);
     al_set_new_bitmap_depth(0);
 
@@ -181,7 +181,7 @@ inline std::vector<T> Object3D::getFromAccessor(int accessorID) const
 void Object3D::Draw() const
 {
     //Transformation are per bitmap
-    al_set_target_bitmap(depthTexture.get());
+    al_set_target_bitmap(depthbuffer.get());
     al_clear_depth_buffer(1);
     al_clear_to_color(al_map_rgba_f(1,1,1,1));
     
@@ -206,7 +206,7 @@ void Object3D::Draw() const
 
     al_set_target_backbuffer(al_get_current_display());
     al_draw_bitmap(render.get(), 0, 0, 0);
-    al_draw_scaled_bitmap(depthTexture.get(), 0, 0, 2048, 1536, 0, 0, 832, 624, 0);
+    //al_draw_scaled_bitmap(depthbuffer.get(), 0, 0, 2048, 1536, 0, 0, 832, 624, 0);
     //al_draw_scaled_bitmap(depthTexture.get(), 0, 0, 2048, 2048, 1216, 454, 384, 384, 0);
 }
 
