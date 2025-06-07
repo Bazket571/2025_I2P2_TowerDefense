@@ -41,8 +41,7 @@ namespace Engine {
 
         // Setup game display.
         al_set_new_display_option(ALLEGRO_DEPTH_SIZE, 16, ALLEGRO_SUGGEST);
-        al_set_new_display_option(ALLEGRO_PROGRAMMABLE_PIPELINE, 1, ALLEGRO_SUGGEST);
-        al_set_new_display_flags(ALLEGRO_OPENGL);
+        al_set_new_display_flags(ALLEGRO_OPENGL | ALLEGRO_PROGRAMMABLE_PIPELINE);
         display = al_create_display(screenW, screenH);
         if (!display) throw Allegro5Exception("failed to create display");
         al_set_window_title(display, title);

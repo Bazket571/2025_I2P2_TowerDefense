@@ -109,9 +109,10 @@ add_executable(2025_I2P2_TowerDefense
     "Turret/FreezeTurret.cpp"  
     "3D/Object3D.cpp")
 
-add_custom_command(TARGET 2025_I2P2_TowerDefense PRE_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy_directory
-                    ${CMAKE_SOURCE_DIR}/Resource $<TARGET_FILE_DIR:2025_I2P2_TowerDefense>/Resource)
+#add_custom_command(TARGET 2025_I2P2_TowerDefense POST_BUILD
+#                  COMMAND ${CMAKE_COMMAND} -E copy_directory
+#                    ${CMAKE_SOURCE_DIR}/Resource $<TARGET_FILE_DIR:2025_I2P2_TowerDefense>/Resource)
+file(COPY ${CMAKE_SOURCE_DIR}/Resource DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 set(TINYGLTF_INSTALL OFF CACHE INTERNAL "" FORCE)
 set(TINYGLTF_BUILD_LOADER_EXAMPLE OFF CACHE INTERNAL "" FORCE)
 set(TINYGLTF_HEADER_ONLY OFF CACHE INTERNAL "" FORCE)
