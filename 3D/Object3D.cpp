@@ -1,5 +1,14 @@
 #include "Object3D.hpp"
 
+std::vector<ALLEGRO_VERTEX_ELEMENT> Object3D::vertexElems = {
+    {ALLEGRO_PRIM_POSITION, ALLEGRO_PRIM_FLOAT_3, offsetof(Object3D::Vertex, x)},
+    {ALLEGRO_PRIM_TEX_COORD, ALLEGRO_PRIM_FLOAT_2, offsetof(Object3D::Vertex, u)},
+    {ALLEGRO_PRIM_USER_ATTR + 0, ALLEGRO_PRIM_FLOAT_3, offsetof(Object3D::Vertex, nx)}, //Normal
+    {ALLEGRO_PRIM_COLOR_ATTR, 0, offsetof(Object3D::Vertex, color)},
+    {0,0,0}
+};
+std::shared_ptr<ALLEGRO_VERTEX_DECL> Object3D::vertexDecl = nullptr;
+
 static ALLEGRO_TRANSFORM perspective_transform()
 {
     ALLEGRO_BITMAP* bmp = al_get_target_bitmap();
@@ -48,7 +57,7 @@ static ALLEGRO_TRANSFORM camera_view() {
     return t;
 }
 float a = 0;
-void DrawCube(std::vector<ALLEGRO_VERTEX> vertices, std::vector<int> indices, ALLEGRO_BITMAP* texture) {
+void DrawCube(ALLEGRO_VERTEX_BUFFER* vertices, ALLEGRO_INDEX_BUFFER* indices, ALLEGRO_BITMAP* texture) {
     ALLEGRO_TRANSFORM t;
     al_set_render_state(ALLEGRO_DEPTH_TEST, true);
     ALLEGRO_TRANSFORM defaultTrans;
@@ -63,7 +72,7 @@ void DrawCube(std::vector<ALLEGRO_VERTEX> vertices, std::vector<int> indices, AL
     al_set_shader_matrix("model_matrix", &t);
     al_compose_transform(&t, &defaultTrans);
     al_use_transform(&t);
-    al_draw_indexed_prim(vertices.data(), nullptr, texture, indices.data(), indices.size(), ALLEGRO_PRIM_TRIANGLE_LIST);
+    al_draw_indexed_buffer(vertices, texture, indices, 0, al_get_index_buffer_size(indices), ALLEGRO_PRIM_TRIANGLE_LIST);
     
     al_identity_transform(&t);
     al_set_shader_matrix("model_matrix", &t);
@@ -100,9 +109,9 @@ Object3D::Object3D(std::string gltfFile, int x, int y, float scaleX, float scale
     tinygltf::Image image = model.images[0];
     //al_set_new_bitmap_depth(0);
 
+    //Load texture
     texture = std::shared_ptr<ALLEGRO_BITMAP>(al_create_bitmap(image.width, image.height), al_destroy_bitmap);
     ALLEGRO_LOCKED_REGION* al_bmp_mem = al_lock_bitmap(texture.get(), ALLEGRO_PIXEL_FORMAT_ABGR_8888, ALLEGRO_LOCK_WRITEONLY);
-    //If pitch is negative
     for (int i = 0; i < image.height; i++) {
         memcpy((uint8_t*)al_bmp_mem->data + i * al_bmp_mem->pitch,
             image.image.data() + i * image.width * 4,
@@ -110,13 +119,13 @@ Object3D::Object3D(std::string gltfFile, int x, int y, float scaleX, float scale
     }
     al_unlock_bitmap(texture.get());
 
+    //Load render targets
     al_set_new_bitmap_depth(16);
     depthbuffer = std::shared_ptr<ALLEGRO_BITMAP>(al_create_bitmap(2048, 1536), al_destroy_bitmap);
     render = std::shared_ptr<ALLEGRO_BITMAP>(al_create_bitmap(Engine::GameEngine::GetInstance().GetScreenWidth(), Engine::GameEngine::GetInstance().GetScreenHeight()), al_destroy_bitmap);
     al_set_new_bitmap_depth(0);
 
     //Compiling shaders
-
     std::string vert =
         "attribute vec4 al_pos;"
         "attribute vec4 al_color;"
@@ -137,31 +146,32 @@ Object3D::Object3D(std::string gltfFile, int x, int y, float scaleX, float scale
     shadowShader = std::shared_ptr<ALLEGRO_SHADER>(al_create_shader(ALLEGRO_SHADER_GLSL), al_destroy_shader);
     al_attach_shader_source(shadowShader.get(), ALLEGRO_VERTEX_SHADER, vert.c_str());
     al_attach_shader_source(shadowShader.get(), ALLEGRO_PIXEL_SHADER, frag.c_str());
-    //al_attach_shader_source(shadowShader.get(), ALLEGRO_VERTEX_SHADER, al_get_default_shader_source(ALLEGRO_SHADER_GLSL, ALLEGRO_VERTEX_SHADER));
-    //al_attach_shader_source(shadowShader.get(), ALLEGRO_PIXEL_SHADER, al_get_default_shader_source(ALLEGRO_SHADER_GLSL, ALLEGRO_PIXEL_SHADER));
-
     al_build_shader(shadowShader.get());
     if (strlen(al_get_shader_log(shadowShader.get())) > 0) {
         Engine::LOG(Engine::WARN) << al_get_shader_log(shadowShader.get());
     }
 
-    //Load 3d model
-    for (auto mesh : model.meshes) {
-        for (auto primitive : mesh.primitives) {
-            std::vector<float> verts = getFromAccessor<float>(primitive.attributes["POSITION"]);
-            std::vector<float> uv = getFromAccessor<float>(primitive.attributes["TEXCOORD_0"]);
-            std::vector<uint16_t> index = getFromAccessor<uint16_t>(primitive.indices);
-            for (int i = 0; i < verts.size() / 3; i++) {
-                vertices.push_back({ verts[i * 3 + 0], verts[i * 3 + 1] , verts[i * 3 + 2],
-                                     uv[i * 2] * image.width, uv[i * 2 + 1] * image.height,
-                                     al_map_rgba_f(1,1,1,1) });
-            }
-            indices.resize(index.size());
-            for (int i = 0; i < indices.size(); i++) indices[i] = index[i];
-
-
-        }
+    //Load 3d model, only accept 1 primitive as we only have a cube
+    auto primitive = model.meshes[0].primitives[0];
+    std::vector<float> verts = getFromAccessor<float>(primitive.attributes["POSITION"]);
+    std::vector<float> normals = getFromAccessor<float>(primitive.attributes["NORMAL"]);
+    std::vector<float> uv = getFromAccessor<float>(primitive.attributes["TEXCOORD_0"]);
+    std::vector<uint16_t> index = getFromAccessor<uint16_t>(primitive.indices);
+    for (int i = 0; i < verts.size() / 3; i++) {
+        vertices.push_back({ verts[i * 3 + 0], verts[i * 3 + 1] , verts[i * 3 + 2],
+                                uv[i * 2] * image.width, uv[i * 2 + 1] * image.height,
+                                normals[i * 3 + 0], normals[i*3+1], normals[i*3+2],
+                                al_map_rgba_f(1,1,1,1) });
     }
+    if (vertexDecl.get() == nullptr) {
+        vertexDecl = std::shared_ptr<ALLEGRO_VERTEX_DECL>(al_create_vertex_decl(vertexElems.data(), sizeof(Vertex)), al_destroy_vertex_decl);
+    }
+    indicesBuffer = std::shared_ptr<ALLEGRO_INDEX_BUFFER>(
+        al_create_index_buffer(sizeof(index[0]), index.data(), index.size(), ALLEGRO_PRIM_BUFFER_STATIC), 
+        al_destroy_index_buffer);
+    vertexBuffer = std::shared_ptr<ALLEGRO_VERTEX_BUFFER>(
+        al_create_vertex_buffer(vertexDecl.get(), vertices.data(), vertices.size(), ALLEGRO_PRIM_BUFFER_STATIC), 
+        al_destroy_vertex_buffer);
 }
 
 template<typename T>
@@ -192,7 +202,7 @@ void Object3D::Draw() const
     al_set_shader_matrix("view_matrix", &light_view());
     //al_use_projection_transform(&orthographic_transform());
     //al_use_transform(&light_view());
-    DrawCube(vertices, indices, texture.get());
+    DrawCube(vertexBuffer.get(), indicesBuffer.get(), texture.get());
     al_use_shader(nullptr);
 
     al_set_target_bitmap(render.get());
@@ -202,11 +212,11 @@ void Object3D::Draw() const
     al_use_projection_transform(&perspective_transform());
 
     al_use_transform(&camera_view());
-    DrawCube(vertices, indices, texture.get());
+    DrawCube(vertexBuffer.get(), indicesBuffer.get(), texture.get());
 
     al_set_target_backbuffer(al_get_current_display());
     al_draw_bitmap(render.get(), 0, 0, 0);
-    //al_draw_scaled_bitmap(depthbuffer.get(), 0, 0, 2048, 1536, 0, 0, 832, 624, 0);
+    al_draw_scaled_bitmap(depthbuffer.get(), 0, 0, 2048, 1536, 0, 0, 832, 624, 0);
     //al_draw_scaled_bitmap(depthTexture.get(), 0, 0, 2048, 2048, 1216, 454, 384, 384, 0);
 }
 

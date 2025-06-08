@@ -16,11 +16,22 @@
 #include "tiny_gltf.h"
 
 class Object3D : public Engine::IObject {
+	struct Vertex {
+		float x, y, z;
+		float u, v;
+		float nx, ny, nz;
+		ALLEGRO_COLOR color;
+	};
+
 	template <typename T>
 	std::vector<T> getFromAccessor(int accessorID) const;
+	static std::vector<ALLEGRO_VERTEX_ELEMENT> vertexElems;
+	static std::shared_ptr<ALLEGRO_VERTEX_DECL> vertexDecl;
 public:
 	tinygltf::Model model;
-	std::vector<ALLEGRO_VERTEX> vertices;
+	std::shared_ptr<ALLEGRO_VERTEX_BUFFER> vertexBuffer;
+	std::shared_ptr<ALLEGRO_INDEX_BUFFER> indicesBuffer;
+	std::vector<Vertex> vertices;
 	std::vector<int> indices;
 	std::shared_ptr<ALLEGRO_BITMAP> texture;
 	std::shared_ptr<ALLEGRO_BITMAP> depthbuffer;
