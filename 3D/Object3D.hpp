@@ -37,6 +37,7 @@ public:
 	std::shared_ptr<ALLEGRO_BITMAP> depthbuffer;
 	std::shared_ptr<ALLEGRO_BITMAP> render;
 	std::shared_ptr<ALLEGRO_SHADER> shadowShader;
+	std::shared_ptr<ALLEGRO_SHADER> mainShader;
 
 	Object3D(std::string gltfFile, int x, int y, float scaleX, float scaleY, int anchorX = 0, int anchorY = 0);
 	void Draw() const;
