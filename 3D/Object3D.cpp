@@ -34,7 +34,7 @@ static ALLEGRO_TRANSFORM orthographic_transform(float width, float height)
 static ALLEGRO_TRANSFORM light_view() {
     static float a = 0; a += 0.05; if (a > 10) a = 0;
     ALLEGRO_TRANSFORM t;
-    Engine::Point vec(1, -3, 3 + a);
+    Engine::Point vec(1, -3, 5);
     std::array<float, 3> vecArr = { vec.x, vec.y, vec.z};
     al_set_shader_float_vector("lightPos", 3, vecArr.data(), 1);
     al_build_camera_transform(&t,
@@ -68,19 +68,22 @@ void DrawCube(ALLEGRO_VERTEX_BUFFER* vertices, ALLEGRO_INDEX_BUFFER* indices, AL
     al_copy_transform(&defaultTrans, al_get_current_transform());
 
     Engine::Point mouse = Engine::GameEngine::GetInstance().GetMousePosition();
+    a += 1; if (a > 100) a = 0;
     
     al_identity_transform(&t);
     al_scale_transform_3d(&t, 50, 50, 50);
-    a += 1; if (a > 100) a = 0;
-    al_translate_transform_3d(&t, 800, 416, a);
+    al_translate_transform_3d(&t, 1000, 416, a);
     al_set_shader_matrix("model_matrix", &t);
-    al_compose_transform(&t, &defaultTrans);
-    al_use_transform(&t);
+    al_draw_indexed_buffer(vertices, texture, indices, 0, al_get_index_buffer_size(indices), ALLEGRO_PRIM_TRIANGLE_LIST);
+
+    al_identity_transform(&t);
+    al_scale_transform_3d(&t, 50, 50, 50);
+    al_translate_transform_3d(&t, 600, 416, a);
+    al_set_shader_matrix("model_matrix", &t);
     al_draw_indexed_buffer(vertices, texture, indices, 0, al_get_index_buffer_size(indices), ALLEGRO_PRIM_TRIANGLE_LIST);
     
     al_identity_transform(&t);
     al_set_shader_matrix("model_matrix", &t);
-    al_use_transform(&defaultTrans);
     al_draw_circle(800, 416, 10, al_map_rgb_f(1, 0, 0), 5);
     al_draw_filled_rectangle(0, 0, 1600, 832, al_map_rgb_f(0, 0, 1));
 
@@ -191,7 +194,7 @@ Object3D::Object3D(std::string gltfFile, int x, int y, float scaleX, float scale
             "vs_out.Normal = transpose(inverse(mat3(model_matrix))) * al_user_attr_0;"
             "vs_out.TexCoords = al_texcoord;"
             "if(al_use_tex_matrix) {"
-                "vs_out.TexCoords = (al_tex_matrix * vec4(vs_out.TexCoords, 0, 1)).xy;"
+                //"vs_out.TexCoords = (al_tex_matrix * vec4(vs_out.TexCoords, 0, 1)).xy;"
             "}"
             "vs_out.FragPosLightSpace = light_proj_matrix * light_view_matrix * vs_out.FragPos;"
             "vs_out.Color = al_color;"
@@ -215,12 +218,12 @@ Object3D::Object3D(std::string gltfFile, int x, int y, float scaleX, float scale
 
         "float shininess = 4;"
 
-        "float ShadowCalculation(vec4 fragPosLightSpace) {"
+        "float ShadowCalculation(vec4 fragPosLightSpace, float bias) {"
             "vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;" //transform [-w;w] to [-1;1]
             "projCoords = projCoords * 0.5 + 0.5;"                           //transform [-1;1] to [0;1]
             "float closestDepth = texture(depth_map, projCoords.xy).r;"      //get closest depth value from light's perspective 
             "float currentDepth = projCoords.z;"                             //get depth of current fragment from light's perspective
-            "float shadow = (currentDepth > closestDepth) ? 1 : 0;"            //check whether current frag pos is in shadow
+            "float shadow = (currentDepth - bias > closestDepth) ? 1 : 0;"            //check whether current frag pos is in shadow
             //"float shadow = max(currentDepth, closestDepth);"            //check whether current frag pos is in shadow
             "return shadow;"
         "}"
@@ -233,7 +236,7 @@ Object3D::Object3D(std::string gltfFile, int x, int y, float scaleX, float scale
             "vec3 normal = normalize(fs_in.Normal);"
             "vec3 lightColor = vec3(1);"
             //Ambient
-            "vec3 ambient = 0.15 * lightColor;"
+            "vec3 ambient = 0.5 * lightColor;"
             //Diffuse
             "vec3 lightDir = normalize(lightPos - fs_in.FragPos.xyz);"
             "float diff = max(dot(lightDir, normal), 0);"
@@ -245,8 +248,9 @@ Object3D::Object3D(std::string gltfFile, int x, int y, float scaleX, float scale
             "spec = pow(max(dot(normal, halfwayDir), 0), shininess);"
             "vec3 specular = spec * lightColor;"
             //calculate shadow
-            "float shadow = ShadowCalculation(fs_in.FragPosLightSpace);"
-            "vec3 lighting = (ambient + (1 - shadow) * (diffuse + specular)) * color;"
+            "float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);"
+            "float shadow = ShadowCalculation(fs_in.FragPosLightSpace, bias);"
+            "vec3 lighting = (ambient + (1 - shadow) * (diffuse)) * color;"
             //"vec3 lighting = (ambient + (1 - shadow)) * color;"
 
             "gl_FragColor = vec4(lighting, 1);"
@@ -317,7 +321,9 @@ void Object3D::Draw() const
     al_set_shader_matrix("view_matrix", &lightView);
     //al_use_projection_transform(&orthographic_transform());
     //al_use_transform(&light_view());
+    glCullFace(GL_FRONT);
     DrawCube(vertexBuffer.get(), indicesBuffer.get(), texture.get());
+    glCullFace(GL_BACK);
     al_use_shader(nullptr);
 
     al_set_target_bitmap(render.get());
