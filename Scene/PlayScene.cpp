@@ -43,7 +43,7 @@ bool PlayScene::DebugMode = false;
 const std::vector<Engine::Point> PlayScene::directions = { Engine::Point(-1, 0), Engine::Point(0, -1), Engine::Point(1, 0), Engine::Point(0, 1) };
 const int PlayScene::MapWidthRatio = 5, PlayScene::MapHeightRatio = 3;
 int PlayScene::MapWidth = 0, PlayScene::MapHeight = 0;
-int PlayScene::BlockSize = 64;
+int PlayScene::BlockSize = 96;
 int PlayScene::score = 0;
 const int PlayScene::WindowWidth = (64*21), PlayScene::WindowHeight = 64*13;
 const float PlayScene::DangerTime = 7.61;
@@ -67,7 +67,9 @@ void PlayScene::Initialize() {
     SpeedMult = 1;
     score = 0;
     // Add groups from bottom to top.
-    AddNewObject(TileMapGroup = new Group());
+    TileMapGroup = new Group();
+    UIGroup = new Group();
+    //AddNewObject();
     AddNewObject(TileGroup = new Group3D(true));
     AddNewObject(GroundEffectGroup = new Group());
     AddNewObject(DebugIndicatorGroup = new Group());
@@ -76,7 +78,7 @@ void PlayScene::Initialize() {
     AddNewObject(BulletGroup = new Group());
     AddNewObject(EffectGroup = new Group());
     // Should support buttons.
-    AddNewControlObject(UIGroup = new Group());
+    //AddNewControlObject(UIGroup = new Group());
     ReadMap();
     ReadEnemyWave();
     mapDistance = CalculateBFSDistance();
@@ -85,9 +87,6 @@ void PlayScene::Initialize() {
     imgTarget->Visible = false;
     preview = nullptr;
     UIGroup->AddNewObject(imgTarget);
-
-    TileGroup->AddNewObject(new Object3D("Resource/3D/BlueBox.glb", { 800, 416, 50}, { 50, 50, 50 }));
-    TileGroup->AddNewObject(new Object3D("Resource/3D/RedBox.glb", { 400, 416, 50}, {50, 50, 50}));
 
     // Preload Lose Scene
     deathBGMInstance = Engine::Resources::GetInstance().GetSampleInstance("astronomia.ogg");
@@ -359,23 +358,25 @@ void PlayScene::ReadMap()
     for (int i = 0; i < MapHeight; i++) {
         for (int j = 0; j < MapWidth; j++) {
             mapState[i][j] = mapData[i * MapWidth + j];
-            
+            Engine::Point scale = { (float)BlockSize/2, (float)BlockSize/2, (float)BlockSize/2 };
             //TODO Map has only 2 states, change this
             switch(mapState[i][j]){
                 case TILE_LOW:
-                    TileMapGroup->AddNewObject(new Engine::Image("play/floor.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+                    //TileMapGroup->AddNewObject(new Engine::Image("play/floor.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+                    TileGroup->AddNewObject(new Object3D("Resource/3D/TileLow.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 2 }, scale));
                     break;
                 case TILE_HIGH:
-                    TileMapGroup->AddNewObject(new Engine::Image("play/dirt.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+                    TileGroup->AddNewObject(new Object3D("Resource/3D/TileHigh.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 4 }, scale));
                     break;
                 case TILE_SPAWN:
                     SpawnGridPoint = Engine::Point(j, i);
-                    TileMapGroup->AddNewObject(new Engine::Image("play/sand.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+                    TileGroup->AddNewObject(new Object3D("Resource/3D/TileLow.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 2 }, scale));
+                    TileGroup->AddNewObject(new Object3D("Resource/3D/RedBox.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)BlockSize / 2 }, scale));
                     break;
                 case TILE_OBJECTIVE:
                     EndGridPoint = Engine::Point(j, i);
-                    TileMapGroup->AddNewObject(new Engine::Image("play/sand.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
-                    TileMapGroup->AddNewObject(new Engine::Image("play/turret-fire.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+                    TileGroup->AddNewObject(new Object3D("Resource/3D/TileLow.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 2 }, scale));
+                    TileGroup->AddNewObject(new Object3D("Resource/3D/BlueBox.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)BlockSize / 2 }, scale));
                     break;
                 default:
                     TileMapGroup->AddNewObject(new Engine::Image("play/dirt.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
