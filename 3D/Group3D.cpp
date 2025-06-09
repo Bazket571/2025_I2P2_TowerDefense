@@ -118,10 +118,10 @@ const std::string Group3D::mainFrag =
         //calculate shadow
         "float bias = max(0.0025 * (1.0 - dot(normal, lightDir)), 0.005);"
         "float shadow = ShadowCalculation(fs_in.FragPosLightSpace, bias);"
-        "vec4 lighting = (shadow + ambient) * color;"
+        "vec3 lighting = (shadow + ambient) * color.rgb;"
         //"vec3 lighting = (ambient + (1 - shadow)) * color;"
 
-        "gl_FragColor = lighting;"
+        "gl_FragColor = vec4(lighting, color.a);"
 
     "}";
 
