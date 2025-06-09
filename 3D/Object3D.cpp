@@ -70,22 +70,19 @@ void DrawCube(ALLEGRO_VERTEX_BUFFER* vertices, ALLEGRO_INDEX_BUFFER* indices, AL
     Engine::Point mouse = Engine::GameEngine::GetInstance().GetMousePosition();
     a += 1; if (a > 100) a = 50;
     
-    al_identity_transform(&t);
-    al_scale_transform_3d(&t, 50, 50, 50);
-    al_translate_transform_3d(&t, 1200, 416, 50);
-    al_set_shader_matrix("model_matrix", &t);
-    al_draw_indexed_buffer(vertices, texture, indices, 0, al_get_index_buffer_size(indices), ALLEGRO_PRIM_TRIANGLE_LIST);
-
-    al_identity_transform(&t);
-    al_scale_transform_3d(&t, 50, 50, 50);
-    al_translate_transform_3d(&t, 400, 416, a);
-    al_set_shader_matrix("model_matrix", &t);
-    al_draw_indexed_buffer(vertices, texture, indices, 0, al_get_index_buffer_size(indices), ALLEGRO_PRIM_TRIANGLE_LIST);
-    
+    for (int y = 0; y < 8; y++) {
+        for (int x = 0; x < 16; x++) {
+            al_identity_transform(&t);
+            al_scale_transform_3d(&t, 50, 50, 50);
+            al_translate_transform_3d(&t, x * 100 + 50, y * 100 + 50, -50 * ((x + y) % 2));
+            al_set_shader_matrix("model_matrix", &t);
+            al_draw_indexed_buffer(vertices, texture, indices, 0, al_get_index_buffer_size(indices), ALLEGRO_PRIM_TRIANGLE_LIST);
+        }
+    }
     al_identity_transform(&t);
     al_set_shader_matrix("model_matrix", &t);
     al_draw_circle(800, 416, 10, al_map_rgb_f(1, 0, 0), 5);
-    al_draw_filled_rectangle(0, 0, 1600, 832, al_map_rgb_f(0, 0, 1));
+    al_draw_rectangle(0, 0, 1600, 832, al_map_rgb_f(0, 0, 1), 10);
 
     al_set_render_state(ALLEGRO_DEPTH_TEST, false);
 }
@@ -259,7 +256,7 @@ Object3D::Object3D(std::string gltfFile, int x, int y, float scaleX, float scale
             //calculate shadow
             "float bias = max(0.0025 * (1.0 - dot(normal, lightDir)), 0.005);"
             "float shadow = ShadowCalculation(fs_in.FragPosLightSpace, bias);"
-            "vec3 lighting = (shadow * (diffuse + specular) + ambient) * color;"
+            "vec3 lighting = (shadow + ambient) * color;"
             //"vec3 lighting = (ambient + (1 - shadow)) * color;"
 
             "gl_FragColor = vec4(lighting, 1);"
