@@ -16,7 +16,7 @@ static ALLEGRO_TRANSFORM perspective_transform(float width, float height)
     float height = al_get_bitmap_height(bmp);*/
     ALLEGRO_TRANSFORM p;
     al_identity_transform(&p);
-    al_perspective_transform(&p, -width / 2, -height / 2, width / 2, width / 2, height / 2, 9000);
+    al_perspective_transform(&p, -width / 2, -height / 2, width / 2, width / 2, height / 2, 4000);
     return p;
 }
 static ALLEGRO_TRANSFORM orthographic_transform(float width, float height)
@@ -32,7 +32,7 @@ static ALLEGRO_TRANSFORM orthographic_transform(float width, float height)
 }
 
 static ALLEGRO_TRANSFORM light_view() {
-    static float a = 0; a += 0.05; if (a > 10) a = 0;
+    static float a = 0; a += 0.05; if (a > 20) a = 0;
     ALLEGRO_TRANSFORM t;
     Engine::Point vec(1, -3, 5);
     std::array<float, 3> vecArr = { vec.x, vec.y, vec.z};
@@ -68,17 +68,17 @@ void DrawCube(ALLEGRO_VERTEX_BUFFER* vertices, ALLEGRO_INDEX_BUFFER* indices, AL
     al_copy_transform(&defaultTrans, al_get_current_transform());
 
     Engine::Point mouse = Engine::GameEngine::GetInstance().GetMousePosition();
-    a += 1; if (a > 100) a = 0;
+    a += 1; if (a > 100) a = 50;
     
     al_identity_transform(&t);
     al_scale_transform_3d(&t, 50, 50, 50);
-    al_translate_transform_3d(&t, 1000, 416, a);
+    al_translate_transform_3d(&t, 1200, 416, 50);
     al_set_shader_matrix("model_matrix", &t);
     al_draw_indexed_buffer(vertices, texture, indices, 0, al_get_index_buffer_size(indices), ALLEGRO_PRIM_TRIANGLE_LIST);
 
     al_identity_transform(&t);
     al_scale_transform_3d(&t, 50, 50, 50);
-    al_translate_transform_3d(&t, 600, 416, a);
+    al_translate_transform_3d(&t, 400, 416, a);
     al_set_shader_matrix("model_matrix", &t);
     al_draw_indexed_buffer(vertices, texture, indices, 0, al_get_index_buffer_size(indices), ALLEGRO_PRIM_TRIANGLE_LIST);
     
@@ -141,7 +141,7 @@ Object3D::Object3D(std::string gltfFile, int x, int y, float scaleX, float scale
 
     //Load render targets
     al_set_new_bitmap_depth(16);
-    depthbuffer = std::shared_ptr<ALLEGRO_BITMAP>(al_create_bitmap(2048, 1536), al_destroy_bitmap);
+    depthbuffer = std::shared_ptr<ALLEGRO_BITMAP>(al_create_bitmap(2400, 1536), al_destroy_bitmap);
     render = std::shared_ptr<ALLEGRO_BITMAP>(al_create_bitmap(Engine::GameEngine::GetInstance().GetScreenWidth(), Engine::GameEngine::GetInstance().GetScreenHeight()), al_destroy_bitmap);
     al_set_new_bitmap_depth(0);
 
@@ -194,7 +194,7 @@ Object3D::Object3D(std::string gltfFile, int x, int y, float scaleX, float scale
             "vs_out.Normal = transpose(inverse(mat3(model_matrix))) * al_user_attr_0;"
             "vs_out.TexCoords = al_texcoord;"
             "if(al_use_tex_matrix) {"
-                //"vs_out.TexCoords = (al_tex_matrix * vec4(vs_out.TexCoords, 0, 1)).xy;"
+                "vs_out.TexCoords = (al_tex_matrix * vec4(vs_out.TexCoords, 0, 0)).xy;"
             "}"
             "vs_out.FragPosLightSpace = light_proj_matrix * light_view_matrix * vs_out.FragPos;"
             "vs_out.Color = al_color;"
@@ -220,12 +220,20 @@ Object3D::Object3D(std::string gltfFile, int x, int y, float scaleX, float scale
 
         "float ShadowCalculation(vec4 fragPosLightSpace, float bias) {"
             "vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;" //transform [-w;w] to [-1;1]
+            "if(projCoords.z > 1) return 0;"
             "projCoords = projCoords * 0.5 + 0.5;"                           //transform [-1;1] to [0;1]
-            "float closestDepth = texture(depth_map, projCoords.xy).r;"      //get closest depth value from light's perspective 
-            "float currentDepth = projCoords.z;"                             //get depth of current fragment from light's perspective
-            "float shadow = (currentDepth - bias > closestDepth) ? 1 : 0;"            //check whether current frag pos is in shadow
-            //"float shadow = max(currentDepth, closestDepth);"            //check whether current frag pos is in shadow
-            "return shadow;"
+            "float currentDepth = projCoords.z;"
+            "float shadow = 0;"            //check whether current frag pos is in shadow
+            "int sampleRadius = 2;"
+            "vec2 pixelSize = 1.0 / textureSize(depth_map, 0);"
+            "for(int y = -sampleRadius; y <= sampleRadius; y++) {"
+                "for(int x = -sampleRadius; x <= sampleRadius; x++) {"
+                    "float closestDepth = texture(depth_map, projCoords.xy + vec2(x, y) * pixelSize).r;"      //get closest depth value from light's perspective 
+                    "if (currentDepth > closestDepth + bias) shadow += 1;"                        
+                "}"
+            "}"
+            "shadow /= pow((sampleRadius * 2 + 1), 2);"
+            "return 1 - shadow;"
         "}"
 
         "void main() {"
@@ -233,14 +241,15 @@ Object3D::Object3D(std::string gltfFile, int x, int y, float scaleX, float scale
             "if(al_use_tex) {"
                 "color = texture(al_tex, fs_in.TexCoords).rgb;"
             "}"
+            "float dist = length(lightPos - fs_in.FragPos.xyz);"
             "vec3 normal = normalize(fs_in.Normal);"
             "vec3 lightColor = vec3(1);"
             //Ambient
-            "vec3 ambient = 0.5 * lightColor;"
+            "vec3 ambient = 0.2 * lightColor;"
             //Diffuse
-            "vec3 lightDir = normalize(lightPos - fs_in.FragPos.xyz);"
+            "vec3 lightDir = -normalize(lightPos - fs_in.FragPos.xyz);"
             "float diff = max(dot(lightDir, normal), 0);"
-            "vec3 diffuse = diff * lightColor;"
+            "vec3 diffuse = diff * 1.5 * lightColor;"
             //Specular
             "vec3 viewDir = normalize(viewPos - fs_in.FragPos.xyz);"
             "float spec = 0;"
@@ -248,12 +257,13 @@ Object3D::Object3D(std::string gltfFile, int x, int y, float scaleX, float scale
             "spec = pow(max(dot(normal, halfwayDir), 0), shininess);"
             "vec3 specular = spec * lightColor;"
             //calculate shadow
-            "float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);"
+            "float bias = max(0.0025 * (1.0 - dot(normal, lightDir)), 0.005);"
             "float shadow = ShadowCalculation(fs_in.FragPosLightSpace, bias);"
-            "vec3 lighting = (ambient + (1 - shadow) * (diffuse)) * color;"
+            "vec3 lighting = (shadow * (diffuse + specular) + ambient) * color;"
             //"vec3 lighting = (ambient + (1 - shadow)) * color;"
 
             "gl_FragColor = vec4(lighting, 1);"
+
         "}";
     shadowShader = std::shared_ptr<ALLEGRO_SHADER>(al_create_shader(ALLEGRO_SHADER_GLSL), al_destroy_shader);
     if (!attachAndBuildShader(shadowShader.get(), shadowVert, shadowFrag)) {
@@ -303,11 +313,9 @@ inline std::vector<T> Object3D::getFromAccessor(int accessorID) const
 
 void Object3D::Draw() const
 {
-    ALLEGRO_TRANSFORM proj, view, lightProj, lightView;
+    ALLEGRO_TRANSFORM proj, lightProj;
     proj = perspective_transform(al_get_bitmap_width(render.get()), al_get_bitmap_height(render.get()));
-    view = camera_view();
     lightProj = orthographic_transform(al_get_bitmap_width(depthbuffer.get()), al_get_bitmap_height(depthbuffer.get()));
-    lightView = light_view();
 
     //Transformation are per bitmap
     al_set_target_bitmap(depthbuffer.get());
@@ -318,12 +326,12 @@ void Object3D::Draw() const
     
     al_use_shader(shadowShader.get());
     al_set_shader_matrix("proj_matrix", &lightProj);
-    al_set_shader_matrix("view_matrix", &lightView);
+    al_set_shader_matrix("view_matrix", &light_view());
     //al_use_projection_transform(&orthographic_transform());
     //al_use_transform(&light_view());
-    glCullFace(GL_FRONT);
+    //glCullFace(GL_FRONT);
     DrawCube(vertexBuffer.get(), indicesBuffer.get(), texture.get());
-    glCullFace(GL_BACK);
+    //glCullFace(GL_BACK);
     al_use_shader(nullptr);
 
     al_set_target_bitmap(render.get());
@@ -332,9 +340,9 @@ void Object3D::Draw() const
 
     al_use_shader(mainShader.get());
     al_set_shader_matrix("proj_matrix", &proj);
-    al_set_shader_matrix("view_matrix", &view);
+    al_set_shader_matrix("view_matrix", &camera_view());
     al_set_shader_matrix("light_proj_matrix", &lightProj);
-    al_set_shader_matrix("light_view_matrix", &lightView);
+    al_set_shader_matrix("light_view_matrix", &light_view());
     al_set_shader_sampler("depth_map", depthbuffer.get(), 1);
     //al_use_projection_transform(&perspective_transform());
     //al_use_transform(&camera_view());
@@ -344,7 +352,7 @@ void Object3D::Draw() const
     al_use_shader(nullptr);
     al_set_target_backbuffer(al_get_current_display());
     al_draw_bitmap(render.get(), 0, 0, 0);
-    al_draw_scaled_bitmap(depthbuffer.get(), 0, 0, 2048, 1536, 0, 0, 832 / 2, 624 / 2, 0);
+    //al_draw_scaled_bitmap(depthbuffer.get(), 0, 0, al_get_bitmap_width(depthbuffer.get()), al_get_bitmap_height(depthbuffer.get()), 0, 0, al_get_bitmap_width(depthbuffer.get()) / 4, al_get_bitmap_height(depthbuffer.get()) / 4, 0);
     //al_draw_scaled_bitmap(depthTexture.get(), 0, 0, 2048, 2048, 1216, 454, 384, 384, 0);
 }
 

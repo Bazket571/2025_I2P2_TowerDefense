@@ -48,7 +48,7 @@ void StartScene::Initialize() {
     supremeLeader = new Engine::SpineSprite("amiya/build_char_002_amiya.skel", "amiya/build_char_002_amiya.atlas", halfW, halfH, 0.5, 0.5, 0.5);
     supremeLeader->state->setAnimation(1, "Interact", true);
     AddNewObject(supremeLeader);
-    AddNewObject(new Object3D("Resource/Dirt.glb", 200, 200, 50, 50));
+    AddNewObject(new Object3D("Resource/Cube.glb", 200, 200, 50, 50));
 }
 void StartScene::Terminate() {
     IScene::Terminate();
