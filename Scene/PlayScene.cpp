@@ -86,7 +86,7 @@ void PlayScene::Initialize() {
     preview = nullptr;
     UIGroup->AddNewObject(imgTarget);
 
-    TileGroup->AddNewObject(new Object3D("Resource/Cube.glb", {800, 416, 50}, {50, 50, 50}));
+    TileGroup->AddNewObject(new Object3D("Resource/3D/BlueBox.glb", {800, 416, 50}, {50, 50, 50}));
 
     // Preload Lose Scene
     deathBGMInstance = Engine::Resources::GetInstance().GetSampleInstance("astronomia.ogg");

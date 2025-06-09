@@ -176,7 +176,9 @@ namespace Engine {
         // Destroy allegro5 window resources.
         al_destroy_timer(update_timer);
         al_destroy_event_queue(event_queue);
-        al_destroy_display(display);
+        //Cant free vertex buffers if we free display first.
+        //Let the system ball itself
+        //al_destroy_display(display);
         // Free all scenes.
         for (const auto &pair : scenes)
             delete pair.second;
@@ -225,6 +227,7 @@ namespace Engine {
         activeScene->Terminate();
         LOG(INFO) << "Game terminated";
         LOG(INFO) << "Game end";
+
         destroy();
     }
     void GameEngine::AddNewScene(const std::string &name, IScene *scene) {

@@ -96,9 +96,9 @@ const std::string Group3D::mainFrag =
     "}"
 
     "void main() {"
-        "vec3 color = fs_in.Color.rgb;"
+        "vec4 color = fs_in.Color;"
         "if(al_use_tex) {"
-            "color = texture(al_tex, fs_in.TexCoords).rgb;"
+            "color = texture(al_tex, fs_in.TexCoords);"
         "}"
         "float dist = length(lightPos - fs_in.FragPos.xyz);"
         "vec3 normal = normalize(fs_in.Normal);"
@@ -118,15 +118,12 @@ const std::string Group3D::mainFrag =
         //calculate shadow
         "float bias = max(0.0025 * (1.0 - dot(normal, lightDir)), 0.005);"
         "float shadow = ShadowCalculation(fs_in.FragPosLightSpace, bias);"
-        "vec3 lighting = (shadow + ambient) * color;"
+        "vec4 lighting = (shadow + ambient) * color;"
         //"vec3 lighting = (ambient + (1 - shadow)) * color;"
 
-        "gl_FragColor = vec4(lighting, 1);"
+        "gl_FragColor = lighting;"
 
     "}";
-
-std::shared_ptr<ALLEGRO_SHADER> Group3D::shadowShader = nullptr;
-std::shared_ptr<ALLEGRO_SHADER> Group3D::mainShader = nullptr;
 
 ALLEGRO_TRANSFORM Group3D::perspective_transform(float width, float height)
 {
@@ -175,17 +172,13 @@ ALLEGRO_TRANSFORM Group3D::camera_view() {
 Group3D::Group3D() : Group3D::Group3D(false) {};
 Group3D::Group3D(bool shadow) : renderShadow(shadow) {
     //Build shaders
-    if (shadowShader.get() == nullptr) {
-        shadowShader = std::shared_ptr<ALLEGRO_SHADER>(al_create_shader(ALLEGRO_SHADER_GLSL), al_destroy_shader);
-        if (!attachAndBuildShader(shadowShader.get(), shadowVert, shadowFrag)) {
-            Engine::LOG(Engine::WARN) << al_get_shader_log(shadowShader.get());
-        }
+    shadowShader = std::shared_ptr<ALLEGRO_SHADER>(al_create_shader(ALLEGRO_SHADER_GLSL), al_destroy_shader);
+    if (!attachAndBuildShader(shadowShader.get(), shadowVert, shadowFrag)) {
+        Engine::LOG(Engine::WARN) << al_get_shader_log(shadowShader.get());
     }
-    if (mainShader.get() == nullptr) {
-        mainShader = std::shared_ptr<ALLEGRO_SHADER>(al_create_shader(ALLEGRO_SHADER_GLSL), al_destroy_shader);
-        if (!attachAndBuildShader(mainShader.get(), mainVert, mainFrag)) {
-            Engine::LOG(Engine::WARN) << al_get_shader_log(mainShader.get());
-        }
+    mainShader = std::shared_ptr<ALLEGRO_SHADER>(al_create_shader(ALLEGRO_SHADER_GLSL), al_destroy_shader);
+    if (!attachAndBuildShader(mainShader.get(), mainVert, mainFrag)) {
+        Engine::LOG(Engine::WARN) << al_get_shader_log(mainShader.get());
     }
 
     //Load render targets

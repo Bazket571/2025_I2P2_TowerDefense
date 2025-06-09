@@ -11,8 +11,8 @@ class Group3D : public Engine::Group {
 
 	static const std::string shadowVert, shadowFrag, mainVert, mainFrag;
 
-	static std::shared_ptr<ALLEGRO_SHADER> shadowShader;
-	static std::shared_ptr<ALLEGRO_SHADER> mainShader;
+	std::shared_ptr<ALLEGRO_SHADER> shadowShader;
+	std::shared_ptr<ALLEGRO_SHADER> mainShader;
 
 	std::shared_ptr<ALLEGRO_BITMAP> depthbuffer;
 	std::shared_ptr<ALLEGRO_BITMAP> render;

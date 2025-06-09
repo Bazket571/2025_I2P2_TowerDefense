@@ -29,7 +29,6 @@ namespace Engine {
     };
     std::shared_ptr<ALLEGRO_VERTEX_DECL> Resources::vertexDecl = nullptr;
 
-
     Resources::Resources() {
         vertexDecl = std::shared_ptr<ALLEGRO_VERTEX_DECL>(al_create_vertex_decl(vertexElems.data(), sizeof(Vertex)), al_destroy_vertex_decl);
     };
