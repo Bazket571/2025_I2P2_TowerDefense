@@ -22,6 +22,7 @@
 #include "Engine/LOG.hpp"
 #include "Engine/Resources.hpp"
 #include "PlayScene.hpp"
+#include "3D/Object3D.hpp"
 #include "Turret/LaserTurret.hpp"
 #include "Turret/MachineGunTurret.hpp"
 #include "Turret/HomingTurret.hpp"
@@ -67,6 +68,7 @@ void PlayScene::Initialize() {
     score = 0;
     // Add groups from bottom to top.
     AddNewObject(TileMapGroup = new Group());
+    AddNewObject(TileGroup = new Group3D(true));
     AddNewObject(GroundEffectGroup = new Group());
     AddNewObject(DebugIndicatorGroup = new Group());
     AddNewObject(TowerGroup = new Group());
@@ -83,6 +85,9 @@ void PlayScene::Initialize() {
     imgTarget->Visible = false;
     preview = nullptr;
     UIGroup->AddNewObject(imgTarget);
+
+    TileGroup->AddNewObject(new Object3D("Resource/Cube.glb", {800, 416, 50}, {50, 50, 50}));
+
     // Preload Lose Scene
     deathBGMInstance = Engine::Resources::GetInstance().GetSampleInstance("astronomia.ogg");
     Engine::Resources::GetInstance().GetBitmap("lose/benjamin-happy.png");

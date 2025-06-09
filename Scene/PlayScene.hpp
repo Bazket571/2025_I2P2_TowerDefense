@@ -9,6 +9,7 @@
 
 #include "Engine/IScene.hpp"
 #include "Engine/Point.hpp"
+#include "3D/Group3D.hpp"
 
 class Turret;
 namespace Engine {
@@ -54,6 +55,7 @@ public:
     float ticks;
     float deathCountDown;
     // Map tiles.
+    Group3D *TileGroup;
     Group *TileMapGroup;
     Group *GroundEffectGroup;
     Group *DebugIndicatorGroup;
