@@ -39,6 +39,7 @@ const std::string Group3D::mainVert =
     "uniform mat4 light_view_matrix;"
     "uniform bool al_use_tex_matrix;"
     "uniform mat4 al_tex_matrix;"
+    "uniform bool isBillboard;"
 
     "out VS_OUT {"
         "vec4 FragPos;"
@@ -57,6 +58,15 @@ const std::string Group3D::mainVert =
         "}"
         "vs_out.FragPosLightSpace = light_proj_matrix * light_view_matrix * vs_out.FragPos;"
         "vs_out.Color = al_color;"
+        "if(isBillboard) {"
+            "mat4 billboard_matrix = view_matrix * model_matrix;"
+            //https://blog.42yeah.is/opengl/rendering/2023/06/24/opengl-billboards.html#solution-2
+            "billboard_matrix[0].xyz = vec3(1, 0, 0);"
+            "billboard_matrix[1].xyz = vec3(0, 1, 0);"
+            "billboard_matrix[2].xyz = vec3(0, 0, 1);"
+            "gl_Position = proj_matrix * billboard_matrix * al_pos;"
+            "return;"
+        "}"
         "gl_Position = proj_matrix * view_matrix * vs_out.FragPos;"
     "}";
 const std::string Group3D::mainFrag =
@@ -74,6 +84,8 @@ const std::string Group3D::mainFrag =
 
     "uniform vec3 lightPos;"
     "uniform vec3 viewPos;"
+    "uniform bool hasShadow;"
+    "uniform bool isBillboard;"
 
     "float shininess = 4;"
 
@@ -100,6 +112,11 @@ const std::string Group3D::mainFrag =
         "if(al_use_tex) {"
             "color = texture(al_tex, fs_in.TexCoords);"
         "}"
+        "if(!hasShadow) {"
+            "gl_FragColor = color;"
+            "return;"
+        "}"
+
         "float dist = length(lightPos - fs_in.FragPos.xyz);"
         "vec3 normal = normalize(fs_in.Normal);"
         "vec3 lightColor = vec3(1);"
@@ -124,6 +141,8 @@ const std::string Group3D::mainFrag =
         "gl_FragColor = vec4(lighting, color.a);"
 
     "}";
+
+ALLEGRO_TRANSFORM Group3D::identity = {{ {1, 0, 0, 0}, {0, -1, 0, 0}, {0, 0, -1, 0}, {0, 0, 0, 1} }};
 
 ALLEGRO_TRANSFORM Group3D::perspective_transform(float width, float height)
 {
@@ -201,10 +220,10 @@ bool Group3D::attachAndBuildShader(ALLEGRO_SHADER* shader, std::string vertSourc
     return true;
 }
 
+//Manually handle billboard draw calls
 void Group3D::Draw() const
 {
     //Activate shaders if shadows are needed
-
     ALLEGRO_TRANSFORM proj, lightProj;
     proj = perspective_transform(al_get_bitmap_width(render.get()), al_get_bitmap_height(render.get()));
     lightProj = orthographic_transform(al_get_bitmap_width(depthbuffer.get()), al_get_bitmap_height(depthbuffer.get()));
@@ -227,22 +246,40 @@ void Group3D::Draw() const
     al_clear_depth_buffer(1);
     al_clear_to_color(al_map_rgba_f(0, 0, 0, 0));
 
-    if (renderShadow) {
-        al_use_shader(mainShader.get());
-        al_set_shader_matrix("proj_matrix", &proj);
-        al_set_shader_matrix("view_matrix", &camera_view());
-        al_set_shader_matrix("light_proj_matrix", &lightProj);
-        al_set_shader_matrix("light_view_matrix", &light_view());
-        al_set_shader_sampler("depth_map", depthbuffer.get(), 1);
-    }
-
+    al_use_shader(mainShader.get());
+    al_set_shader_matrix("proj_matrix", &proj);
+    al_set_shader_matrix("view_matrix", &camera_view());
+    al_set_shader_matrix("light_proj_matrix", &lightProj);
+    al_set_shader_matrix("light_view_matrix", &light_view());
+    al_set_shader_sampler("depth_map", depthbuffer.get(), 1);
+    //Render main stuffs
     al_set_render_state(ALLEGRO_DEPTH_TEST, true);
+    al_set_shader_bool("hasShadow", renderShadow);
+    al_set_shader_bool("isBillboard", false);
+    al_set_render_state(ALLEGRO_DEPTH_FUNCTION, ALLEGRO_RENDER_LESS);
     Group::Draw();
-    al_set_render_state(ALLEGRO_DEPTH_TEST, false);
-
+    //Render bill boards
+    al_set_shader_bool("hasShadow", false);
+    al_set_shader_bool("isBillboard", true);
+    al_set_shader_matrix("model_matrix", &identity);
+    al_set_render_state(ALLEGRO_DEPTH_FUNCTION, ALLEGRO_RENDER_ALWAYS);
+    billboards.Draw();
+    al_set_render_state(ALLEGRO_DEPTH_FUNCTION, ALLEGRO_RENDER_LESS);
+    al_set_render_state(ALLEGRO_DEPTH_TEST, false);    
     al_use_shader(nullptr);
     al_set_target_backbuffer(al_get_current_display());
     al_draw_bitmap(render.get(), 0, 0, 0);
     //al_draw_scaled_bitmap(depthbuffer.get(), 0, 0, al_get_bitmap_width(depthbuffer.get()), al_get_bitmap_height(depthbuffer.get()), 0, 0, al_get_bitmap_width(depthbuffer.get()) / 4, al_get_bitmap_height(depthbuffer.get()) / 4, 0);
+}
 
+//Manually handle billboard updates
+void Group3D::Update(float delta)
+{
+    billboards.Update(delta);
+    Group::Update(delta);
+}
+
+Engine::Group* Group3D::GetBillboards()
+{
+    return &billboards;
 }

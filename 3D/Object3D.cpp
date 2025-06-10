@@ -26,11 +26,11 @@ void Object3D::Draw() const
     //Setup transforms for shaders and use. They are seperate!!!!
     al_set_shader_matrix("model_matrix", &t);
     al_compose_transform(&t, &defaultTrans);
-    al_use_transform(&t);
+    //al_use_transform(&t);
 
     al_draw_indexed_buffer(vertexBuffer.get(), texture.get(), indicesBuffer.get(), 0, al_get_index_buffer_size(indicesBuffer.get()), ALLEGRO_PRIM_TRIANGLE_LIST);
     //Reset transforms used
-    al_use_transform(&defaultTrans);
+    //al_use_transform(&defaultTrans);
 }
 
 void Object3D::Update(float delta)
