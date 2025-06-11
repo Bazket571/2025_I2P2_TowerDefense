@@ -88,20 +88,6 @@ void PlayScene::Initialize() {
     imgTarget->Visible = false;
     preview = nullptr;
     UIGroup->AddNewObject(imgTarget);
-
-    Engine::SpineSprite* supremeLeader;
-    supremeLeader = new Engine::SpineSprite("amiya/build_char_002_amiya.skel", "amiya/build_char_002_amiya.atlas",
-        4 * BlockSize, 5 * BlockSize, 0.4);
-    supremeLeader->state->setAnimation(1, "Interact", true);
-    supremeLeader->Position.z = BlockSize; //HighTile
-    TileGroup->GetBillboards()->AddNewObject(supremeLeader);
-    supremeLeader = new Engine::SpineSprite("logos/char_4133_logos.skel", "logos/char_4133_logos.atlas", 
-        4 * BlockSize, 4 * BlockSize, 0.4);
-    auto test = supremeLeader->skeleton->getData()->getAnimations();
-    supremeLeader->state->setAnimation(1, "Attack_1", true);
-    supremeLeader->Position.z = BlockSize * 0.75; //LowTile
-    TileGroup->GetBillboards()->AddNewObject(supremeLeader);
-
     // Preload Lose Scene
     deathBGMInstance = Engine::Resources::GetInstance().GetSampleInstance("astronomia.ogg");
     Engine::Resources::GetInstance().GetBitmap("lose/benjamin-happy.png");
