@@ -28,3 +28,4 @@ int main(int argc, char **argv) {
 	game.Start("start", 60, 1600, 832);
 	return 0;
 }
+/* vim: set sts=3 sw=3 et: */

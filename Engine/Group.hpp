@@ -135,7 +135,7 @@ namespace Engine {
         /// The added objects will be deleted by Scene at remove or terminate.
         /// </summary>
         /// <param name="obj">The Object to add.</param>
-        void AddNewObject(IObject *obj);
+        virtual void AddNewObject(IObject *obj);
         /// <summary>
         /// Insert Object to scene before the iterator.
         /// Use inline-new when adding Object in order to support polymorphism,
@@ -150,14 +150,14 @@ namespace Engine {
         /// The added controls will be deleted by Scene at remove or terminate.
         /// </summary>
         /// <param name="ctrl">The Control to add.</param>
-        void AddNewControl(IControl *ctrl);
+        virtual void AddNewControl(IControl *ctrl);
         /// <summary>
         /// Add ControlObject to scene.
         /// Use inline-new when adding ControlObject in order to support polymorphism,
         /// ControlObject means classes that inherit both Control and Object. (e.g. buttons)
         /// </summary>
         /// <param name="ctrl">The ControlObject to add.</param>
-        void AddNewControlObject(IControl *ctrl);
+        virtual void AddNewControlObject(IControl *ctrl);
         /// <summary>
         /// Add Object to scene.
         /// Use reference when adding Object. Make sure it won't be deconstructed due to out-of-scope.
