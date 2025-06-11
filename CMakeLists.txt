@@ -57,9 +57,6 @@ add_executable(2025_I2P2_TowerDefense
     Engine/spine/spine.cpp
     Engine/spine/spine.hpp
 
-    Operator/Operator.cpp
-    Operator/Operator.hpp
-    
     # TODO HACKATHON-2 (3/3): Add the new scene source files here
     Scene/LoseScene.cpp
     Scene/LoseScene.hpp
@@ -107,7 +104,8 @@ add_executable(2025_I2P2_TowerDefense
     
     main.cpp
     "Turret/FreezeTurret.cpp"  
-    "3D/Object3D.cpp" "3D/Group3D.cpp" "3D/Billboard.cpp")
+    "3D/Object3D.cpp" "3D/Group3D.cpp" "3D/Billboard.cpp"
+    "Entities/Entity.cpp")
 
 #add_custom_command(TARGET 2025_I2P2_TowerDefense POST_BUILD
 #                  COMMAND ${CMAKE_COMMAND} -E copy_directory

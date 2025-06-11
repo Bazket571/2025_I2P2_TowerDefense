@@ -75,6 +75,7 @@ void Engine::SpineSprite::Update(float deltaTime)
 	state->update(deltaTime * timeScale);
 	state->apply(*skeleton);
 	skeleton->update(deltaTime * timeScale);
+	bounds.update(*skeleton, true);
 	//skeleton->setPosition(Position.x, Position.y);
 	skeleton->updateWorldTransform();
 }

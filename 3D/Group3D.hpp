@@ -21,7 +21,7 @@ class Group3D : public Engine::Group {
 	std::shared_ptr<ALLEGRO_BITMAP> depthbuffer;
 	std::shared_ptr<ALLEGRO_BITMAP> render;
 
-	Billboard billboards;
+	Billboard* billboards;
 	bool attachAndBuildShader(ALLEGRO_SHADER* shader, std::string vertSource, std::string fragSource);
 
 	

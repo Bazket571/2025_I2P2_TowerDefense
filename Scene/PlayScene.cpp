@@ -71,7 +71,7 @@ void PlayScene::Initialize() {
     TileMapGroup = new Group();
     UIGroup = new Group();
     //AddNewObject();
-    AddNewObject(TileGroup = new Group3D(true));
+    AddNewControlObject(TileGroup = new Group3D(true));
     AddNewObject(GroundEffectGroup = new Group());
     AddNewObject(DebugIndicatorGroup = new Group());
     AddNewObject(TowerGroup = new Group());
@@ -91,6 +91,7 @@ void PlayScene::Initialize() {
     // Preload Lose Scene
     deathBGMInstance = Engine::Resources::GetInstance().GetSampleInstance("astronomia.ogg");
     Engine::Resources::GetInstance().GetBitmap("lose/benjamin-happy.png");
+
     // Start BGM.
     bgmId = AudioHelper::PlayBGM("play.ogg");
 }

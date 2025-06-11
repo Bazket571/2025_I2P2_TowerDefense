@@ -205,6 +205,9 @@ Group3D::Group3D(bool shadow) : renderShadow(shadow) {
     depthbuffer = std::shared_ptr<ALLEGRO_BITMAP>(al_create_bitmap(2400, 1536), al_destroy_bitmap);
     render = std::shared_ptr<ALLEGRO_BITMAP>(al_create_bitmap(Engine::GameEngine::GetInstance().GetScreenWidth(), Engine::GameEngine::GetInstance().GetScreenHeight()), al_destroy_bitmap);
     al_set_new_bitmap_depth(0);
+
+    billboards = new Billboard();
+    AddNewControl(billboards);
 };
 
 bool Group3D::attachAndBuildShader(ALLEGRO_SHADER* shader, std::string vertSource, std::string fragSource) {
@@ -263,7 +266,7 @@ void Group3D::Draw() const
     al_set_shader_bool("isBillboard", true);
     al_set_shader_matrix("model_matrix", &identity);
     al_set_render_state(ALLEGRO_DEPTH_FUNCTION, ALLEGRO_RENDER_ALWAYS);
-    billboards.Draw();
+    billboards->Draw();
     al_set_render_state(ALLEGRO_DEPTH_FUNCTION, ALLEGRO_RENDER_LESS);
     al_set_render_state(ALLEGRO_DEPTH_TEST, false);    
     al_use_shader(nullptr);
@@ -275,11 +278,11 @@ void Group3D::Draw() const
 //Manually handle billboard updates
 void Group3D::Update(float delta)
 {
-    billboards.Update(delta);
+    billboards->Update(delta);
     Group::Update(delta);
 }
 
 Engine::Group* Group3D::GetBillboards()
 {
-    return &billboards;
+    return billboards;
 }
