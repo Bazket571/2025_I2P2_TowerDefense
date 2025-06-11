@@ -1,4 +1,11 @@
 #include "Billboard.hpp"
+static bool CustomCompare(const std::pair<bool, Engine::IObject*>& a, const float y) {
+    return a.second->Position.y < y;
+}
+void Billboard::AddNewObject(IObject* obj)
+{
+    insertObject(true, obj, std::lower_bound(objects.begin(), objects.end(), obj->Position.y, CustomCompare));
+}
 
 void Billboard::Draw() const{
     for (auto& it : objects) {

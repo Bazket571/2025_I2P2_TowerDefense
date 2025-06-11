@@ -5,5 +5,6 @@
 #include <memory>
 class Billboard : public Engine::Group{
 public:
+	void AddNewObject(IObject* obj);
 	void Draw() const override;
 };
