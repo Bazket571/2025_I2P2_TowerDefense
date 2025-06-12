@@ -156,6 +156,13 @@ void Billboard::AddNewControlObject(IObject* obj)
     addControl(true, dynamic_cast<IControl*>(obj));
 }
 
+Billboard::Billboard() : Engine::Group() {
+    Engine::Point screenSize = Engine::GameEngine::GetInstance().GetScreenSize();
+    al_identity_transform(&invProjView);
+    al_compose_transform(&invProjView, &Group3D::camera_view());
+    al_compose_transform(&invProjView, &Group3D::perspective_transform(screenSize.x, screenSize.y));
+    inverse(&invProjView);
+}
 void Billboard::Draw() const{
     ALLEGRO_TRANSFORM trans;
     for (auto& it : objects) {
@@ -177,14 +184,11 @@ void Billboard::Draw() const{
 void Billboard::ScreenToWorld(int& x, int& y) const
 {
     Engine::Point screenSize = Engine::GameEngine::GetInstance().GetScreenSize();
-    ALLEGRO_TRANSFORM trans; al_identity_transform(&trans);
-    al_compose_transform(&trans, &Group3D::camera_view());
-    al_compose_transform(&trans, &Group3D::perspective_transform(screenSize.x, screenSize.y));
-    inverse(&trans);
     static float a = -1; if ((a += 0.025) > 1) a = -1;
     float fx = (float)(x) / screenSize.x * 2.f - 1, fy = 1.f - (float)y / screenSize.y * 2.f, fz = 0, fw = 1;
-    al_transform_coordinates_4d(&trans, &fx, &fy, &fz, &fw);
-    
+    //glReadPixels(x, y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &fz);
+    //fz = fz * 2 - 1;
+    al_transform_coordinates_4d(&invProjView, &fx, &fy, &fz, &fw);
     x = fx / fw, y = fy / fw;
     
     //Engine::LOG(Engine::INFO) << x << " " << y;

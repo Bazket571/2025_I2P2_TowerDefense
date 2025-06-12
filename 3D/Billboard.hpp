@@ -6,7 +6,9 @@
 class Billboard : public Engine::Group{
     void GetModelMatrix(ALLEGRO_TRANSFORM* trans, Engine::Point Position) const;
     void inverse(ALLEGRO_TRANSFORM* trans) const;
+    ALLEGRO_TRANSFORM invProjView;
 public:
+    Billboard();
     void AddNewObject(IObject* obj);
     void AddNewControlObject(IObject* obj);
 	void Draw() const override;
