@@ -123,9 +123,9 @@ const std::string Group3D::mainFrag =
         //Ambient
         "vec3 ambient = 0.2 * lightColor;"
         //Diffuse
-        "vec3 lightDir = -normalize(lightPos - fs_in.FragPos.xyz);"
+        "vec3 lightDir = normalize(lightPos - fs_in.FragPos.xyz);"
         "float diff = max(dot(lightDir, normal), 0);"
-        "vec3 diffuse = diff * 1.5 * lightColor;"
+        "vec3 diffuse = diff * lightColor;"
         //Specular
         "vec3 viewDir = normalize(viewPos - fs_in.FragPos.xyz);"
         "float spec = 0;"
@@ -148,7 +148,7 @@ ALLEGRO_TRANSFORM Group3D::perspective_transform(float width, float height)
 {
     ALLEGRO_TRANSFORM p;
     al_identity_transform(&p);
-    al_perspective_transform(&p, -width / 2, -height / 2, width / 2, width / 2, height / 2, 4000);
+    al_perspective_transform(&p, width / 2, height / 2, width / 2, -width / 2, -height / 2, 4000);
     return p;
 }
 ALLEGRO_TRANSFORM Group3D::orthographic_transform(float width, float height)
@@ -173,6 +173,7 @@ ALLEGRO_TRANSFORM Group3D::light_view() {
     return t;
 }
 ALLEGRO_TRANSFORM Group3D::camera_view() {
+    static float a = 0; if ((a += 0.25) > 20) a = 0;
     ALLEGRO_TRANSFORM t;
     Engine::Point vec(0, 3, 6);
     vec = vec.Normalize();
@@ -182,8 +183,8 @@ ALLEGRO_TRANSFORM Group3D::camera_view() {
     al_build_camera_transform(&t,
         vec.x, vec.y, vec.z,
         0, 0, 0,
-        0, 1, 0);
-    al_translate_transform_3d(&t, -800, -416, 0);
+        0, 0, 1);
+    al_translate_transform_3d(&t, 800, 416, 0);
     al_rotate_transform_3d(&t, 1, 0, 0, -ALLEGRO_PI / 24);
     return t;
 }

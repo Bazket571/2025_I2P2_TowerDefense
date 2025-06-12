@@ -3,7 +3,7 @@
 #include <list>
 #include <string>
 #include <memory>
-
+#define SPINE_USE_STD_FUNCTION
 #include <spine/spine.h>
 #include <Engine/IObject.hpp>
 #include <Engine/IControl.hpp>

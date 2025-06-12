@@ -18,8 +18,8 @@ protected:
     Engine::Point direction;
     ALLEGRO_TRANSFORM rangeTransform; //For Deltas rotation. Default position will be up.
 public:
-    Entity(std::string skel, std::string atlas, float x, float y);
-
+    Entity(std::string skel, std::string atlas, float x, float y, int atk, int def, int hp);
+    void Listener(spine::AnimationState* state, spine::EventType type, spine::TrackEntry* entry, spine::Event* event);
     virtual void OnAttack() = 0;
     virtual void OnStart() = 0;
     virtual void ChangeHP(int amount);
