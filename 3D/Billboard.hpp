@@ -12,7 +12,7 @@ public:
     void AddNewObject(IObject* obj);
     void AddNewControlObject(IObject* obj);
 	void Draw() const override;
-    void ScreenToWorld(int& x, int& y) const;
+    void ScreenToWorld(float & x, float & y, float &z) const;
 
     //Do Transformations to the mouse position before passing them to the thing.
     /// <summary>

@@ -148,7 +148,7 @@ ALLEGRO_TRANSFORM Group3D::perspective_transform(float width, float height)
 {
     ALLEGRO_TRANSFORM p;
     al_identity_transform(&p);
-    al_perspective_transform(&p, -width / 2, -height / 2, width / 2, width / 2, height / 2, 4000);
+    al_perspective_transform(&p, -width / 2, -height / 2, width / 2, width / 2, height / 2, 2000);
     al_translate_transform_3d(&p, -800, height, 0);
     al_rotate_transform_3d(&p, 1, 0, 0, -ALLEGRO_PI / 24);
     return p;

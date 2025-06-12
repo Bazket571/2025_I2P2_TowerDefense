@@ -4,7 +4,8 @@
 Slime::Slime(float x, float y, float z):
 	Enemy("slime/enemy_1007_slime.skel", "slime/enemy_1007_slime.atlas", x, y, z, { 550, 0, 130, 1 })
 {
-
+	state->addAnimation(0, "Move_Begin", false, 0);
+	state->addAnimation(0, "Move_Loop", true, 0);
 }
 
 std::vector<Engine::Point> Slime::getRangeDeltas()

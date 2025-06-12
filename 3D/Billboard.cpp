@@ -12,21 +12,19 @@ static bool CustomCompare(const std::pair<bool, Engine::IObject*>& a, const floa
 static bool CustomSort(Engine::IObject* a, Engine::IObject* b) {
     return a->Position.y < b->Position.y;
 }
-void Billboard::GetModelMatrix(ALLEGRO_TRANSFORM *trans, Engine::Point Position) const
-{
+void Billboard::GetModelMatrix(ALLEGRO_TRANSFORM *trans, Engine::Point Position) const {
     al_identity_transform(trans);
     al_translate_transform_3d(trans, Position.x, Position.y, Position.z);
     //al_scale_transform_3d(&trans, it.second->Scale.x, it.second->Scale.y, 1);
 }
-void Billboard::inverse(ALLEGRO_TRANSFORM* trans) const
-{
+void Billboard::inverse(ALLEGRO_TRANSFORM* trans) const {
     std::vector<float> m;
     for (int y = 0; y < 4; y++) {
         for (int x = 0; x < 4; x++) {
             m.push_back(trans->m[y][x]);
         }
     }
-    double inv[16], det;
+    float inv[16], det;
     int i;
 
     inv[0] = m[5] * m[10] * m[15] -
@@ -166,7 +164,10 @@ Billboard::Billboard() : Engine::Group() {
     al_identity_transform(&invProjView);
     al_compose_transform(&invProjView, &Group3D::camera_view());
     al_compose_transform(&invProjView, &Group3D::perspective_transform(screenSize.x, screenSize.y));
+    float x = -1, y = 1, z = 0;
+    //cam pos 0 536.656311 1073.31262
     inverse(&invProjView);
+    //1 0 0 -800 0 -1.79289 0.677549 798.776855 0 -0.440569580 -1.44241 -306.886719 0 -0.44721 -0.89442 1200
 }
 void Billboard::Draw() const{
     temp.clear();
@@ -190,41 +191,43 @@ void Billboard::Draw() const{
     }
     //Draw cursor
     Engine::Point mouse = Engine::GameEngine::GetInstance().GetMousePosition();
-    int fx = mouse.x, fy = mouse.y;
-    ScreenToWorld(fx, fy);
-    GetModelMatrix(&trans, { (float)fx, (float)fy, 0 });
+    ScreenToWorld(mouse.x, mouse.y, mouse.z);
+    GetModelMatrix(&trans, mouse);
     al_set_shader_matrix("model_matrix", &trans);
     al_draw_circle(0, 0, 5, al_map_rgba_f(1, 0, 0, 1), 5);
 }
 //https://stackoverflow.com/questions/7692988/opengl-math-projecting-screen-space-to-world-space-coords
 //Not working
-void Billboard::ScreenToWorld(int& x, int& y) const
+void Billboard::ScreenToWorld(float& x, float& y, float& z) const
 {
     Engine::Point screenSize = Engine::GameEngine::GetInstance().GetScreenSize();
     static float a = -1; if ((a += 0.025) > 1) a = -1;
     float fx = (float)(x) / screenSize.x * 2.f - 1, fy = 1.f - (float)y / screenSize.y * 2.f, fz = 0, fw = 1;
     //glReadPixels(x, y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &fz);
     //fz = fz * 2 - 1;
-    al_transform_coordinates_4d(&invProjView, &fx, &fy, &fz, &fw);
-    x = fx / fw, y = fy / fw;
-    
+    al_transform_coordinates_3d_projective(&invProjView, &fx, &fy, &fz);
+    Engine::Point worldPos = Engine::Point(fx, fy, fz);
+    x = worldPos.x, y = worldPos.y, z = worldPos.z;
     //Engine::LOG(Engine::INFO) << x << " " << y;
 }
 
 void Billboard::OnMouseDown(int button, int mx, int my)
 {
-    ScreenToWorld(mx, my);
+    float fx = mx, fy = my, fz = 0;
+    ScreenToWorld(fx, fy, fz);
     Group::OnMouseDown(button, mx, my);
 }
 
 void Billboard::OnMouseUp(int button, int mx, int my)
 {
-    ScreenToWorld(mx, my);
+    float fx = mx, fy = my, fz = 0;
+    ScreenToWorld(fx, fy, fz);
     Group::OnMouseUp(button, mx, my);
 }
 
 void Billboard::OnMouseMove(int mx, int my)
 {
-    ScreenToWorld(mx, my);
+    float fx = mx, fy = my, fz = 0;
+    ScreenToWorld(fx, fy, fz);
     Group::OnMouseMove(mx, my);
 }
