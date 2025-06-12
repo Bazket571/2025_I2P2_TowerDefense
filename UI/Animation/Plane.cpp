@@ -70,7 +70,7 @@ void Plane::Update(float deltaTime) {
             CollisionRadius = shockWaveRadius * scale;
             // Check if overlap with enemy.
             for (auto &it : getPlayScene()->EnemyGroup->GetObjects()) {
-                Enemy *enemy = dynamic_cast<Enemy *>(it);
+                Enemy2 *enemy = dynamic_cast<Enemy2 *>(it);
                 if (Engine::Collider::IsCircleOverlap(Position, CollisionRadius, enemy->Position, enemy->CollisionRadius))
                     enemy->Hit(INFINITY);
             }

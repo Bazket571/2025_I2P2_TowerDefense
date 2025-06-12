@@ -2,7 +2,7 @@
 #define SOLDIERENEMY_HPP
 #include "Enemy.hpp"
 
-class SoldierEnemy : public Enemy {
+class SoldierEnemy : public Enemy2 {
 public:
     SoldierEnemy(int x, int y);
 };

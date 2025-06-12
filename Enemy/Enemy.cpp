@@ -17,10 +17,10 @@
 #include "UI/Animation/DirtyEffect.hpp"
 #include "UI/Animation/ExplosionEffect.hpp"
 
-PlayScene *Enemy::getPlayScene() {
+PlayScene *Enemy2::getPlayScene() {
     return dynamic_cast<PlayScene *>(Engine::GameEngine::GetInstance().GetActiveScene());
 }
-void Enemy::OnExplode() {
+void Enemy2::OnExplode() {
     getPlayScene()->EffectGroup->AddNewObject(new ExplosionEffect(Position.x, Position.y));
     std::random_device dev;
     std::mt19937 rng(dev());
@@ -31,12 +31,12 @@ void Enemy::OnExplode() {
         getPlayScene()->GroundEffectGroup->AddNewObject(new DirtyEffect("play/dirty-" + std::to_string(distId(rng)) + ".png", dist(rng), Position.x, Position.y));
     }
 }
-Enemy::Enemy(std::string img, float x, float y, float radius, float speed, float hp, int money) : Engine::Sprite(img, x, y), speed(speed), hp(hp), money(money) {
+Enemy2::Enemy2(std::string img, float x, float y, float radius, float speed, float hp, int money) : Engine::Sprite(img, x, y), speed(speed), hp(hp), money(money) {
     CollisionRadius = radius;
     reachEndTime = 0;
     speedMultiplier = 1;
 }
-void Enemy::Hit(float damage) {
+void Enemy2::Hit(float damage) {
     hp -= damage;
     if (hp <= 0) {
         OnExplode();
@@ -56,7 +56,7 @@ void Enemy::Hit(float damage) {
         AudioHelper::PlayAudio("explosion.wav");
     }
 }
-void Enemy::UpdatePath(const std::vector<std::vector<int>> &mapDistance) {
+void Enemy2::UpdatePath(const std::vector<std::vector<int>> &mapDistance) {
     int x = static_cast<int>(floor(Position.x / PlayScene::BlockSize));
     int y = static_cast<int>(floor(Position.y / PlayScene::BlockSize));
     if (x < 0) x = 0;
@@ -89,7 +89,7 @@ void Enemy::UpdatePath(const std::vector<std::vector<int>> &mapDistance) {
     }
     path[0] = PlayScene::EndGridPoint;
 }
-void Enemy::Update(float deltaTime) {
+void Enemy2::Update(float deltaTime) {
     // Pre-calculate the velocity.
     float remainSpeed = speed * speedMultiplier * deltaTime;
     if (remainSpeed == 0) {
@@ -124,7 +124,7 @@ void Enemy::Update(float deltaTime) {
     Rotation = atan2(Velocity.y, Velocity.x);
     Sprite::Update(deltaTime);
 }
-void Enemy::Draw() const {
+void Enemy2::Draw() const {
     Sprite::Draw();
     if (PlayScene::DebugMode || Engine::GameEngine::GetInstance().GetSettings().DrawBoundingBox) {
         // Draw collision radius.

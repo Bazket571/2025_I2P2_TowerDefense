@@ -6,15 +6,15 @@
 #include "TankEnemy.hpp"
 
 TankEnemy::TankEnemy(int x, int y)
-    : Enemy("play/enemy-3.png", x, y, 20, 20, 100, 50),
+    : Enemy2("play/enemy-3.png", x, y, 20, 20, 100, 50),
       head("play/enemy-3-head.png", x, y), targetRotation(0) {
 }
 void TankEnemy::Draw() const {
-    Enemy::Draw();
+    Enemy2::Draw();
     head.Draw();
 }
 void TankEnemy::Update(float deltaTime) {
-    Enemy::Update(deltaTime);
+    Enemy2::Update(deltaTime);
     head.Position = Position;
     // Choose arbitrary one.
     std::random_device dev;

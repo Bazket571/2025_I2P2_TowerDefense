@@ -115,8 +115,8 @@ void PlayScene::Update(float deltaTime) {
     // Reset all enemy's speed multiplier
     std::vector<float> reachEndTimes;
     for (auto &it : EnemyGroup->GetObjects()) {
-        dynamic_cast<Enemy *>(it)->speedMultiplier = 1;
-        reachEndTimes.push_back(dynamic_cast<Enemy *>(it)->reachEndTime);
+        dynamic_cast<Enemy2 *>(it)->speedMultiplier = 1;
+        reachEndTimes.push_back(dynamic_cast<Enemy2 *>(it)->reachEndTime);
     }
     // Can use Heap / Priority-Queue instead. But since we won't have too many enemies, sorting is fast enough.
     std::sort(reachEndTimes.begin(), reachEndTimes.end());
@@ -168,7 +168,7 @@ void PlayScene::Update(float deltaTime) {
         ticks -= current.second;
         enemyWaveData.pop_front();
         const Engine::Point SpawnCoordinate = Engine::Point(SpawnGridPoint.x * BlockSize + BlockSize / 2, SpawnGridPoint.y * BlockSize + BlockSize / 2);
-        Enemy *enemy;
+        Enemy2 *enemy;
         switch (current.first) {
             case 1:
                 EnemyGroup->AddNewObject(enemy = new SoldierEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
@@ -267,7 +267,7 @@ void PlayScene::OnMouseUp(int button, int mx, int my) {
             mapState[y][x] |= TILE_OCCUPIED_TURRET;
             mapDistance = result.second;
             for (auto &it : EnemyGroup->GetObjects())
-                dynamic_cast<Enemy *>(it)->UpdatePath(mapDistance);
+                dynamic_cast<Enemy2 *>(it)->UpdatePath(mapDistance);
 
             OnMouseMove(mx, my);
         }

@@ -42,7 +42,7 @@ void Turret::Update(float deltaTime) {
         for (auto &it : scene->EnemyGroup->GetObjects()) {
             Engine::Point diff = it->Position - Position;
             if (diff.Magnitude() <= CollisionRadius) {
-                Target = dynamic_cast<Enemy *>(it);
+                Target = dynamic_cast<Enemy2 *>(it);
                 Target->lockedTurrets.push_back(this);
                 lockedTurretIterator = std::prev(Target->lockedTurrets.end());
                 break;
