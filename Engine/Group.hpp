@@ -14,6 +14,7 @@ namespace Engine {
     protected:
         // Stores all object pointers in the scene.
         // The first boolean indicates whether the scene should delete it.
+        //std::list<std::pair<bool, IObject*>> objects;
         std::list<std::pair<bool, IObject *>> objects;
         // Stores all control pointers in the scene.
         // The first boolean indicates whether the scene should delete it.

@@ -1,7 +1,7 @@
 #include "Entities/Entity.hpp"
 
 class Amiya : public Entity {
-	Stats stat;
+	Stats stat{ 699, 276, 48, 0 };
 public:
 	Amiya(float x, float y, float z);
 	void OnAttack();

@@ -2,11 +2,8 @@
 #include "Engine/LOG.hpp"
 
 Amiya::Amiya(float x, float y, float z) :
-	Entity("amiya/char_002_amiya.skel", "amiya/char_002_amiya.atlas", x, y, z, {})
+	Entity("amiya/char_002_amiya.skel", "amiya/char_002_amiya.atlas", x, y, z, stat)
 {
-	stat.atk = 276;
-	stat.def = 48;
-	stat.hp = 699;
 	state->setAnimation(0, "Start", false);
 	state->addAnimation(0, "Idle", true, 0);
 }
@@ -26,4 +23,5 @@ std::vector<Engine::Point> Amiya::getRangeDeltas()
 
 void Amiya::OnStart()
 {
+	Engine::LOG(Engine::INFO) << "Amiya start";
 }

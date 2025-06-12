@@ -3,9 +3,13 @@
 #include "Engine/GameEngine.hpp"
 #include "Engine/LOG.hpp"
 #include <allegro5/allegro_opengl.h>
+#include <algorithm>
 
 static bool CustomCompare(const std::pair<bool, Engine::IObject*>& a, const float y) {
     return a.second->Position.y < y;
+}
+static bool CustomSort(const std::pair<bool, Engine::IObject*>& a, const std::pair<bool, Engine::IObject*>& b) {
+    return a.second->Position.y < b.second->Position.y;
 }
 void Billboard::GetModelMatrix(ALLEGRO_TRANSFORM *trans, Engine::Point Position) const
 {
@@ -164,6 +168,8 @@ Billboard::Billboard() : Engine::Group() {
     inverse(&invProjView);
 }
 void Billboard::Draw() const{
+    //Sort objects by y coords
+    std::sort(objects.begin(), objects.end(), CustomSort);
     ALLEGRO_TRANSFORM trans;
     for (auto& it : objects) {
         if (it.second->Visible) {

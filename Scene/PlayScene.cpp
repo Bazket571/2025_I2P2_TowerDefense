@@ -12,6 +12,7 @@
 #include <array>
 #include <sstream>
 
+#include "Entities/Enemies.hpp"
 #include "Enemy/Enemy.hpp"
 #include "Enemy/PlaneEnemy.hpp"
 #include "Enemy/SoldierEnemy.hpp"
@@ -168,24 +169,27 @@ void PlayScene::Update(float deltaTime) {
         ticks -= current.second;
         enemyWaveData.pop_front();
         const Engine::Point SpawnCoordinate = Engine::Point(SpawnGridPoint.x * BlockSize + BlockSize / 2, SpawnGridPoint.y * BlockSize + BlockSize / 2);
-        Enemy2 *enemy;
+        Enemy *enemy = nullptr;
         switch (current.first) {
             case 1:
-                EnemyGroup->AddNewObject(enemy = new SoldierEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
+                //EnemyGroup->AddNewObject(enemy = new SoldierEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
+                FieldGroup->AddNewBillboard(enemy = new Slime(SpawnCoordinate.x, SpawnCoordinate.y, 0));
                 break;
             // TODO HACKATHON-3 (2/3): Add your new enemy here.
             case 2:
-                EnemyGroup->AddNewObject(enemy = new PlaneEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
+                //EnemyGroup->AddNewObject(enemy = new PlaneEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
                 break;
             case 3:
-                EnemyGroup->AddNewObject(enemy = new TankEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
+                //EnemyGroup->AddNewObject(enemy = new TankEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
                 break;
             default:
                 continue;
         }
-        enemy->UpdatePath(mapDistance);
-        // Compensate the time lost.
-        enemy->Update(ticks);
+        if (enemy != nullptr) {
+            enemy->UpdatePath(mapDistance);
+            // Compensate the time lost.
+            enemy->Update(ticks);
+        }
     }
     if (preview) {
         preview->Position = Engine::GameEngine::GetInstance().GetMousePosition();

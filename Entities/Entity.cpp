@@ -16,7 +16,7 @@ Entity::Entity(std::string skel, std::string atlas, float x, float y, float z, S
 
 void Entity::callback(spine::AnimationState* state, spine::EventType type, spine::TrackEntry* entry, spine::Event* event)
 {
-	if (entry->getAnimation()->getName().buffer() == "Start") {
+	if (entry->getAnimation()->getName() == "Start" && type == spine::EventType_Start) {
 		OnStart();
 	}
 	if (event == nullptr) return;
@@ -28,6 +28,7 @@ void Entity::callback(spine::AnimationState* state, spine::EventType type, spine
 void Entity::Update(float delta)
 {
 	SpineSprite::Update(delta);
+	Position = Position + Velocity * delta;
 }
 
 void Entity::ChangeHP(int amount)

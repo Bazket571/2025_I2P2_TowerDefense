@@ -105,7 +105,7 @@ add_executable(2025_I2P2_TowerDefense
     main.cpp
     "Turret/FreezeTurret.cpp"  
     "3D/Object3D.cpp" "3D/Group3D.cpp" "3D/Billboard.cpp"
-    "Entities/Entity.cpp" "Entities/Operator.cpp" "Entities/Operators/Amiya.cpp" "Entities/Enemy.cpp")
+    "Entities/Entity.cpp" "Entities/Operator.cpp" "Entities/Operators/Amiya.cpp" "Entities/Enemy.cpp" "Entities/Enemies/Slime.cpp")
 
 #add_custom_command(TARGET 2025_I2P2_TowerDefense POST_BUILD
 #                  COMMAND ${CMAKE_COMMAND} -E copy_directory
