@@ -1,11 +1,11 @@
 #include "Operator.hpp"
 
-void Operator::Update(float delta)
+Operator::Operator(std::string skel, std::string atlas, float x, float y, float z, Stats stat) :
+    Entity(skel, atlas, x, y, z, stat)
 {
-    
-    SpineSprite::Update(delta);
 }
 
-Operator::Operator(float x, float y) : Entity(x, y)
+void Operator::Update(float delta)
 {
+    Entity::Update(delta);
 }

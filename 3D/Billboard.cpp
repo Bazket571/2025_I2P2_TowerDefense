@@ -153,7 +153,7 @@ void Billboard::AddNewObject(IObject* obj)
 void Billboard::AddNewControlObject(IObject* obj)
 {
     AddNewObject(obj);
-    addControl(true, dynamic_cast<IControl*>(obj));
+    addControl(false, dynamic_cast<IControl*>(obj));
 }
 
 Billboard::Billboard() : Engine::Group() {
@@ -181,6 +181,7 @@ void Billboard::Draw() const{
     al_draw_circle(0, 0, 5, al_map_rgba_f(1, 0, 0, 1), 5);
 }
 //https://stackoverflow.com/questions/7692988/opengl-math-projecting-screen-space-to-world-space-coords
+//Not working
 void Billboard::ScreenToWorld(int& x, int& y) const
 {
     Engine::Point screenSize = Engine::GameEngine::GetInstance().GetScreenSize();

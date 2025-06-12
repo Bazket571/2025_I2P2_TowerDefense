@@ -33,6 +33,7 @@
 #include <Turret/DefenderTurret.hpp>
 #include <Turret/FreezeTurret.hpp>
 #include <Engine/spine/spine.hpp>
+#include "Entities/Operators.hpp"
 
 // TODO HACKATHON-4 (1/3): Trace how the game handles keyboard input.
 // TODO HACKATHON-4 (2/3): Find the cheat code sequence in this file.
@@ -71,7 +72,7 @@ void PlayScene::Initialize() {
     TileMapGroup = new Group();
     UIGroup = new Group();
     //AddNewObject();
-    AddNewControlObject(TileGroup = new Group3D(true));
+    AddNewControlObject(FieldGroup = new Group3D(true));
     AddNewObject(GroundEffectGroup = new Group());
     AddNewObject(DebugIndicatorGroup = new Group());
     AddNewObject(TowerGroup = new Group());
@@ -80,6 +81,8 @@ void PlayScene::Initialize() {
     AddNewObject(EffectGroup = new Group());
     // Should support buttons.
     //AddNewControlObject(UIGroup = new Group());
+    FieldGroup->AddNewControlBillboard(new Amiya(5 * BlockSize, (4 + 0.25) * BlockSize, 0)); //Low ground offset
+    FieldGroup->AddNewControlBillboard(new Amiya(5 * BlockSize, (2) * BlockSize, 0));        //High ground
     ReadMap();
     ReadEnemyWave();
     mapDistance = CalculateBFSDistance();
@@ -364,20 +367,20 @@ void PlayScene::ReadMap()
             switch(mapState[i][j]){
                 case TILE_LOW:
                     //TileMapGroup->AddNewObject(new Engine::Image("play/floor.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
-                    TileGroup->AddNewObject(new Object3D("Resource/3D/TileLow.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 2 }, scale));
+                    FieldGroup->AddNewObject(new Object3D("Resource/3D/TileLow.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 2 }, scale));
                     break;
                 case TILE_HIGH:
-                    TileGroup->AddNewObject(new Object3D("Resource/3D/TileHigh.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 4 }, scale));
+                    FieldGroup->AddNewObject(new Object3D("Resource/3D/TileHigh.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 4 }, scale));
                     break;
                 case TILE_SPAWN:
                     SpawnGridPoint = Engine::Point(j, i);
-                    TileGroup->AddNewObject(new Object3D("Resource/3D/TileLow.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 2 }, scale));
-                    TileGroup->AddNewObject(new Object3D("Resource/3D/RedBox.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)BlockSize / 2 }, scale));
+                    FieldGroup->AddNewObject(new Object3D("Resource/3D/TileLow.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 2 }, scale));
+                    FieldGroup->AddNewObject(new Object3D("Resource/3D/RedBox.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)BlockSize / 2 }, scale));
                     break;
                 case TILE_OBJECTIVE:
                     EndGridPoint = Engine::Point(j, i);
-                    TileGroup->AddNewObject(new Object3D("Resource/3D/TileLow.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 2 }, scale));
-                    TileGroup->AddNewObject(new Object3D("Resource/3D/BlueBox.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)BlockSize / 2 }, scale));
+                    FieldGroup->AddNewObject(new Object3D("Resource/3D/TileLow.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 2 }, scale));
+                    FieldGroup->AddNewObject(new Object3D("Resource/3D/BlueBox.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)BlockSize / 2 }, scale));
                     break;
                 default:
                     TileMapGroup->AddNewObject(new Engine::Image("play/dirt.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));

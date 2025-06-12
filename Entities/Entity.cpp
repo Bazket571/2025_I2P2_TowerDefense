@@ -6,21 +6,31 @@ PlayScene* Entity::GetPlayScene()
 	return dynamic_cast<PlayScene*>(Engine::GameEngine::GetInstance().GetScene("play"));
 }
 
-Entity::Entity(std::string skel, std::string atlas, float x, float y, int atk, int def, int hp):
-	Engine::SpineSprite(skel, atlas, x, y),
-	atk(atk), def(def), hp(hp)
+Entity::Entity(std::string skel, std::string atlas, float x, float y, float z, Stats stat) :
+	Engine::SpineSprite(skel, atlas, x, y, 0.4),
+	stat(stat)
 {
-	//SpineSprite::state->setListener(Listener);
+	Position.z = z;
+	SpineSprite::state->setListener(this);
 }
 
-void Entity::Listener(spine::AnimationState* state, spine::EventType type, spine::TrackEntry* entry, spine::Event* event)
+void Entity::callback(spine::AnimationState* state, spine::EventType type, spine::TrackEntry* entry, spine::Event* event)
 {
-	if (event->getStringValue() == "OnAttack") {
+	if (entry->getAnimation()->getName().buffer() == "Start") {
+		OnStart();
+	}
+	if (event == nullptr) return;
+	if (event->getData().getName() == "OnAttack") {
 		OnAttack();
 	}
 }
 
+void Entity::Update(float delta)
+{
+	SpineSprite::Update(delta);
+}
+
 void Entity::ChangeHP(int amount)
 {
-	hp += amount;
+	stat.hp += amount;
 }

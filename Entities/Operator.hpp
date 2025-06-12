@@ -9,13 +9,17 @@
 
 class Operator : public Entity {
 protected:
-    std::string getSkelFile() = 0;
-    std::string getAtlasFile() = 0;
+	Engine::Point direction;
+	ALLEGRO_TRANSFORM rangeTransform; //For Deltas rotation. Default position will be down.
     virtual std::vector<Engine::Point> getRange() = 0;
 public:
+	bool Preview = true;
+	enum AttackType {Ground = 0b1, Air = 0b10, Both = 0b11};
+	enum DamageType {Physical = 0b1, Arts = 0b10};
 	//Must be inherited
-	Operator(float x, float y);
+	Operator(std::string skel, std::string atlas, float x, float y, float z, Stats stat);
 
 	virtual void OnAttack() = 0;
 	virtual void OnStart() = 0;
+	virtual void Update(float delta);
 };

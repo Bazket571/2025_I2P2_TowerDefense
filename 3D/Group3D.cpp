@@ -148,7 +148,9 @@ ALLEGRO_TRANSFORM Group3D::perspective_transform(float width, float height)
 {
     ALLEGRO_TRANSFORM p;
     al_identity_transform(&p);
-    al_perspective_transform(&p, width / 2, height / 2, width / 2, -width / 2, -height / 2, 4000);
+    al_perspective_transform(&p, -width / 2, -height / 2, width / 2, width / 2, height / 2, 4000);
+    al_translate_transform_3d(&p, -800, height, 0);
+    al_rotate_transform_3d(&p, 1, 0, 0, -ALLEGRO_PI / 24);
     return p;
 }
 ALLEGRO_TRANSFORM Group3D::orthographic_transform(float width, float height)
@@ -183,9 +185,9 @@ ALLEGRO_TRANSFORM Group3D::camera_view() {
     al_build_camera_transform(&t,
         vec.x, vec.y, vec.z,
         0, 0, 0,
-        0, 0, 1);
-    al_translate_transform_3d(&t, 800, 416, 0);
-    al_rotate_transform_3d(&t, 1, 0, 0, -ALLEGRO_PI / 24);
+        0, 1, 0);
+    //al_translate_transform_3d(&t, -800, -416, 0);
+    //al_rotate_transform_3d(&t, 1, 0, 0, -ALLEGRO_PI / 24);
     return t;
 }
 
@@ -206,6 +208,12 @@ Group3D::Group3D(bool shadow) : renderShadow(shadow) {
     depthbuffer = std::shared_ptr<ALLEGRO_BITMAP>(al_create_bitmap(2400, 1536), al_destroy_bitmap);
     render = std::shared_ptr<ALLEGRO_BITMAP>(al_create_bitmap(Engine::GameEngine::GetInstance().GetScreenWidth(), Engine::GameEngine::GetInstance().GetScreenHeight()), al_destroy_bitmap);
     al_set_new_bitmap_depth(0);
+
+    al_set_target_bitmap(depthbuffer.get());
+    al_use_shader(shadowShader.get());
+    al_set_target_bitmap(render.get());
+    al_use_shader(mainShader.get());
+    al_set_target_backbuffer(al_get_current_display());
 
     billboards = new Billboard();
     AddNewControl(billboards);
@@ -236,21 +244,19 @@ void Group3D::Draw() const
         al_set_target_bitmap(depthbuffer.get());
         al_clear_depth_buffer(1);
         al_clear_to_color(al_map_rgba_f(1, 1, 1, 1));
-        al_use_shader(shadowShader.get());
+        //al_use_shader(shadowShader.get());
         al_set_shader_matrix("proj_matrix", &lightProj);
         al_set_shader_matrix("view_matrix", &light_view());
 
         al_set_render_state(ALLEGRO_DEPTH_TEST, true);
         Group::Draw();
         al_set_render_state(ALLEGRO_DEPTH_TEST, false);
-
-        al_use_shader(nullptr);
     }
     al_set_target_bitmap(render.get());
     al_clear_depth_buffer(1);
     al_clear_to_color(al_map_rgba_f(0, 0, 0, 0));
 
-    al_use_shader(mainShader.get());
+    //al_use_shader(mainShader.get());
     al_set_shader_matrix("proj_matrix", &proj);
     al_set_shader_matrix("view_matrix", &camera_view());
     al_set_shader_matrix("light_proj_matrix", &lightProj);
@@ -270,7 +276,6 @@ void Group3D::Draw() const
     billboards->Draw();
     al_set_render_state(ALLEGRO_DEPTH_FUNCTION, ALLEGRO_RENDER_LESS);
     al_set_render_state(ALLEGRO_DEPTH_TEST, false);    
-    al_use_shader(nullptr);
     al_set_target_backbuffer(al_get_current_display());
     al_draw_bitmap(render.get(), 0, 0, 0);
     //al_draw_scaled_bitmap(depthbuffer.get(), 0, 0, al_get_bitmap_width(depthbuffer.get()), al_get_bitmap_height(depthbuffer.get()), 0, 0, al_get_bitmap_width(depthbuffer.get()) / 4, al_get_bitmap_height(depthbuffer.get()) / 4, 0);
@@ -281,6 +286,16 @@ void Group3D::Update(float delta)
 {
     billboards->Update(delta);
     Group::Update(delta);
+}
+
+void Group3D::AddNewControlBillboard(IObject* obj)
+{
+    billboards->AddNewControlObject(obj);
+}
+
+void Group3D::AddNewBillboard(IObject* obj)
+{
+    billboards->AddNewObject(obj);
 }
 
 Engine::Group* Group3D::GetBillboards()

@@ -55,7 +55,7 @@ public:
     float ticks;
     float deathCountDown;
     // Map tiles.
-    Group3D *TileGroup;
+    Group3D *FieldGroup;
     Group *TileMapGroup;
     Group *GroundEffectGroup;
     Group *DebugIndicatorGroup;

@@ -105,7 +105,7 @@ add_executable(2025_I2P2_TowerDefense
     main.cpp
     "Turret/FreezeTurret.cpp"  
     "3D/Object3D.cpp" "3D/Group3D.cpp" "3D/Billboard.cpp"
-    "Entities/Entity.cpp")
+    "Entities/Entity.cpp" "Entities/Operator.cpp" "Entities/Operators/Amiya.cpp" "Entities/Enemy.cpp")
 
 #add_custom_command(TARGET 2025_I2P2_TowerDefense POST_BUILD
 #                  COMMAND ${CMAKE_COMMAND} -E copy_directory
@@ -116,7 +116,7 @@ set(TINYGLTF_BUILD_LOADER_EXAMPLE OFF CACHE INTERNAL "" FORCE)
 set(TINYGLTF_HEADER_ONLY OFF CACHE INTERNAL "" FORCE)
 add_subdirectory(tinygltf)
 add_subdirectory(lunasvg)
-add_subdirectory(spine-runtimes/spine-cpp spine-runtimes)
+add_subdirectory(spine-runtimes/spine-cpp)
 target_link_libraries(2025_I2P2_TowerDefense lunasvg::lunasvg spine-cpp tinygltf)
 
 IF (WIN32)

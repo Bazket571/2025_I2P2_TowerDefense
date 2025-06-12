@@ -34,5 +34,7 @@ public:
 	Group3D(bool renderShadow);
 	void Draw() const override;
 	void Update(float delta);
+	void AddNewControlBillboard(IObject* obj);
+	void AddNewBillboard(IObject* obj);
 	Engine::Group* GetBillboards();
 };
