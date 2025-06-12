@@ -28,6 +28,7 @@ void Object3D::Draw() const
     al_compose_transform(&t, &defaultTrans);
     //al_use_transform(&t);
 
+    //al_draw_circle(0, 0, 1, al_map_rgb_f(0, 1, 0), 2);
     al_draw_indexed_buffer(vertexBuffer.get(), texture.get(), indicesBuffer.get(), 0, al_get_index_buffer_size(indicesBuffer.get()), ALLEGRO_PRIM_TRIANGLE_LIST);
     //Reset transforms used
     //al_use_transform(&defaultTrans);

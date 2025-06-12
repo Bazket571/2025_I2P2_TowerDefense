@@ -61,7 +61,7 @@ void Enemy::Update(float delta)
             reachEndTime = 0;
             return;
         }
-        Engine::Point target = path.back() * PlayScene::BlockSize + Engine::Point(PlayScene::BlockSize / 2, PlayScene::BlockSize / 2);
+        Engine::Point target = path.back() * PlayScene::BlockSize;
         Engine::Point vec = target - Position;
         // Add up the distances:
         // 1. to path.back()
