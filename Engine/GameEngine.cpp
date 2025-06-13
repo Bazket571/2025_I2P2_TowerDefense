@@ -5,6 +5,7 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_video.h>
 #include <chrono>
 #include <memory>
 #include <stdexcept>
@@ -38,6 +39,7 @@ namespace Engine {
         // Install peripherals.
         if (!al_install_keyboard()) throw Allegro5Exception("failed to install keyboard");
         if (!al_install_mouse()) throw Allegro5Exception("failed to install mouse");
+        if (!al_init_video_addon()) throw Allegro5Exception("Failed to initialize video add-on");
 
         // Setup game display.
         al_set_new_display_option(ALLEGRO_DEPTH_SIZE, 16, ALLEGRO_SUGGEST);

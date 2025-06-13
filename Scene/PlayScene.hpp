@@ -42,6 +42,7 @@ protected:
 
 public:
     static bool DebugMode;
+    static int OperatorUISize;
     static const std::vector<Engine::Point> directions;
     static int MapWidth, MapHeight;
     static const int MapWidthRatio, MapHeightRatio;
@@ -50,7 +51,6 @@ public:
     static const float DangerTime;
     static Engine::Point SpawnGridPoint;
     static Engine::Point EndGridPoint;
-    static const std::vector<int> code;
     static int score;
     int MapId;
     float ticks;
@@ -93,6 +93,8 @@ public:
     void AddScore(int point);
     void ReadMap();
     void ReadEnemyWave();
+    void UpdateOperatorUI();
+    void ConstructOperatorUI();
     //void ConstructTurretList();
     void ConstructUI();
     void UIBtnClicked(int id);

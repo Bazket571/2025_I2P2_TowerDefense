@@ -35,6 +35,7 @@
 #include <Turret/FreezeTurret.hpp>
 #include <Engine/spine/spine.hpp>
 #include "Entities/Operators.hpp"
+#include "UI/Video.hpp"
 
 // TODO HACKATHON-4 (1/3): Trace how the game handles keyboard input.
 // TODO HACKATHON-4 (2/3): Find the cheat code sequence in this file.
@@ -52,11 +53,8 @@ const int PlayScene::WindowWidth = (64*21), PlayScene::WindowHeight = 64*13;
 const float PlayScene::DangerTime = 7.61;
 Engine::Point PlayScene::SpawnGridPoint = Engine::Point(0, 0);
 Engine::Point PlayScene::EndGridPoint = Engine::Point(MapWidth, MapHeight - 1);
-const std::vector<int> PlayScene::code = {
-    ALLEGRO_KEY_UP, ALLEGRO_KEY_UP, ALLEGRO_KEY_DOWN, ALLEGRO_KEY_DOWN,
-    ALLEGRO_KEY_LEFT, ALLEGRO_KEY_RIGHT, ALLEGRO_KEY_LEFT, ALLEGRO_KEY_RIGHT,
-    ALLEGRO_KEY_B, ALLEGRO_KEY_A, ALLEGRO_KEY_LSHIFT, ALLEGRO_KEY_ENTER
-};
+int PlayScene::OperatorUISize = 96;
+
 Engine::Point PlayScene::GetClientSize() {
     return Engine::Point(MapWidth * BlockSize, MapHeight * BlockSize);
 }
@@ -73,16 +71,16 @@ void PlayScene::Initialize() {
     //TileMapGroup = new Group();
     UIGroup = new Group();
     //AddNewObject();
+    //AddNewObject(new Video("Resource/test.ogv", { 0, 0 }, { 1600, 832 }));
     AddNewControlObject(FieldGroup = new Group3D(true));
     AddNewObject(GroundEffectGroup = new Group());
     AddNewObject(DebugIndicatorGroup = new Group());
-    //AddNewObject(TowerGroup = new Group());
-    //AddNewObject(EnemyGroup = new Group());
-   // AddNewObject(BulletGroup = new Group());
     AddNewObject(EffectGroup = new Group());
     // Should support buttons.
     AddNewControlObject(UIGroup = new Group());
     operators.push_back({ 0, new Amiya() });
+    std::sort(operators.begin(), operators.end(), 
+        [](std::pair<float, Operator*> a, std::pair<float, Operator*> b) {return a.second->cost > b.second->cost;});
     //FieldGroup->AddNewControlBillboard(amiyi); //Low ground offset
     //amiyi->Deploy(5 * BlockSize, 2 * BlockSize, 0, Right);
     //FieldGroup->AddNewControlBillboard(new Amiya(5 * BlockSize, (2) * BlockSize, 0, Right));        //High ground
@@ -289,6 +287,9 @@ void PlayScene::OnKeyDown(int keyCode) {
         // Hotkey for Speed up.
         SpeedMult = keyCode - ALLEGRO_KEY_0;
     }
+    if (keyCode == ALLEGRO_KEY_ESCAPE) {
+        SpeedMult = 0;
+    }
 }
 void PlayScene::Hit() {
     lives--;
@@ -390,6 +391,19 @@ void PlayScene::ReadEnemyWave() {
     fin.close();
 }
 //TODO improve(automate) this horrid piece of shit
+
+void PlayScene::UpdateOperatorUI() {
+
+}
+
+void PlayScene::ConstructOperatorUI() {
+    Engine::Point screenSize = Engine::GameEngine::GetInstance().GetScreenSize();
+    for (int i = 0; i < operators.size(); i++) {
+        std::string filepath = operators[i].second->getIconPath();
+        UIGroup->AddNewControlObject(new Engine::ImageButton(filepath, filepath, screenSize.x - OperatorUISize * (i + 1), screenSize.y - OperatorUISize, OperatorUISize, OperatorUISize));
+    }
+}
+
 void PlayScene::ConstructUI() {
     // Background
     //UIGroup->AddNewObject(new Engine::Image("play/sand.png", 1280, 0, 320, 832));
@@ -398,6 +412,9 @@ void PlayScene::ConstructUI() {
     //UIGroup->AddNewObject(UIMoney = new Engine::Label(std::string("$") + std::to_string(money), "pirulen.ttf", 24, 1294, 48));
     //UIGroup->AddNewObject(UILives = new Engine::Label(std::string("Life ") + std::to_string(lives), "pirulen.ttf", 24, 1294, 88));
     //UIGroup->AddNewObject(UIScore = new Engine::Label(std::string("Score ") + std::to_string(score), "pirulen.ttf", 24, 1294, 128));
+
+    ConstructOperatorUI();
+
     int w = Engine::GameEngine::GetInstance().GetScreenSize().x;
     int h = Engine::GameEngine::GetInstance().GetScreenSize().y;
     int shift = 135 + 25;

@@ -164,7 +164,7 @@ ALLEGRO_TRANSFORM Group3D::orthographic_transform(float width, float height)
 ALLEGRO_TRANSFORM Group3D::light_view() {
     static float a = 0; a += 0.05; if (a > 20) a = 0;
     ALLEGRO_TRANSFORM t;
-    Engine::Point vec(1, -3, 5);
+    Engine::Point vec(1, -3, 3);
     std::array<float, 3> vecArr = { vec.x, vec.y, vec.z };
     al_set_shader_float_vector("lightPos", 3, vecArr.data(), 1);
     al_build_camera_transform(&t,
