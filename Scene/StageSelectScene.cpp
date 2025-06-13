@@ -8,6 +8,7 @@
 #include "Engine/Point.hpp"
 #include "Engine/Resources.hpp"
 #include "PlayScene.hpp"
+#include "StoryScene.h"
 #include "StageSelectScene.hpp"
 #include "UI/Component/ImageButton.hpp"
 #include "UI/Component/Label.hpp"
@@ -20,11 +21,11 @@ void StageSelectScene::Initialize() {
     int halfH = h / 2;
     Engine::ImageButton *btn;
     btn = new Engine::ImageButton("stage-select/dirt.png", "stage-select/floor.png", halfW - 200, halfH / 2 - 50, 400, 100);
-    btn->SetOnClickCallback(std::bind(&StageSelectScene::PlayOnClick, this, 1));
+    btn->SetOnClickCallback(std::bind(&StageSelectScene::PlayOnClick, this, "1-1"));
     AddNewControlObject(btn);
     AddNewObject(new Engine::Label("Stage 1", "pirulen.ttf", 48, halfW, halfH / 2, 0, 0, 0, 255, 0.5, 0.5));
     btn = new Engine::ImageButton("stage-select/dirt.png", "stage-select/floor.png", halfW - 200, halfH / 2 + 100, 400, 100);
-    btn->SetOnClickCallback(std::bind(&StageSelectScene::PlayOnClick, this, 2));
+    btn->SetOnClickCallback(std::bind(&StageSelectScene::PlayOnClick, this, "1-2"));
     AddNewControlObject(btn);
     AddNewObject(new Engine::Label("Stage 2", "pirulen.ttf", 48, halfW, halfH / 2 + 150, 0, 0, 0, 255, 0.5, 0.5));
     btn = new Engine::ImageButton("svgs/regular/circle-left.svg", "svgs/solid/circle-arrow-left.svg", 10, 10, 50, 50);
@@ -41,10 +42,10 @@ void StageSelectScene::Terminate() {
 void StageSelectScene::BackOnClick(int stage) {
     Engine::GameEngine::GetInstance().ChangeScene("start");
 }
-void StageSelectScene::PlayOnClick(int stage) {
-    PlayScene *scene = dynamic_cast<PlayScene *>(Engine::GameEngine::GetInstance().GetScene("play"));
-    scene->MapId = std::to_string(stage);
-    Engine::GameEngine::GetInstance().ChangeScene("play");
+void StageSelectScene::PlayOnClick(std::string stage) {
+    StoryScene *scene = dynamic_cast<StoryScene*>(Engine::GameEngine::GetInstance().GetScene("story"));
+    scene->StageID = stage;
+    Engine::GameEngine::GetInstance().ChangeScene("story");
 }
 void StageSelectScene::ScoreboardOnClick() {
     Engine::GameEngine::GetInstance().ChangeScene("scoreboard-scene");

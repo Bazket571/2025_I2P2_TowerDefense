@@ -12,11 +12,12 @@ class StoryScene : public Engine::IScene {
     Engine::Image* character;
     Engine::Image* character2;
     Engine::Image* dialoguebar;
-    Engine::ImageButton* skip;
+    //Engine::ImageButton* skip;
     std::ifstream cmdFile;
     void Initialize() override;
     void OnMouseDown(int button, int mx, int my) override;
     void OnKeyDown(int keyCode) override;
     void ReadAndExecute();
-
+public:
+    std::string StageID;
 };

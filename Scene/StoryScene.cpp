@@ -27,7 +27,7 @@ void StoryScene::Initialize() {
     AddNewObject(dialoguebar);
     AddNewObject(dialogue);
     AddNewObject(speaker);
-    cmdFile.open("Resource/plot/1-1.txt");
+    cmdFile.open("Resource/plot/"+StageID+".txt");
     bgmInstance = AudioHelper::PlaySample("story1-1.ogg", true, AudioHelper::BGMVolume);
     ReadAndExecute();
 }
