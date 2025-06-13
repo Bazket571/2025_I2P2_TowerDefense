@@ -19,7 +19,6 @@ void StageSelectScene::Initialize() {
     int halfW = w / 2;
     int halfH = h / 2;
     Engine::ImageButton *btn;
-
     btn = new Engine::ImageButton("stage-select/dirt.png", "stage-select/floor.png", halfW - 200, halfH / 2 - 50, 400, 100);
     btn->SetOnClickCallback(std::bind(&StageSelectScene::PlayOnClick, this, 1));
     AddNewControlObject(btn);
