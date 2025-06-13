@@ -50,7 +50,7 @@ public:
     static Engine::Point EndGridPoint;
     static const std::vector<int> code;
     static int score;
-    int MapId;
+    std::string MapId;
     float ticks;
     float deathCountDown;
     // Map tiles.

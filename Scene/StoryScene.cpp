@@ -31,6 +31,7 @@ void StoryScene::Initialize() {
     AddNewObject(speaker);
     cmdFile.open("Resource/plot/1-1.txt");
     bgmInstance = AudioHelper::PlaySample("story1-1.ogg", true, AudioHelper::BGMVolume);
+    ReadAndExecute();
 }
 
 void StoryScene::OnMouseDown(int button, int mx, int my)
@@ -43,13 +44,22 @@ void StoryScene::OnKeyDown(int keyCode)
     if (keyCode == ALLEGRO_KEY_SPACE) {
         ReadAndExecute();
     }
+    if (keyCode == ALLEGRO_KEY_ESCAPE) {
+        Engine::GameEngine::GetInstance().ChangeScene("play");
+    }
 }
 
 void StoryScene::ReadAndExecute()
 {
     std::string cmd;
     cmdFile >> cmd;
-    if (cmd == "dia") {
+    if (cmd == "play") {
+        std::string target;
+        cmdFile >> target;
+        PlayScene* scene = dynamic_cast<PlayScene*>(Engine::GameEngine::GetInstance().GetScene("play"));
+        scene->MapId = target;
+    }
+    else if (cmd == "dia") {
         std::string dia; std::getline(cmdFile, dia);
         dialogue->Text = dia;
     }
@@ -62,18 +72,19 @@ void StoryScene::ReadAndExecute()
         ReadAndExecute();
     }
     else if (cmd == "speRight") {
-        std::string speRight;
+        std::string imgFile, speRight;
+        cmdFile >> imgFile;
         std::getline(cmdFile, speRight);
         speaker->Text = speRight;
         character2->bmp = Engine::Resources::GetInstance().GetBitmap("char/Medic.png");
         character2->Visible = true;
         ReadAndExecute();
     }
-    else if (cmd == "play") {
+    else if (cmd == "end") {
         AudioHelper::StopSample(bgmInstance);
         bgmInstance = std::shared_ptr<ALLEGRO_SAMPLE_INSTANCE>();
         IScene::Terminate();
-        Engine::GameEngine::GetInstance().ChangeScene("stage-select");
+        Engine::GameEngine::GetInstance().ChangeScene("play");
     }
     else if (cmd == "back") {
         std::string back; std::getline(cmdFile, back);

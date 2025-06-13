@@ -1,6 +1,7 @@
+play 1
 speRight Medic
 dia Amiya! Don't panic, just calm down first!
-speLeft Amiya
+speLeft  Amiya
 dia Ah... S-sorry.
 speRight Medic
 dia You always get so flustered when it comes to the doctor.
@@ -10,6 +11,7 @@ dia ...I'm already mentally prepared for that. We would continue to follow the p
 speRight Medic
 dia ...I understand. Anyway, I'll do what you requested.
 speLeft Amiya
+speLeft none
 dia All right... I appreciate it.
 dia About the Doctor...
 speRight Medic
@@ -19,4 +21,3 @@ speLeft Amiya
 dia Thank you... Thank you very much!
 speRight Medic
 dia Mhm. Breathing is slightly shallow, but blood pressure is normal. There should be no cause for concern.
-play 1-1
