@@ -77,14 +77,14 @@ void PlayScene::Initialize() {
     AddNewObject(GroundEffectGroup = new Group());
     AddNewObject(DebugIndicatorGroup = new Group());
     AddNewObject(TowerGroup = new Group());
-    AddNewObject(EnemyGroup = new Group());
+    //AddNewObject(EnemyGroup = new Group());
     AddNewObject(BulletGroup = new Group());
     AddNewObject(EffectGroup = new Group());
     // Should support buttons.
     //AddNewControlObject(UIGroup = new Group());
-    Operator* amiyi = new Amiya(5 * BlockSize, (4 + 0.25) * BlockSize, 0);
+    Operator* amiyi = new Amiya(5 * BlockSize, 2 * BlockSize, 0, Right);
     FieldGroup->AddNewControlBillboard(amiyi); //Low ground offset
-    FieldGroup->AddNewControlBillboard(new Amiya(5 * BlockSize, (2) * BlockSize, 0));        //High ground
+    //FieldGroup->AddNewControlBillboard(new Amiya(5 * BlockSize, (2) * BlockSize, 0, Right));        //High ground
     ReadMap();
     ReadEnemyWave();
     mapDistance = CalculateBFSDistance();
@@ -116,10 +116,10 @@ void PlayScene::Update(float deltaTime) {
     // Calculate danger zone.
     // Reset all enemy's speed multiplier
     std::vector<float> reachEndTimes;
-    for (auto &it : EnemyGroup->GetObjects()) {
+    /*for (auto &it : EnemyGroup->GetObjects()) {
         dynamic_cast<Enemy2 *>(it)->speedMultiplier = 1;
         reachEndTimes.push_back(dynamic_cast<Enemy2 *>(it)->reachEndTime);
-    }
+    }*/
     // Can use Heap / Priority-Queue instead. But since we won't have too many enemies, sorting is fast enough.
     std::sort(reachEndTimes.begin(), reachEndTimes.end());
     float newDeathCountDown = -1;
@@ -158,7 +158,7 @@ void PlayScene::Update(float deltaTime) {
         // Check if we should create new enemy.
         ticks += deltaTime;
         if (enemyWaveData.empty()) {
-            if (EnemyGroup->GetObjects().empty()) {
+            if (FieldGroup->GetFromBillboard<Enemy>().empty()) {
                 // Win.
                 Engine::GameEngine::GetInstance().ChangeScene("win");
             }

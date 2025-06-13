@@ -5,12 +5,15 @@
 #include <vector>
 
 #include "Entity.hpp"
+#include "Enemy.hpp"
+
 #include <Scene/PlayScene.hpp>
 
 class Operator : public Entity {
 protected:
     virtual std::vector<Engine::Point> getRange();
 public:
+	std::vector<Enemy*> enemiesInRange;
 	bool Preview = true;
 	EntityDirection direction;
 	//Must be inherited

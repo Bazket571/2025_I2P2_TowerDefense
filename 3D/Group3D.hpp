@@ -5,6 +5,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
@@ -36,5 +37,18 @@ public:
 	void Update(float delta);
 	void AddNewControlBillboard(IObject* obj);
 	void AddNewBillboard(IObject* obj);
+	template <typename T>
+	std::vector<T*> GetFromBillboard();
 	Engine::Group* GetBillboards();
 };
+
+template<typename T>
+inline std::vector<T*> Group3D::GetFromBillboard()
+{
+	std::vector<T*> ret;
+	for (auto& it : billboards->GetObjects()) {
+		auto pointer = dynamic_cast<T*>(it);
+		if (pointer) ret.push_back(pointer);
+	}
+	return ret;
+}
