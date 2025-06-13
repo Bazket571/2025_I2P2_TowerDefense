@@ -2,15 +2,10 @@
 #include "Engine/LOG.hpp"
 
 Amiya::Amiya(float x, float y, float z, EntityDirection direction) :
-	Operator("amiya/char_002_amiya.skel", "amiya/char_002_amiya.atlas", x, y, z, stat, direction)
+	Operator("amiya/char_002_amiya.skel", "amiya/char_002_amiya.atlas", x, y, z, Stats( 699, 276, 48, 0), direction)
 {
 	state->addAnimation(0, "Start", false, 0);
 	state->addAnimation(0, "Idle", true, 0);
-}
-
-void Amiya::OnAttack()
-{
-	Engine::LOG(Engine::INFO) << "Amiya attack";
 }
 
 void Amiya::Update(float delta)
@@ -38,6 +33,13 @@ std::vector<Engine::Point> Amiya::getRangeDeltas()
 			 {-1, 1}, {0, 1}, {1, 1},
 			 {-1, 2}, {0, 2}, {1, 2},
 					  {0, 3} };
+}
+
+void Amiya::OnAttack()
+{
+	Enemy* target = enemiesInRange[0];
+	AddEffect(new Damage(this, target));
+	Engine::LOG(Engine::INFO) << "Amiya attack";
 }
 
 void Amiya::OnStart()

@@ -155,6 +155,7 @@ void PlayScene::Update(float deltaTime) {
         deathCountDown = -1;
     for (int i = 0; i < SpeedMult; i++) {
         IScene::Update(deltaTime);
+        Entity::UpdateEffects();
         // Check if we should create new enemy.
         ticks += deltaTime;
         if (enemyWaveData.empty()) {

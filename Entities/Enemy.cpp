@@ -49,7 +49,7 @@ void Enemy::Update(float delta)
     
 	//TODO: Move enemies here
     // Pre-calculate the velocity.
-    float remainSpeed = curStat.speed * delta * PlayScene::BlockSize;
+    float remainSpeed = curStat.GetSpeed() * delta * PlayScene::BlockSize;
     if (remainSpeed == 0) {
         Velocity = { 0,0 };
     }
@@ -68,7 +68,7 @@ void Enemy::Update(float delta)
         // 2. path.back() to border
         // 3. All intermediate block size
         // 4. to end point
-        reachEndTime = (vec.Magnitude() + (path.size() - 1) * PlayScene::BlockSize - remainSpeed) / stat.speed;
+        reachEndTime = (vec.Magnitude() + (path.size() - 1) * PlayScene::BlockSize - remainSpeed) / stat.GetSpeed();
         Engine::Point normalized = vec.Normalize();
         if (remainSpeed - vec.Magnitude() > 0) {
             Position = target;

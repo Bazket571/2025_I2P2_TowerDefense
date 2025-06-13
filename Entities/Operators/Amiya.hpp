@@ -1,7 +1,6 @@
 #include "Entities/Operator.hpp"
 
 class Amiya : public Operator {
-	Stats stat{ 699, 276, 48, 0 };
 public:
 	Amiya(float x, float y, float z, EntityDirection direction);
 	void OnAttack();

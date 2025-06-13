@@ -2,6 +2,8 @@
 #include "Engine/GameEngine.hpp"
 #include "Engine/Collider.hpp"
 
+std::multimap<std::string, Effect*> Entity::effects;
+
 PlayScene* Entity::GetPlayScene()
 {
 	return dynamic_cast<PlayScene*>(Engine::GameEngine::GetInstance().GetScene("play"));
@@ -47,11 +49,6 @@ void Entity::Update(float delta)
 
 void Entity::IsClickedOn(){}
 
-void Entity::ChangeHP(int amount)
-{
-	stat.hp += amount;
-}
-
 void Entity::OnMouseUp(int button, int mx, int my)
 {
 	Engine::Point mouse = Billboard::MousePlane({(float)mx, (float)my}, Position.z);
@@ -61,4 +58,38 @@ void Entity::OnMouseUp(int button, int mx, int my)
 	//Check if the tile we clicked on
 	if (mouse == curPos)
 		IsClickedOn();
+}
+
+void Entity::UpdateEffects()
+{
+	for(auto iter = effects.begin(); iter != effects.end();){
+		auto cur = iter++;
+		cur->second->effect();
+		cur->second->duration--;
+		if (cur->second->duration <= 0) {
+			effects.erase(cur);
+		}
+
+	}
+}
+
+void Entity::AddEffect(Effect* effect)
+{
+	effects.insert({ effect->name, effect });
+}
+
+Effect::Effect(std::string name, Entity* from, Entity* to, int duration):
+	name(name), from(from), to(to), duration(duration)
+{}
+
+void Effect::effect(){
+
+}
+
+Damage::Damage(Entity* from, Entity* to): Effect("Damage", from, to, 1) {}
+
+void Damage::effect()
+{
+	Effect::effect();
+	to->stat.SetHP(to->stat.GetHP() - std::max(5, from->stat.GetAtk() - to->stat.GetDef()));
 }
