@@ -96,8 +96,10 @@ void StoryScene::ReadAndExecute()
         Engine::GameEngine::GetInstance().ChangeScene("play");
     }
     else if (cmd == "back") {
-        std::string back; std::getline(cmdFile, back);
-        background->bmp = Engine::Resources::GetInstance().GetBitmap("background/background1-1");
+        std::string imgFile, back;
+        cmdFile >> imgFile;
+        std::getline(cmdFile, back);
+        background->bmp = Engine::Resources::GetInstance().GetBitmap(imgFile);
     }
 }
 

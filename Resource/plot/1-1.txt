@@ -1,3 +1,4 @@
+back background/A1-1.png
 play 1
 speRight char/Medic.png Medic
 dia Amiya! Don't panic, just calm down first!
