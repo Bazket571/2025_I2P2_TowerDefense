@@ -1,10 +1,12 @@
+#pragma once
 #include "Entities/Operator.hpp"
 
 class Amiya : public Operator {
 public:
-	Amiya(float x, float y, float z, EntityDirection direction);
+	Amiya();
 	void OnAttack();
 	void Update(float delta);
+	std::string getIconPath();
 
 	// Inherited via Entity
 	std::vector<Engine::Point> getRangeDeltas() override;

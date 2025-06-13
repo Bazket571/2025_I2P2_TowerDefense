@@ -1,8 +1,8 @@
 #include "Enemy.hpp"
 #include <random>
 
-Enemy::Enemy(std::string skel, std::string atlas, float x, float y, float z, Stats stat):
-	Entity(skel, atlas, x, y, z, stat)
+Enemy::Enemy(std::string skel, std::string atlas, float x, float y, float z, Stats stat) :
+    Entity(skel, atlas, x, y, z, stat), reachEndTime(0)
 {
 }
 
@@ -49,7 +49,7 @@ void Enemy::Update(float delta)
     
 	//TODO: Move enemies here
     // Pre-calculate the velocity.
-    float remainSpeed = curStat.GetSpeed() * delta * PlayScene::BlockSize;
+    float remainSpeed = curStat.GetSpeed() * delta * PlayScene::BlockSize / 2;
     if (remainSpeed == 0) {
         Velocity = { 0,0 };
     }

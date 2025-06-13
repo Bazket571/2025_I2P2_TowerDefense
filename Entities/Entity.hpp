@@ -77,6 +77,7 @@ public:
 
     Effect(std::string name, Entity* from, Entity* to, int duration);
     virtual void effect() = 0;
+    virtual void after();
 };
 
 class Damage : public Effect {

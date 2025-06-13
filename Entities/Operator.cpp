@@ -14,14 +14,27 @@ std::vector<Engine::Point> Operator::getRange()
     return ret;
 }
 
-Operator::Operator(std::string skel, std::string atlas, float x, float y, float z, Stats stat, EntityDirection direction) :
-    Entity(skel, atlas, x, y, z, stat),
+Operator::Operator(std::string skel, std::string atlas, Stats stat) :
+    Entity(skel, atlas, 0, 0, 0, stat),
     direction(direction)
+{}
+
+void Operator::Deploy(float x, float y, float z, EntityDirection direction)
 {
+    Position.x = x;
+    Position.y = y;
+    Position.z = z;
+    Preview = false;
+    Enabled = true;
+    this->direction = direction;
+    state->addAnimation(0, "Start", false, 0);
+    state->addAnimation(0, "Idle", true, 0);
 }
 
 void Operator::Update(float delta)
 {
+    Entity::Update(delta);
+    if (!Enabled) return;
     //Find enemies
     enemiesInRange.clear();
     std::vector<Enemy*> enemies = GetPlayScene()->FieldGroup->GetFromBillboard<Enemy>();
@@ -36,7 +49,6 @@ void Operator::Update(float delta)
     }
     //Sort enemies by their distance to objective
     std::sort(enemiesInRange.begin(), enemiesInRange.end(), [](Enemy* a, Enemy* b) {return a->reachEndTime < b->reachEndTime;});
-    Entity::Update(delta);
 }
 
 void Operator::IsClickedOn(){}

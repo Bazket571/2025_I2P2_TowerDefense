@@ -11,6 +11,7 @@
 #include "Engine/Point.hpp"
 #include "3D/Group3D.hpp"
 
+class Operator;
 class Turret;
 namespace Engine {
     class Group;
@@ -54,6 +55,7 @@ public:
     int MapId;
     float ticks;
     float deathCountDown;
+    std::vector<Operator*> operators;
     // Map tiles.
     Group3D *FieldGroup;
     Group *TileMapGroup;

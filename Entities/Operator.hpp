@@ -15,10 +15,13 @@ protected:
 public:
 	std::vector<Enemy*> enemiesInRange;
 	bool Preview = true;
+	bool Enabled = false;
 	EntityDirection direction;
 	//Must be inherited
-	Operator(std::string skel, std::string atlas, float x, float y, float z, Stats stat, EntityDirection direction);
+	Operator(std::string skel, std::string atlas, Stats stat);
+	virtual std::string getIconPath() = 0;
 
+	virtual void Deploy(float x, float y, float z, EntityDirection direction);
 	virtual void OnAttack() = 0;
 	virtual void OnStart() = 0;
 	virtual void Update(float delta);

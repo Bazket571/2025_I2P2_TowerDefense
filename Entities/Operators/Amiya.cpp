@@ -1,17 +1,20 @@
 #include "Amiya.hpp"
 #include "Engine/LOG.hpp"
 
-Amiya::Amiya(float x, float y, float z, EntityDirection direction) :
-	Operator("amiya/char_002_amiya.skel", "amiya/char_002_amiya.atlas", x, y, z, Stats( 699, 276, 48, 0), direction)
+Amiya::Amiya() :
+	Operator("amiya/char_002_amiya.skel", "amiya/char_002_amiya.atlas", Stats( 699, 276, 48, 0))
 {
-	state->addAnimation(0, "Start", false, 0);
-	state->addAnimation(0, "Idle", true, 0);
+}
+
+std::string Amiya::getIconPath() {
+	return "battleSelect/amiya.png";
 }
 
 void Amiya::Update(float delta)
 {
-	//Get enemies in range2
 	Operator::Update(delta);
+	if (!Enabled) return;
+	//Get enemies in range2
 	spine::String curAnim = state->getCurrent(0)->getAnimation()->getName();
 	//Dont update animation if dying
 	if (curAnim == "Die") return;

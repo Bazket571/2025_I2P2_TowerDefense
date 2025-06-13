@@ -103,6 +103,7 @@ void Entity::UpdateEffects()
 		cur->second->effect();
 		cur->second->duration--;
 		if (cur->second->duration <= 0) {
+			cur->second->after();
 			effects.erase(cur);
 		}
 
@@ -121,6 +122,7 @@ Effect::Effect(std::string name, Entity* from, Entity* to, int duration):
 void Effect::effect(){
 
 }
+void Effect::after() {};
 
 Damage::Damage(Entity* from, Entity* to): Effect("Damage", from, to, 1) {}
 
