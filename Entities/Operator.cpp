@@ -28,7 +28,7 @@ void Operator::Update(float delta)
     auto range = getRange();
     for (Enemy* e : enemies) {
         for (Engine::Point p : getRange()) {
-            if (p == e->GetCurrentTile()) {
+            if (p == e->GetCurrentTile() && e->stat.GetHP() > 0) {
                 enemiesInRange.push_back(e);
                 break;
             }

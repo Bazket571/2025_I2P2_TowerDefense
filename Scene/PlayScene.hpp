@@ -90,7 +90,7 @@ public:
     void AddScore(int point);
     void ReadMap();
     void ReadEnemyWave();
-    void ConstructTurretList();
+    //void ConstructTurretList();
     void ConstructUI();
     void UIBtnClicked(int id);
     //Return 1: is space valid

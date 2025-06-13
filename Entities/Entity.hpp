@@ -42,6 +42,7 @@ protected:
     virtual std::vector<Engine::Point> getRangeDeltas() = 0;
     PlayScene* GetPlayScene();
     Engine::Point GetTile(Engine::Point pos);
+    bool shouldDie = false;
 
 public:
     Stats stat;
@@ -51,6 +52,7 @@ public:
     Engine::Point GetCurrentTile();
     void callback(spine::AnimationState* state, spine::EventType type, spine::TrackEntry* entry, spine::Event* event);
     virtual void Update(float delta);
+    virtual void OnDie();
     virtual void OnAttack() = 0;
     virtual void OnStart() = 0;
     virtual void IsClickedOn();

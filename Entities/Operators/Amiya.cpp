@@ -13,6 +13,8 @@ void Amiya::Update(float delta)
 	//Get enemies in range2
 	Operator::Update(delta);
 	spine::String curAnim = state->getCurrent(0)->getAnimation()->getName();
+	//Dont update animation if dying
+	if (curAnim == "Die") return;
 	if (enemiesInRange.size() > 0) {
 		if (curAnim != "Attack" && curAnim != "Attack_Begin") {
 			state->setAnimation(0, "Attack_Begin", false);

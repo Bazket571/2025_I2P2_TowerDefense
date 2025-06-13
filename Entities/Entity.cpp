@@ -35,6 +35,9 @@ void Entity::callback(spine::AnimationState* state, spine::EventType type, spine
 	if (entry->getAnimation()->getName() == "Start" && type == spine::EventType_Start) {
 		OnStart();
 	}
+	if (entry->getAnimation()->getName() == "Die" && type == spine::EventType_Complete) {
+		OnDie();
+	}
 	if (event == nullptr) return;
 	if (event->getData().getName() == "OnAttack") {
 		OnAttack();
@@ -43,8 +46,21 @@ void Entity::callback(spine::AnimationState* state, spine::EventType type, spine
 
 void Entity::Update(float delta)
 {
+	if (shouldDie) {
+		GetPlayScene()->FieldGroup->GetBillboards()->RemoveObject(objectIterator);
+		return;
+	}
 	SpineSprite::Update(delta);
+	if (state->getCurrent(0)->getAnimation()->getName() == "Die") 
+		return;
+	else if (stat.GetHP() <= 0) 
+		state->setAnimation(0, "Die", false);
 	Position = Position + Velocity * delta;
+}
+
+void Entity::OnDie()
+{
+	shouldDie = true;
 }
 
 void Entity::IsClickedOn(){}
