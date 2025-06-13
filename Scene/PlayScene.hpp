@@ -24,6 +24,7 @@ class PlayScene final : public Engine::IScene {
 private:
     ALLEGRO_SAMPLE_ID bgmId;
     std::shared_ptr<ALLEGRO_SAMPLE_INSTANCE> deathBGMInstance;
+    int curSelectIndex = -1;
 
 protected:
     int lives;
@@ -58,6 +59,7 @@ public:
     //Group *EnemyGroup;
     Group *EffectGroup;
     Group *UIGroup;
+    Group* OperatorButtons;
     //Engine::Label *UIMoney;
     Engine::Label *UILives;
     Engine::Label *UIScore;
@@ -88,7 +90,7 @@ public:
     void ConstructOperatorUI();
     //void ConstructTurretList();
     void ConstructUI();
-    void UIBtnClicked(Operator* op);
+    void UIBtnClicked(std::vector<std::pair<float, Operator*>>::iterator it);
     //Return 1: is space valid
     //Return 2: calculated BFS path map if space is valid
     std::pair<bool, std::vector<std::vector<int>>> CheckSpaceValid(int x, int y, TileType type);
