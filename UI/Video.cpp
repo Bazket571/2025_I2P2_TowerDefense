@@ -19,6 +19,10 @@ void Video::Update(float delta)
 		if (event.type == ALLEGRO_EVENT_VIDEO_FRAME_SHOW) {
 			shouldDraw = true;
 		}
+		if (event.type == ALLEGRO_EVENT_VIDEO_FINISHED) {
+			//Loop the video.
+			al_seek_video(video.get(), 0);
+		}
 	}
 }
 
