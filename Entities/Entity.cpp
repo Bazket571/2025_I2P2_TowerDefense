@@ -22,6 +22,7 @@ Entity::Entity(std::string skel, std::string atlas, float x, float y, float z, S
 	stat(stat)
 {
 	Position.z = z;
+	SpineSprite::state->setAnimation(0, "Default", true);
 	SpineSprite::state->setListener(this);
 }
 
@@ -51,7 +52,7 @@ void Entity::Update(float delta)
 		return;
 	}
 	SpineSprite::Update(delta);
-	if (state->getCurrent(0)->getAnimation()->getName() == "Die") 
+	if (state->getCurrent(0) && state->getCurrent(0)->getAnimation()->getName() == "Die") 
 		return;
 	else if (stat.GetHP() <= 0) 
 		state->setAnimation(0, "Die", false);

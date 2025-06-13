@@ -155,7 +155,7 @@ void Billboard::AddNewObject(IObject* obj)
 }
 void Billboard::AddNewControlObject(IObject* obj)
 {
-    AddNewObject(obj);
+    insertObject(true, obj, std::lower_bound(objects.begin(), objects.end(), obj->Position.y, CustomCompare));
     addControl(false, dynamic_cast<IControl*>(obj));
 }
 

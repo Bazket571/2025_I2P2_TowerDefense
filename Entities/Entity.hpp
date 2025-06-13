@@ -9,6 +9,15 @@
 #include "Engine/spine/spine.hpp"
 #include <Scene/PlayScene.hpp>
 
+enum TileType {
+    TILE_LOW = 0b1,
+    TILE_HIGH = 0b10,
+    TILE_SPAWN = 0b100,
+    TILE_OBJECTIVE = 0b1000,
+    TILE_BLOCKED = 0b10000, //For roadblocks
+    TILE_OCCUPIED_TURRET = 0b100000
+};
+
 class Stats {
     int hp = 0;
     int maxHp = 0;
@@ -41,15 +50,17 @@ protected:
     Engine::Point Velocity;
     virtual std::vector<Engine::Point> getRangeDeltas() = 0;
     PlayScene* GetPlayScene();
-    Engine::Point GetTile(Engine::Point pos);
     bool shouldDie = false;
 
 public:
     Stats stat;
     enum AttackType { Ground = 0b1, Air = 0b10, Both = 0b11 };
     enum DamageType { Physical = 0b1, Arts = 0b10 };
+    TileType tileType;
+
     Entity(std::string skel, std::string atlas, float x, float y, float z, Stats stat);
     Engine::Point GetCurrentTile();
+    static Engine::Point GetTile(Engine::Point pos);
     void callback(spine::AnimationState* state, spine::EventType type, spine::TrackEntry* entry, spine::Event* event);
     virtual void Update(float delta);
     virtual void OnDie();

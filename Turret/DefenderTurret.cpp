@@ -5,7 +5,7 @@ const int DefenderTurret::Price = 50;
 DefenderTurret::DefenderTurret(float x, float y, int blockCount):
     Turret("play/tower-base.png", "play/enemy-4.png", x, y, 30, Price, 1, blockCount)
 {
-    tileType = TILE_LOW;
+    //tileType = TILE_LOW;
 }
 
 //This turret will not attack

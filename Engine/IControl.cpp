@@ -7,4 +7,8 @@ namespace Engine {
     void IControl::OnMouseUp(int button, int mx, int my) {}
     void IControl::OnMouseMove(int mx, int my) {}
     void IControl::OnMouseScroll(int mx, int my, int delta) {}
+    std::list<std::pair<bool, IControl*>>::iterator IControl::GetControlIterator()
+    {
+        return controlIterator;
+    }
 }

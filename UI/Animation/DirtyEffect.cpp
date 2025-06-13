@@ -20,7 +20,7 @@ DirtyEffect::DirtyEffect(std::string img, float timeSpan, float x, float y) : Sp
 void DirtyEffect::Update(float deltaTime) {
     alpha -= deltaTime / timeSpan;
     if (alpha <= 0) {
-        getPlayScene()->GroundEffectGroup->RemoveObject(objectIterator);
+        getPlayScene()->FieldGroup->RemoveObject(objectIterator);
         return;
     }
     unsigned char r, g, b, a = alpha * 255;

@@ -4,6 +4,7 @@
 Amiya::Amiya() :
 	Operator("amiya/char_002_amiya.skel", "amiya/char_002_amiya.atlas", Stats( 1059, 442, 93, 0), 20, 70)
 {
+	tileType = TILE_HIGH;
 }
 
 std::string Amiya::getIconPath() {
@@ -16,6 +17,8 @@ void Amiya::Update(float delta)
 	if (!Enabled) return;
 	//Get enemies in range2
 	spine::String curAnim = state->getCurrent(0)->getAnimation()->getName();
+	//Dont update animation if deploying
+	if (curAnim == "Start") return;
 	//Dont update animation if dying
 	if (curAnim == "Die") return;
 	if (enemiesInRange.size() > 0) {

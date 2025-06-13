@@ -69,6 +69,7 @@ namespace Engine {
         /// <param name="my">Mouse y coordinate in window space.</param>
         /// <param name="delta">Mouse z scroll delta value.</param>
         virtual void OnMouseScroll(int mx, int my, int delta);
+        std::list<std::pair<bool, IControl*>>::iterator GetControlIterator();
     };
 }
 #endif   // ICONTROL_HPP

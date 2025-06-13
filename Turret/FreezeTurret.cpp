@@ -7,7 +7,7 @@ const int FreezeTurret::Price = 50;
 FreezeTurret::FreezeTurret(float x, float y, float freezeRate) :
     Turret("play/tower-base.png", "svgs/regular/snowflake.svg", x, y, 200, Price, 1, 1)
 {
-    tileType = TILE_HIGH;
+    //tileType = TILE_HIGH;
     slowRate = freezeRate;
     Size = Engine::Point(48, 48);
 }

@@ -11,24 +11,14 @@
 #include "Engine/Point.hpp"
 #include "3D/Group3D.hpp"
 
+enum TileType;
 class Operator;
-class Turret;
 namespace Engine {
     class Group;
     class Image;
     class Label;
     class Sprite;
 };   // namespace Engine
-
-
-enum TileType {
-    TILE_LOW = 0b1,
-    TILE_HIGH = 0b10,
-    TILE_SPAWN = 0b100,
-    TILE_OBJECTIVE = 0b1000,
-    TILE_BLOCKED = 0b10000, //For roadblocks
-    TILE_OCCUPIED_TURRET = 0b100000
-};
 
 class PlayScene final : public Engine::IScene {
 private:
@@ -39,6 +29,7 @@ protected:
     int lives;
     int money;
     int SpeedMult;
+    int PrevSpeedMult;
 
 public:
     static bool DebugMode;
@@ -67,12 +58,12 @@ public:
     //Group *EnemyGroup;
     Group *EffectGroup;
     Group *UIGroup;
-    Engine::Label *UIMoney;
+    //Engine::Label *UIMoney;
     Engine::Label *UILives;
     Engine::Label *UIScore;
     Engine::Image *imgTarget;
     //Engine::Sprite *dangerIndicator;
-    Turret *preview;
+    Operator *preview;
     std::vector<std::vector<int>> mapState;
     std::vector<std::vector<int>> mapDistance;
     std::list<std::pair<int, float>> enemyWaveData;
@@ -97,7 +88,7 @@ public:
     void ConstructOperatorUI();
     //void ConstructTurretList();
     void ConstructUI();
-    void UIBtnClicked(int id);
+    void UIBtnClicked(Operator* op);
     //Return 1: is space valid
     //Return 2: calculated BFS path map if space is valid
     std::pair<bool, std::vector<std::vector<int>>> CheckSpaceValid(int x, int y, TileType type);
