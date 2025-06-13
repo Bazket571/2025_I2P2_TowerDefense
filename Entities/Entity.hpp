@@ -48,8 +48,8 @@ class Entity : public Engine::SpineSprite, public Engine::IControl, public spine
 protected:
     //Atk speed will be the time for the animation to run
     Engine::Point Velocity;
-    virtual std::vector<Engine::Point> getRangeDeltas() = 0;
-    PlayScene* GetPlayScene();
+    virtual std::vector<Engine::Point> getRangeDeltas() const = 0;
+    PlayScene* GetPlayScene() const;
     bool shouldDie = false;
 
 public:
@@ -59,7 +59,7 @@ public:
     TileType tileType;
 
     Entity(std::string skel, std::string atlas, float x, float y, float z, Stats stat);
-    Engine::Point GetCurrentTile();
+    Engine::Point GetCurrentTile() const;
     static Engine::Point GetTile(Engine::Point pos);
     void callback(spine::AnimationState* state, spine::EventType type, spine::TrackEntry* entry, spine::Event* event);
     virtual void Update(float delta);

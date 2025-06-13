@@ -9,7 +9,7 @@ public:
 	std::string getIconPath();
 
 	// Inherited via Entity
-	std::vector<Engine::Point> getRangeDeltas() override;
+	std::vector<Engine::Point> getRangeDeltas() const override;
 	void OnStart() override;
 	void IsClickedOn();
 };

@@ -13,7 +13,7 @@
 
 class Operator : public Entity {
 protected:
-    virtual std::vector<Engine::Point> getRange();
+    virtual std::vector<Engine::Point> getRange() const;
 public:
 	std::vector<Enemy*> enemiesInRange;
 	bool Preview = true;
@@ -28,6 +28,7 @@ public:
 	virtual void Deploy(float x, float y, float z, EntityDirection direction);
 	virtual void OnAttack() = 0;
 	virtual void OnStart() = 0;
+	virtual void Draw() const;
 	virtual void Update(float delta);
 	virtual void IsClickedOn();
 };

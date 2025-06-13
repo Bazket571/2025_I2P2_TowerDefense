@@ -6,7 +6,7 @@
 class Slime : public Enemy {
 public:
 	Slime(float x, float y, float z);
-	std::vector<Engine::Point> getRangeDeltas() override;
+	std::vector<Engine::Point> getRangeDeltas() const override;
 	void OnStart() override;
 	void OnAttack();
 };

@@ -35,7 +35,7 @@ void Amiya::Update(float delta)
 	}
 }
 
-std::vector<Engine::Point> Amiya::getRangeDeltas()
+std::vector<Engine::Point> Amiya::getRangeDeltas() const
 {
 	return { {-1, 0}, {0, 0}, {1, 0},
 			 {-1, 1}, {0, 1}, {1, 1},

@@ -8,7 +8,7 @@ Slime::Slime(float x, float y, float z):
 	state->addAnimation(0, "Move_Loop", true, 0);
 }
 
-std::vector<Engine::Point> Slime::getRangeDeltas()
+std::vector<Engine::Point> Slime::getRangeDeltas() const
 {
 	return { 0, 0 };
 }

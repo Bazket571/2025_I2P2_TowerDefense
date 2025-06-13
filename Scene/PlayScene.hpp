@@ -23,7 +23,7 @@ namespace Engine {
 class PlayScene final : public Engine::IScene {
 private:
     ALLEGRO_SAMPLE_ID bgmId;
-    std::shared_ptr<ALLEGRO_SAMPLE_INSTANCE> deathBGMInstance;
+    //std::shared_ptr<ALLEGRO_SAMPLE_INSTANCE> deathBGMInstance;
     int curSelectIndex = -1;
 
 protected:
@@ -40,7 +40,7 @@ public:
     static const int MapWidthRatio, MapHeightRatio;
     static const int WindowWidth, WindowHeight;
     static int BlockSize;
-    static const float DangerTime;
+    //static const float DangerTime;
     static Engine::Point SpawnGridPoint;
     static Engine::Point EndGridPoint;
     static int score;

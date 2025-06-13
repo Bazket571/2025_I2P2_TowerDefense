@@ -50,7 +50,6 @@ int PlayScene::MapWidth = 0, PlayScene::MapHeight = 0;
 int PlayScene::BlockSize = 96;
 int PlayScene::score = 0;
 const int PlayScene::WindowWidth = (64*21), PlayScene::WindowHeight = 64*13;
-const float PlayScene::DangerTime = 7.61;
 Engine::Point PlayScene::SpawnGridPoint = Engine::Point(0, 0);
 Engine::Point PlayScene::EndGridPoint = Engine::Point(MapWidth, MapHeight - 1);
 int PlayScene::OperatorUISize = 96;
@@ -93,17 +92,11 @@ void PlayScene::Initialize() {
     imgTarget->Visible = false;
     preview = nullptr;
     UIGroup->AddNewObject(imgTarget);
-    // Preload Lose Scene
-    deathBGMInstance = Engine::Resources::GetInstance().GetSampleInstance("astronomia.ogg");
-    Engine::Resources::GetInstance().GetBitmap("lose/benjamin-happy.png");
-
     // Start BGM.
     bgmId = AudioHelper::PlayBGM("play.ogg");
 }
 void PlayScene::Terminate() {
     AudioHelper::StopBGM(bgmId);
-    AudioHelper::StopSample(deathBGMInstance);
-    deathBGMInstance = std::shared_ptr<ALLEGRO_SAMPLE_INSTANCE>();
     IScene::Terminate();
 }
 void PlayScene::Update(float deltaTime) {
@@ -124,33 +117,7 @@ void PlayScene::Update(float deltaTime) {
     std::sort(reachEndTimes.begin(), reachEndTimes.end());
     float newDeathCountDown = -1;
     int danger = lives;
-    for (auto &it : reachEndTimes) {
-        if (it <= DangerTime) {
-            danger--;
-            if (danger <= 0) {
-                // Death Countdown
-                float pos = DangerTime - it;
-                if (it > deathCountDown) {
-                    // Restart Death Count Down BGM.
-                    AudioHelper::StopSample(deathBGMInstance);
-                    if (SpeedMult != 0)
-                        deathBGMInstance = AudioHelper::PlaySample("astronomia.ogg", false, AudioHelper::BGMVolume, pos);
-                }
-                float alpha = pos / DangerTime;
-                alpha = std::max(0, std::min(255, static_cast<int>(alpha * alpha * 255)));
-                //dangerIndicator->Tint = al_map_rgba(255, 255, 255, alpha);
-                newDeathCountDown = it;
-                break;
-            }
-        }
-    }
     deathCountDown = newDeathCountDown;
-    if (SpeedMult == 0)
-        AudioHelper::StopSample(deathBGMInstance);
-    if (deathCountDown == -1 && lives > 0) {
-        AudioHelper::StopSample(deathBGMInstance);
-        //dangerIndicator->Tint.a = 0;
-    }
     if (SpeedMult == 0)
         deathCountDown = -1;
     for (int i = 0; i < SpeedMult; i++) {
@@ -441,16 +408,6 @@ void PlayScene::ConstructUI() {
 void PlayScene::UIBtnClicked(std::vector<std::pair<float, Operator*>>::iterator it) {
     if (preview)
         UIGroup->RemoveObject(preview->GetObjectIterator());
-    /*if (id == 0 && money >= MachineGunTurret::Price)
-        preview = new MachineGunTurret(0, 0);
-    else if (id == 1 && money >= LaserTurret::Price)
-        preview = new LaserTurret(0, 0);
-    else if (id == 2 && money >= HomingTurret::Price)
-        preview = new HomingTurret(0, 0);
-    else if (id == 3 && money >= DefenderTurret::Price)
-        preview = new DefenderTurret(0, 0, 3);
-    else if (id == 4 && money >= FreezeTurret::Price)
-        preview = new FreezeTurret(0, 0, 0.8);*/
     if (dynamic_cast<Amiya*>(it->second)) {
         preview = new Amiya();
     }
@@ -485,17 +442,6 @@ std::pair<bool, std::vector<std::vector<int>>> PlayScene::CheckSpaceValid(int x,
     mapState[y][x] = map00;
     if (map[SpawnGridPoint.y][SpawnGridPoint.x] == -1)
         return {false, {}};
-    /*for (auto &it : EnemyGroup->GetObjects()) {
-        Engine::Point pnt;
-        pnt.x = floor(it->Position.x / BlockSize);
-        pnt.y = floor(it->Position.y / BlockSize);
-        if (pnt.x < 0) pnt.x = 0;
-        if (pnt.x >= MapWidth) pnt.x = MapWidth - 1;
-        if (pnt.y < 0) pnt.y = 0;
-        if (pnt.y >= MapHeight) pnt.y = MapHeight - 1;
-        if (map[pnt.y][pnt.x] == -1)
-            return {false, {}};
-    }*/
     return {true, map};
 }
 std::vector<std::vector<int>> PlayScene::CalculateBFSDistance() {

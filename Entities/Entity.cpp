@@ -4,7 +4,7 @@
 
 std::multimap<std::string, Effect*> Entity::effects;
 
-PlayScene* Entity::GetPlayScene()
+PlayScene* Entity::GetPlayScene() const
 {
 	return dynamic_cast<PlayScene*>(Engine::GameEngine::GetInstance().GetScene("play"));
 }
@@ -26,7 +26,7 @@ Entity::Entity(std::string skel, std::string atlas, float x, float y, float z, S
 	SpineSprite::state->setListener(this);
 }
 
-Engine::Point Entity::GetCurrentTile()
+Engine::Point Entity::GetCurrentTile() const
 {
 	return GetTile(Position);
 }
