@@ -78,6 +78,7 @@ void PlayScene::Initialize() {
     AddNewObject(EffectGroup = new Group());
     // Should support buttons.
     AddNewControlObject(UIGroup = new Group());
+    AddNewControlObject(OperatorButtons = new Group());
     operators.push_back({ 0, new Amiya() });
     std::sort(operators.begin(), operators.end(), 
         [](std::pair<float, Operator*> a, std::pair<float, Operator*> b) {return a.second->cost > b.second->cost;});
@@ -198,6 +199,7 @@ void PlayScene::Update(float deltaTime) {
         // To keep responding when paused.
         preview->Update(deltaTime);
     }
+    UpdateOperatorUI();
 }
 void PlayScene::Draw() const {
     IScene::Draw();
@@ -256,27 +258,17 @@ void PlayScene::OnMouseUp(int button, int mx, int my) {
             }
             // Purchase.
             EarnMoney(-preview->cost);
-            // Remove Preview.
-            /*preview->GetObjectIterator()->first = false;
-            FieldGroup->GetBillboards()->RemoveObject(preview->GetObjectIterator());*/
-            Engine::Point deployPos = curTile * BlockSize;
             //Deploy preview
+            Engine::Point deployPos = curTile * BlockSize;
             preview->Deploy(deployPos.x, deployPos.y, deployPos.z, Right);
-            // Construct real turret.
-            //preview->Position = Entity::GetTile(Billboard::MousePlane({ (float)mx, (float)my }, 0)) * BlockSize;
-            //preview->Position.y = y * BlockSize + BlockSize / 2;
-            //preview->Enabled = true;
-            //preview->Preview = false;
-            //preview->Tint = al_map_rgba(255, 255, 255, 255);
-            //TowerGroup->AddNewObject(preview);
-            // To keep responding when paused.
-            //preview->Update(0);
             // Remove Preview.
             preview = nullptr;
             
             mapState[curTile.y][curTile.x] |= TILE_OCCUPIED_TURRET;
             mapDistance = result.second;
             SpeedMult = PrevSpeedMult;
+            operators[curSelectIndex].first = -1;
+            curSelectIndex = -1;
             /*for (auto &it : EnemyGroup->GetObjects())
                 dynamic_cast<Enemy2 *>(it)->UpdatePath(mapDistance);*/
 
@@ -298,6 +290,7 @@ void PlayScene::OnKeyDown(int keyCode) {
             FieldGroup->GetBillboards()->RemoveControlObject(preview->GetControlIterator(), preview->GetObjectIterator());
             preview = nullptr;
             SpeedMult = PrevSpeedMult;
+            curSelectIndex = -1;
         }
         else SpeedMult = 0;
     }
@@ -404,16 +397,30 @@ void PlayScene::ReadEnemyWave() {
 //TODO improve(automate) this horrid piece of shit
 
 void PlayScene::UpdateOperatorUI() {
-
+    Engine::Point screenSize = Engine::GameEngine::GetInstance().GetScreenSize();
+    int opNo = 0;
+    int i = -1;
+    for (auto &button : OperatorButtons->GetObjects()) {
+        i++;
+        if (operators[i].first == -1) {
+            button->Visible = false;
+            continue;
+        }
+        button->Visible = true;
+        Engine::Point pos = { screenSize.x - OperatorUISize * (opNo + 1), screenSize.y - OperatorUISize};
+        button->Position = pos;
+        opNo++;
+    }
 }
 
 void PlayScene::ConstructOperatorUI() {
     Engine::Point screenSize = Engine::GameEngine::GetInstance().GetScreenSize();
-    for (int i = 0; i < operators.size(); i++) {
-        std::string filepath = operators[i].second->getIconPath();
-        auto button = new Engine::ImageButton(filepath, filepath, screenSize.x - OperatorUISize * (i + 1), screenSize.y - OperatorUISize, OperatorUISize, OperatorUISize);
-        button->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, operators[i].second));
-        UIGroup->AddNewControlObject(button);
+    int i = 0;
+    for (auto it = operators.begin(); it != operators.end(); it++) {
+        std::string filepath = it->second->getIconPath();
+        auto button = new Engine::ImageButton(filepath, filepath, screenSize.x - OperatorUISize * (i++ + 1), screenSize.y - OperatorUISize, OperatorUISize, OperatorUISize);
+        button->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, it));
+        OperatorButtons->AddNewControlObject(button);
     }
 }
 
@@ -434,7 +441,7 @@ void PlayScene::ConstructUI() {
     int shift = 135 + 25;
 }
 
-void PlayScene::UIBtnClicked(Operator* op) {
+void PlayScene::UIBtnClicked(std::vector<std::pair<float, Operator*>>::iterator it) {
     if (preview)
         UIGroup->RemoveObject(preview->GetObjectIterator());
     /*if (id == 0 && money >= MachineGunTurret::Price)
@@ -447,7 +454,7 @@ void PlayScene::UIBtnClicked(Operator* op) {
         preview = new DefenderTurret(0, 0, 3);
     else if (id == 4 && money >= FreezeTurret::Price)
         preview = new FreezeTurret(0, 0, 0.8);*/
-    if (dynamic_cast<Amiya*>(op)) {
+    if (dynamic_cast<Amiya*>(it->second)) {
         preview = new Amiya();
     }
     if (!preview)
@@ -457,6 +464,7 @@ void PlayScene::UIBtnClicked(Operator* op) {
     //preview->Tint = al_map_rgba(255, 255, 255, 200);
     //preview->Enabled = false;
     //preview->Preview = true;
+    curSelectIndex = std::distance(operators.begin(), it);
     PrevSpeedMult = SpeedMult;
     SpeedMult = 0;
     FieldGroup->AddNewControlBillboard(preview);
