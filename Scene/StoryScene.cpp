@@ -17,15 +17,13 @@ void StoryScene::Initialize() {
     speaker = new Engine::Label("","pirulen.ttf",24,70,650,255,255,255);
     dialoguebar = new Engine::Image("background/dialoguebar.png",0,0, 1680, 920);
     background = new Engine::Image("background/background1-1.png",0,0,1680,920);
-    character = new Engine::Image("char/Amiya.png",700,25,0,0);
-    character2 = new Engine::Image("char/Medic.png",-120,25,0,0);
-    skip = new Engine::ImageButton("stage-select/dirt.png", "stage-select/floor.png",1380,-180,240,240);
+    character = new Engine::Image("char/Amiya.png",-120,25,0,0);
+    character2 = new Engine::Image("char/Medic.png",700,25,0,0);
     character->Visible = false;
     character2->Visible = false;
     AddNewObject(background);
     AddNewObject(character);
     AddNewObject(character2);
-    AddNewObject(skip);
     AddNewObject(dialoguebar);
     AddNewObject(dialogue);
     AddNewObject(speaker);
@@ -64,20 +62,31 @@ void StoryScene::ReadAndExecute()
         dialogue->Text = dia;
     }
     else if (cmd == "speLeft") {
-        std::string speLeft;
+        std::string imgFile, speLeft;
+        cmdFile >> imgFile;
         std::getline(cmdFile, speLeft);
         speaker->Text = speLeft;
-        character->bmp = Engine::Resources::GetInstance().GetBitmap("char/Amiya.png");
+        character->bmp = Engine::Resources::GetInstance().GetBitmap(imgFile);
         character->Visible = true;
+        speaker->Visible = true;
+        if (speLeft == "none") {
+            character->Visible = false;
+            speaker->Visible = false;
+        };
         ReadAndExecute();
     }
     else if (cmd == "speRight") {
         std::string imgFile, speRight;
-        cmdFile >> imgFile;
+        cmdFile >> imgFile; //THIS SHIT IMPORTANT DUMBASS
         std::getline(cmdFile, speRight);
         speaker->Text = speRight;
-        character2->bmp = Engine::Resources::GetInstance().GetBitmap("char/Medic.png");
+        character2->bmp = Engine::Resources::GetInstance().GetBitmap(imgFile);
         character2->Visible = true;
+        speaker->Visible = true;
+        if (speRight == "none") {
+            character2->Visible = false;
+            speaker->Visible = false;
+        };
         ReadAndExecute();
     }
     else if (cmd == "end") {
