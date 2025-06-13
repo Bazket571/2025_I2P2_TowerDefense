@@ -5,14 +5,17 @@
 #include <memory>
 class Billboard : public Engine::Group{
     void GetModelMatrix(ALLEGRO_TRANSFORM* trans, Engine::Point Position) const;
-    void inverse(ALLEGRO_TRANSFORM* trans) const;
-    ALLEGRO_TRANSFORM invProjView;
+    static void inverse(ALLEGRO_TRANSFORM* trans);
 public:
     Billboard();
     void AddNewObject(IObject* obj);
     void AddNewControlObject(IObject* obj);
 	void Draw() const override;
-    void ScreenToWorld(float & x, float & y, float &z) const;
+    static void ScreenToWorld(float & x, float & y, float &z);
+    //Check ray p0-p1 intersection point with plane of height z
+    static Engine::Point RayPlane(Engine::Point p0, Engine::Point p1, float z);
+
+    static Engine::Point MousePlane(Engine::Point mouse, float z);
 
     //Do Transformations to the mouse position before passing them to the thing.
     /// <summary>

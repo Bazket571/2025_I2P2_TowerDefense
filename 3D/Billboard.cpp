@@ -17,7 +17,7 @@ void Billboard::GetModelMatrix(ALLEGRO_TRANSFORM *trans, Engine::Point Position)
     al_translate_transform_3d(trans, Position.x, Position.y, Position.z);
     //al_scale_transform_3d(&trans, it.second->Scale.x, it.second->Scale.y, 1);
 }
-void Billboard::inverse(ALLEGRO_TRANSFORM* trans) const {
+void Billboard::inverse(ALLEGRO_TRANSFORM* trans) {
     std::vector<float> m;
     for (int y = 0; y < 4; y++) {
         for (int x = 0; x < 4; x++) {
@@ -160,15 +160,8 @@ void Billboard::AddNewControlObject(IObject* obj)
 }
 
 Billboard::Billboard() : Engine::Group() {
-    Engine::Point screenSize = Engine::GameEngine::GetInstance().GetScreenSize();
-    al_identity_transform(&invProjView);
-    al_compose_transform(&invProjView, &Group3D::camera_view());
-    al_compose_transform(&invProjView, &Group3D::perspective_transform(screenSize.x, screenSize.y));
-    float x = -1, y = 1, z = 0;
-    //cam pos 0 536.656311 1073.31262
-    inverse(&invProjView);
-    //1 0 0 -800 0 -1.79289 0.677549 798.776855 0 -0.440569580 -1.44241 -306.886719 0 -0.44721 -0.89442 1200
 }
+
 void Billboard::Draw() const{
     temp.clear();
     
@@ -191,24 +184,46 @@ void Billboard::Draw() const{
     }
     //Draw cursor
     Engine::Point mouse = Engine::GameEngine::GetInstance().GetMousePosition();
-    ScreenToWorld(mouse.x, mouse.y, mouse.z);
-    GetModelMatrix(&trans, mouse);
+
+    GetModelMatrix(&trans, MousePlane(mouse, 0));
     al_set_shader_matrix("model_matrix", &trans);
     al_draw_circle(0, 0, 5, al_map_rgba_f(1, 0, 0, 1), 5);
 }
+
+//Check if ray p0-p1 plane at height z
+Engine::Point Billboard::RayPlane(Engine::Point p0, Engine::Point p1, float z) {
+    Engine::Point nor(0, 0, 1), point(0, 0, z);
+    Engine::Point u = p1 - p0;
+    float dot = nor.Dot(u);
+    Engine::Point w = p0 - point;
+    float fac = -(nor.Dot(w)) / dot;
+    u = u * fac;
+    return p0 + u;
+}
+
+Engine::Point Billboard::MousePlane(Engine::Point mouse, float z) {
+    Engine::Point p0(mouse.x, mouse.y, -1), p1(mouse.x, mouse.y, 1);
+    ScreenToWorld(p0.x, p0.y, p0.z);
+    ScreenToWorld(p1.x, p1.y, p1.z);
+    return RayPlane(p0, p1, z);
+}
+
 //https://stackoverflow.com/questions/7692988/opengl-math-projecting-screen-space-to-world-space-coords
-//Not working
-void Billboard::ScreenToWorld(float& x, float& y, float& z) const
+void Billboard::ScreenToWorld(float& x, float& y, float& z)
 {
+    static ALLEGRO_TRANSFORM invProjView;
     Engine::Point screenSize = Engine::GameEngine::GetInstance().GetScreenSize();
+    if (invProjView.m[3][3] == 0) {
+        al_identity_transform(&invProjView);
+        al_compose_transform(&invProjView, &Group3D::camera_view());
+        al_compose_transform(&invProjView, &Group3D::perspective_transform(screenSize.x, screenSize.y));
+        inverse(&invProjView);
+    }
     static float a = -1; if ((a += 0.025) > 1) a = -1;
-    float fx = (float)(x) / screenSize.x * 2.f - 1, fy = 1.f - (float)y / screenSize.y * 2.f, fz = 0, fw = 1;
+    x = x / screenSize.x * 2.f - 1, y = 1.f - y / screenSize.y * 2.f;
     //glReadPixels(x, y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &fz);
     //fz = fz * 2 - 1;
-    al_transform_coordinates_3d_projective(&invProjView, &fx, &fy, &fz);
-    Engine::Point worldPos = Engine::Point(fx, fy, fz);
-    x = worldPos.x, y = worldPos.y, z = worldPos.z;
-    //Engine::LOG(Engine::INFO) << x << " " << y;
+    al_transform_coordinates_3d_projective(&invProjView, &x, &y, &z);
 }
 
 void Billboard::OnMouseDown(int button, int mx, int my)

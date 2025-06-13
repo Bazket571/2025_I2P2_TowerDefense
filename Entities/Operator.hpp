@@ -9,13 +9,15 @@
 
 class Operator : public Entity {
 protected:
-    virtual std::vector<Engine::Point> getRange() = 0;
+    virtual std::vector<Engine::Point> getRange();
 public:
 	bool Preview = true;
+	EntityDirection direction;
 	//Must be inherited
 	Operator(std::string skel, std::string atlas, float x, float y, float z, Stats stat, EntityDirection direction);
 
 	virtual void OnAttack() = 0;
 	virtual void OnStart() = 0;
 	virtual void Update(float delta);
+	virtual void IsClickedOn();
 };

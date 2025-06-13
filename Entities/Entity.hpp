@@ -22,22 +22,27 @@ public:
 };
 enum EntityDirection{Down, Left, Up, Right};
 
-class Entity : public Engine::SpineSprite, public Engine::IControl, spine::AnimationStateListenerObject {
+class Entity : public Engine::SpineSprite, public Engine::IControl, public spine::AnimationStateListenerObject {
 protected:
     //Atk speed will be the time for the animation to run
     Stats stat;
     Engine::Point Velocity;
     virtual std::vector<Engine::Point> getRangeDeltas() = 0;
     PlayScene* GetPlayScene();
+    Engine::Point GetTile(Engine::Point pos);
 public:
     enum AttackType { Ground = 0b1, Air = 0b10, Both = 0b11 };
     enum DamageType { Physical = 0b1, Arts = 0b10 };
     Entity(std::string skel, std::string atlas, float x, float y, float z, Stats stat);
+    Engine::Point GetCurrentTile();
     void callback(spine::AnimationState* state, spine::EventType type, spine::TrackEntry* entry, spine::Event* event);
     virtual void Update(float delta);
     virtual void OnAttack() = 0;
     virtual void OnStart() = 0;
+    virtual void IsClickedOn();
     virtual void ChangeHP(int amount);
+
+    virtual void OnMouseUp(int button, int mx, int my);
 
     // Inherited via AnimationStateListenerObject
 };

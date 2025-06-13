@@ -82,7 +82,8 @@ void PlayScene::Initialize() {
     AddNewObject(EffectGroup = new Group());
     // Should support buttons.
     //AddNewControlObject(UIGroup = new Group());
-    FieldGroup->AddNewControlBillboard(new Amiya(5 * BlockSize, (4 + 0.25) * BlockSize, 0)); //Low ground offset
+    Operator* amiyi = new Amiya(5 * BlockSize, (4 + 0.25) * BlockSize, 0);
+    FieldGroup->AddNewControlBillboard(amiyi); //Low ground offset
     FieldGroup->AddNewControlBillboard(new Amiya(5 * BlockSize, (2) * BlockSize, 0));        //High ground
     ReadMap();
     ReadEnemyWave();
