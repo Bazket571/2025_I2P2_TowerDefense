@@ -70,21 +70,21 @@ void PlayScene::Initialize() {
     SpeedMult = 1;
     score = 0;
     // Add groups from bottom to top.
-    TileMapGroup = new Group();
+    //TileMapGroup = new Group();
     UIGroup = new Group();
     //AddNewObject();
     AddNewControlObject(FieldGroup = new Group3D(true));
     AddNewObject(GroundEffectGroup = new Group());
     AddNewObject(DebugIndicatorGroup = new Group());
-    AddNewObject(TowerGroup = new Group());
+    //AddNewObject(TowerGroup = new Group());
     //AddNewObject(EnemyGroup = new Group());
-    AddNewObject(BulletGroup = new Group());
+   // AddNewObject(BulletGroup = new Group());
     AddNewObject(EffectGroup = new Group());
     // Should support buttons.
     AddNewControlObject(UIGroup = new Group());
-    Operator* amiyi = new Amiya();
-    FieldGroup->AddNewControlBillboard(amiyi); //Low ground offset
-    amiyi->Deploy(5 * BlockSize, 2 * BlockSize, 0, Right);
+    operators.push_back({ 0, new Amiya() });
+    //FieldGroup->AddNewControlBillboard(amiyi); //Low ground offset
+    //amiyi->Deploy(5 * BlockSize, 2 * BlockSize, 0, Right);
     //FieldGroup->AddNewControlBillboard(new Amiya(5 * BlockSize, (2) * BlockSize, 0, Right));        //High ground
     ReadMap();
     ReadEnemyWave();
@@ -139,7 +139,7 @@ void PlayScene::Update(float deltaTime) {
                 }
                 float alpha = pos / DangerTime;
                 alpha = std::max(0, std::min(255, static_cast<int>(alpha * alpha * 255)));
-                dangerIndicator->Tint = al_map_rgba(255, 255, 255, alpha);
+                //dangerIndicator->Tint = al_map_rgba(255, 255, 255, alpha);
                 newDeathCountDown = it;
                 break;
             }
@@ -150,7 +150,7 @@ void PlayScene::Update(float deltaTime) {
         AudioHelper::StopSample(deathBGMInstance);
     if (deathCountDown == -1 && lives > 0) {
         AudioHelper::StopSample(deathBGMInstance);
-        dangerIndicator->Tint.a = 0;
+        //dangerIndicator->Tint.a = 0;
     }
     if (SpeedMult == 0)
         deathCountDown = -1;
@@ -265,7 +265,7 @@ void PlayScene::OnMouseUp(int button, int mx, int my) {
             preview->Enabled = true;
             preview->Preview = false;
             preview->Tint = al_map_rgba(255, 255, 255, 255);
-            TowerGroup->AddNewObject(preview);
+            //TowerGroup->AddNewObject(preview);
             // To keep responding when paused.
             preview->Update(0);
             // Remove Preview.
@@ -273,8 +273,8 @@ void PlayScene::OnMouseUp(int button, int mx, int my) {
             
             mapState[y][x] |= TILE_OCCUPIED_TURRET;
             mapDistance = result.second;
-            for (auto &it : EnemyGroup->GetObjects())
-                dynamic_cast<Enemy2 *>(it)->UpdatePath(mapDistance);
+            /*for (auto &it : EnemyGroup->GetObjects())
+                dynamic_cast<Enemy2 *>(it)->UpdatePath(mapDistance);*/
 
             OnMouseMove(mx, my);
         }
@@ -369,7 +369,7 @@ void PlayScene::ReadMap()
                     FieldGroup->AddNewObject(new Object3D("Resource/3D/BlueBox.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)BlockSize / 2 }, scale));
                     break;
                 default:
-                    TileMapGroup->AddNewObject(new Engine::Image("play/dirt.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+                    //TileMapGroup->AddNewObject(new Engine::Image("play/dirt.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
                     break;
             }
         }
@@ -398,16 +398,9 @@ void PlayScene::ConstructUI() {
     //UIGroup->AddNewObject(UIMoney = new Engine::Label(std::string("$") + std::to_string(money), "pirulen.ttf", 24, 1294, 48));
     //UIGroup->AddNewObject(UILives = new Engine::Label(std::string("Life ") + std::to_string(lives), "pirulen.ttf", 24, 1294, 88));
     //UIGroup->AddNewObject(UIScore = new Engine::Label(std::string("Score ") + std::to_string(score), "pirulen.ttf", 24, 1294, 128));
-
-
-    //ConstructTurretList();
-
     int w = Engine::GameEngine::GetInstance().GetScreenSize().x;
     int h = Engine::GameEngine::GetInstance().GetScreenSize().y;
     int shift = 135 + 25;
-    dangerIndicator = new Engine::Sprite("play/benjamin.png", w - shift, h - shift);
-    dangerIndicator->Tint.a = 0;
-    UIGroup->AddNewObject(dangerIndicator);
 }
 
 void PlayScene::UIBtnClicked(int id) {
@@ -449,7 +442,7 @@ std::pair<bool, std::vector<std::vector<int>>> PlayScene::CheckSpaceValid(int x,
     mapState[y][x] = map00;
     if (map[0][0] == -1)
         return {false, {}};
-    for (auto &it : EnemyGroup->GetObjects()) {
+    /*for (auto &it : EnemyGroup->GetObjects()) {
         Engine::Point pnt;
         pnt.x = floor(it->Position.x / BlockSize);
         pnt.y = floor(it->Position.y / BlockSize);
@@ -459,7 +452,7 @@ std::pair<bool, std::vector<std::vector<int>>> PlayScene::CheckSpaceValid(int x,
         if (pnt.y >= MapHeight) pnt.y = MapHeight - 1;
         if (map[pnt.y][pnt.x] == -1)
             return {false, {}};
-    }
+    }*/
     return {true, map};
 }
 std::vector<std::vector<int>> PlayScene::CalculateBFSDistance() {

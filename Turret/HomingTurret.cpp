@@ -11,6 +11,6 @@ HomingTurret::HomingTurret(float x, float y):
 }
 
 void HomingTurret::CreateBullet(){
-    getPlayScene()->BulletGroup->AddNewObject(new HomingBullet("play/bullet-3.png", 60, Position, Target));
+    //getPlayScene()->BulletGroup->AddNewObject(new HomingBullet("play/bullet-3.png", 60, Position, Target));
     AudioHelper::PlayAudio("gun.wav");
 }

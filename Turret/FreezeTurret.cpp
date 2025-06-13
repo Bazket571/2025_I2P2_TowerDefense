@@ -25,10 +25,10 @@ void FreezeTurret::Update(float delta)
     if (!Enabled) return;
 
     //Freeze all enemy in range
-    for (auto &it : scene->EnemyGroup->GetObjects()) {
+    /*for (auto &it : scene->EnemyGroup->GetObjects()) {
         Enemy2* e = dynamic_cast<Enemy2*>(it);
         if (Engine::Collider::IsCircleOverlap(e->Position, e->CollisionRadius, Position, CollisionRadius)) {
             e->speedMultiplier *= slowRate;
         }
-    }
+    }*/
 }

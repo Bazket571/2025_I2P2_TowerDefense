@@ -55,22 +55,23 @@ public:
     int MapId;
     float ticks;
     float deathCountDown;
-    std::vector<Operator*> operators;
+    //Operators and their re-deploy timer
+    std::vector<std::pair<float, Operator*>> operators;
     // Map tiles.
     Group3D *FieldGroup;
-    Group *TileMapGroup;
+    //Group *TileMapGroup;
     Group *GroundEffectGroup;
     Group *DebugIndicatorGroup;
-    Group *BulletGroup;
-    Group *TowerGroup;
-    Group *EnemyGroup;
+    //Group *BulletGroup;
+    //Group *TowerGroup;
+    //Group *EnemyGroup;
     Group *EffectGroup;
     Group *UIGroup;
     Engine::Label *UIMoney;
     Engine::Label *UILives;
     Engine::Label *UIScore;
     Engine::Image *imgTarget;
-    Engine::Sprite *dangerIndicator;
+    //Engine::Sprite *dangerIndicator;
     Turret *preview;
     std::vector<std::vector<int>> mapState;
     std::vector<std::vector<int>> mapDistance;

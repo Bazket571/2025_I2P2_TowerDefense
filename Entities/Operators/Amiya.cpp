@@ -2,7 +2,7 @@
 #include "Engine/LOG.hpp"
 
 Amiya::Amiya() :
-	Operator("amiya/char_002_amiya.skel", "amiya/char_002_amiya.atlas", Stats( 699, 276, 48, 0))
+	Operator("amiya/char_002_amiya.skel", "amiya/char_002_amiya.atlas", Stats( 1059, 442, 93, 0), 20, 70)
 {
 }
 

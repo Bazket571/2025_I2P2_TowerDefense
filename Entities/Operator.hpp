@@ -9,6 +9,8 @@
 
 #include <Scene/PlayScene.hpp>
 
+//Amiya, Necrass, Reed2, Wisadel, Theresa (Damage in range), Kaltsit
+
 class Operator : public Entity {
 protected:
     virtual std::vector<Engine::Point> getRange();
@@ -17,8 +19,10 @@ public:
 	bool Preview = true;
 	bool Enabled = false;
 	EntityDirection direction;
+	int cost = 0;
+	float redeployTime;
 	//Must be inherited
-	Operator(std::string skel, std::string atlas, Stats stat);
+	Operator(std::string skel, std::string atlas, Stats stat, int cost, float redeployTime);
 	virtual std::string getIconPath() = 0;
 
 	virtual void Deploy(float x, float y, float z, EntityDirection direction);

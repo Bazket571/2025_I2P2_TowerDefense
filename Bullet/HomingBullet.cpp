@@ -26,28 +26,28 @@ void HomingBullet::Update(float delta){
     Velocity = direction * speed;
     bool enemyExist = false;
     //Only hit the enemy it aim for
-    for (auto &it : getPlayScene()->EnemyGroup->GetObjects()) {
-        Enemy2 *enemy = dynamic_cast<Enemy2 *>(it);
-        if (!enemy->Visible || enemy != target)
-            continue;
-        enemyExist = true;
-        if (Engine::Collider::IsCircleOverlap(Position, CollisionRadius, enemy->Position, enemy->CollisionRadius)) {
-            OnExplode(enemy);
-            enemy->Hit(damage);
-            getPlayScene()->BulletGroup->RemoveObject(objectIterator);
-            return;
-        }
-    }
+    //for (auto &it : getPlayScene()->EnemyGroup->GetObjects()) {
+    //    Enemy2 *enemy = dynamic_cast<Enemy2 *>(it);
+    //    if (!enemy->Visible || enemy != target)
+    //        continue;
+    //    enemyExist = true;
+    //    if (Engine::Collider::IsCircleOverlap(Position, CollisionRadius, enemy->Position, enemy->CollisionRadius)) {
+    //        OnExplode(enemy);
+    //        enemy->Hit(damage);
+    //        //getPlayScene()->BulletGroup->RemoveObject(objectIterator);
+    //        return;
+    //    }
+    //}
     //Find new enemy on target death
-    if(!enemyExist){
-        //no more enemy
-        if(getPlayScene()->EnemyGroup->GetObjects().empty()){
-            getPlayScene()->BulletGroup->RemoveObject(objectIterator);
-            return;
-        }
-        target = dynamic_cast<Enemy2*>(getPlayScene()->EnemyGroup->GetObjects().front());
-        //OnExplode(nullptr);
-        //getPlayScene()->BulletGroup->RemoveObject(objectIterator);
-        return;
-    }
+    //if(!enemyExist){
+    //    //no more enemy
+    //    if(getPlayScene()->EnemyGroup->GetObjects().empty()){
+    //        getPlayScene()->BulletGroup->RemoveObject(objectIterator);
+    //        return;
+    //    }
+    //    target = dynamic_cast<Enemy2*>(getPlayScene()->EnemyGroup->GetObjects().front());
+    //    //OnExplode(nullptr);
+    //    //getPlayScene()->BulletGroup->RemoveObject(objectIterator);
+    //    return;
+    //}
 }

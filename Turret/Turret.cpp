@@ -39,7 +39,7 @@ void Turret::Update(float deltaTime) {
         // Lock first seen target.
         // Can be improved by Spatial Hash, Quad Tree, ...
         // However simply loop through all enemies is enough for this program.
-        for (auto &it : scene->EnemyGroup->GetObjects()) {
+        /*for (auto &it : scene->EnemyGroup->GetObjects()) {
             Engine::Point diff = it->Position - Position;
             if (diff.Magnitude() <= CollisionRadius) {
                 Target = dynamic_cast<Enemy2 *>(it);
@@ -47,7 +47,7 @@ void Turret::Update(float deltaTime) {
                 lockedTurretIterator = std::prev(Target->lockedTurrets.end());
                 break;
             }
-        }
+        }*/
     }
     if (Target) {
         Engine::Point originRotation = Engine::Point(cos(Rotation - ALLEGRO_PI / 2), sin(Rotation - ALLEGRO_PI / 2));

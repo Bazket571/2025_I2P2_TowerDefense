@@ -52,7 +52,7 @@ void Enemy2::Hit(float damage) {
         int score = getPlayScene()->mapDistance[curPos.y][curPos.x];
         getPlayScene()->AddScore(score);
 
-        getPlayScene()->EnemyGroup->RemoveObject(objectIterator);
+        //getPlayScene()->EnemyGroup->RemoveObject(objectIterator);
         AudioHelper::PlayAudio("explosion.wav");
     }
 }

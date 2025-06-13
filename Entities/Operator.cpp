@@ -14,9 +14,9 @@ std::vector<Engine::Point> Operator::getRange()
     return ret;
 }
 
-Operator::Operator(std::string skel, std::string atlas, Stats stat) :
+Operator::Operator(std::string skel, std::string atlas, Stats stat, int cost, float redeployTime) :
     Entity(skel, atlas, 0, 0, 0, stat),
-    direction(direction)
+    direction(direction), cost(cost), redeployTime(redeployTime)
 {}
 
 void Operator::Deploy(float x, float y, float z, EntityDirection direction)
