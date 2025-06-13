@@ -49,6 +49,26 @@ void Entity::Update(float delta)
 
 void Entity::IsClickedOn(){}
 
+void Entity::Draw() const
+{
+	SpineSprite::Draw();
+	//Still drawing billboard
+	DrawHP();
+}
+
+void Entity::DrawHP() const
+{
+	//Dont draw HP bar when hp is full
+	if (stat.GetHP() == stat.GetMaxHP()) return;
+	float barSize = PlayScene::BlockSize / 1.5;
+	float HpPercent = (float)stat.GetHP() / stat.GetMaxHP();
+	ALLEGRO_TRANSFORM trans; al_identity_transform(&trans);
+	al_translate_transform_3d(&trans, Position.x - barSize / 2, Position.y + 20, Position.z);
+	al_set_shader_matrix("model_matrix", &trans);
+	al_draw_filled_rectangle(0, 0, barSize, 5, al_map_rgba_f(0, 0, 0, 0.5));
+	al_draw_filled_rectangle(0, 0, barSize * HpPercent, 5, al_map_rgba_f(1, 0, 0, 1));
+}
+
 void Entity::OnMouseUp(int button, int mx, int my)
 {
 	Engine::Point mouse = Billboard::MousePlane({(float)mx, (float)my}, Position.z);

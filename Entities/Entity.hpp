@@ -11,15 +11,18 @@
 
 class Stats {
     int hp = 0;
+    int maxHp = 0;
     int atk = 0;
     int def = 0;
     float speed = 0;
 public:
     Stats(int hp, int atk, int def, float speed) :
-        hp(hp), def(def), atk(atk), speed(speed) {};
+        hp(hp), maxHp(hp), def(def), atk(atk), speed(speed) { };
 
     int GetHP() const { return hp; };
     void SetHP(int to) { hp = std::max(0, to); };
+    int GetMaxHP() const { return maxHp; };
+    void SetMaxHP(int to) { maxHp = std::max(0, to); };
     int GetDef() const { return def; }
     void SetDef(int to) { def = std::max(0, to); };
     int GetAtk() const { return atk; }
@@ -51,6 +54,8 @@ public:
     virtual void OnAttack() = 0;
     virtual void OnStart() = 0;
     virtual void IsClickedOn();
+    virtual void Draw() const;
+    void DrawHP() const;
 
     virtual void OnMouseUp(int button, int mx, int my);
 

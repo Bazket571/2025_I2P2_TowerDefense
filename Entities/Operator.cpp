@@ -35,7 +35,7 @@ void Operator::Update(float delta)
         }
     }
     //Sort enemies by their distance to objective
-    std::sort(enemiesInRange.begin(), enemiesInRange.end(), [](Enemy* a, Enemy* b) {return a->reachEndTime < a->reachEndTime;});
+    std::sort(enemiesInRange.begin(), enemiesInRange.end(), [](Enemy* a, Enemy* b) {return a->reachEndTime < b->reachEndTime;});
     Entity::Update(delta);
 }
 
