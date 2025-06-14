@@ -1,81 +1,83 @@
 back intro
+thanos
+spamton
 speRight Necrass/smile3 Eblana
-dia “Oh, los peligros he sorteado…” 
+dia "Oh, los peligros he sorteado…" 
 Doctor a
 dia Eblana thinks she has found a new favourite song recently. A pretty catchy, romantic ancient relic from Iberia. Well, her subordinates told her that this thing is ancient, but judging from the unique beat drops, and how exactly this piece of music came into her possession, Eblana doubted otherwise.
-dia That doesn’t really affect her good mood, however. She shifts on the makeshift couch, leaning her head back. Some chatting words flow into her ears from outside the fabric of her tent.
+dia That doesn't really affect her good mood, however. She shifts on the makeshift couch, leaning her head back. Some chatting words flow into her ears from outside the fabric of her tent.
 speRight Necrass/smile3 Eblana
-dia “Oh, he cumplido mi contrato…”
+dia "Oh, he cumplido mi contrato…"
 speLeft NPC/soldier Soldier1
-dia “The Leader is going on a trip with… Uh, you know, the other Leader?”
+dia "The Leader is going on a trip with… Uh, you know, the other Leader?"
 speLeft2 NPC/soldier2 Soldier2
-dia “Yeah, the other Leader brought her own Taran forces too.”
+dia "Yeah, the other Leader brought her own Taran forces too."
 speLeft NPC/soldier Soldier1
-dia “Are they fighting? I’m kind’ worried, y’know. Internal ruptures gon’ put us into a more vulnerable position than we already are.”
+dia "Are they fighting? I'm kind' worried, y'know. Internal ruptures gon' put us into a more vulnerable position than we already are."
 speLeft2 NPC/soldier2 Soldier2
-dia “From what I observe, no. The Brigadier said nothing either.”
+dia "From what I observe, no. The Brigadier said nothing either."
 speRight Necrass/smile3 Eblana
-dia “Honrado y preparado, visto de negro siempre a tu lado…”
+dia "Honrado y preparado, visto de negro siempre a tu lado…"
 speLeft2 NPC/soldier2 Soldier2
-dia “Leader seemed pretty cheerful with her, err, sister by her side. She sticks to her side very often.”
+dia "Leader seemed pretty cheerful with her, err, sister by her side. She sticks to her side very often."
 speLeft NPC/soldier Soldier1
-dia “That’s good, ain’t it? We get stronger now with them united.”
+dia "That's good, ain't it? We get stronger now with them united."
 speLeft NPC/soldier2 Soldier2
-dia “Oh, bu' I recall the Brigadier sayin’ someth’n along the line of ‘the other Leader won’t be staying for lo—”
+dia "Oh, bu' I recall the Brigadier sayin' someth'n along the line of ‘the other Leader won't be staying for lo—"
 Doctor a
 dia A gentle voice pries its way into the conversation. Eblana likes hearing the soft edges around its edges, sounding like herself, but not quite.
 dia Their shared accent puts a smile on her face as she rolls to fully lie on top of the couch, her heels on one of the armrests.
 speLeft2 Reed/normal Reed
-dia “Gentlemen.”
+dia "Gentlemen."
 speLeft NPC/soldier2 Soldier2
-dia “Leader!” The soldier’s voices ring out in surprise.
+dia "Leader!" The soldier's voices ring out in surprise.
 speLeft2 Reed/normal Reed
-dia “Excuse me.”
+dia "Excuse me."
 speRight Necrass/smile3 Eblana
-dia “Palomas vuelan en el cielo alto…”
+dia "Palomas vuelan en el cielo alto…"
 Doctor a
-dia Loughshinny pushes her way into Eblana’s tent, the black gloves on her right hand standing out against the withered green of the fabric. Eblana feels her own eyes narrow in a welcoming smile.
+dia Loughshinny pushes her way into Eblana's tent, the black gloves on her right hand standing out against the withered green of the fabric. Eblana feels her own eyes narrow in a welcoming smile.
 thanos
 speLeft Reed/serious Reed
-dia “How are you feeling?”
+dia "How are you feeling?"
 Doctor a
-dia A simple piece of paper appears in between Eblana’s fingers like a trick of Arts. Reed’s eyes don’t miss the way they press down onto the paper, a flickering speck of purple flame dancing on her fingertips, close to the paper, but not touching.
+dia A simple piece of paper appears in between Eblana's fingers like a trick of Arts. Reed's eyes don't miss the way they press down onto the paper, a flickering speck of purple flame dancing on her fingertips, close to the paper, but not touching.
 dia So nearby, yet so far away. Real to the touch, unreal at the sight. The Leader of the Taran is enigmatic to the point of driving people insane.
 dia Eblana waves the talisman at her
 speRight Necrass/smile2 Eblana
-dia “I’m fine. It would take way more than a simple heart attack to scare me, you know that.”
+dia "I'm fine. It would take way more than a simple heart attack to scare me, you know that."
 Doctor a
 dia Reed frowns
 speLeft Reed/serious Reed
-dia “Your Arts has yet recovered. Consequences of disobeying this prophecy have already shown itself clear.”
+dia "Your Arts has yet recovered. Consequences of disobeying this prophecy have already shown itself clear."
 Doctor a
 dia At her words, Eblana finally lets her flames lick onto the talisman.
 speRight Necrass/smile1 Eblana
-dia “I can handle myself, Loughshinny.”
+dia "I can handle myself, Loughshinny."
 speLeft Reed/sad Reed
-dia “Hard teeth you do have, but the warmth of your flames speaks otherwise.”
+dia "Hard teeth you do have, but the warmth of your flames speaks otherwise."
 Doctor a
-dia The expression on Eblana’s face falters slightly at the bite in her sister’s answer, before she breaks into a smile again
+dia The expression on Eblana's face falters slightly at the bite in her sister's answer, before she breaks into a smile again
 speRight Necrass/normal Eblana
-dia “So what do you suggest we do?”
+dia "So what do you suggest we do?"
 Doctor a
-dia Reed’s gaze drops to Eblana’s tail.
-dia It’s slithering near her ankle, about to reach out and wrap around her ankle. Like how Eblana’s keeps her wrapped around her fingers all these while, and keeps her heart close and bare too, because Reed cannot bring herself to pull away.
+dia Reed's gaze drops to Eblana's tail.
+dia It's slithering near her ankle, about to reach out and wrap around her ankle. Like how Eblana's keeps her wrapped around her fingers all these while, and keeps her heart close and bare too, because Reed cannot bring herself to pull away.
 speRight Necrass/normal Eblana
-dia “Ah-ah, diligencia.”
+dia "Ah-ah, diligencia."
 speLeft Reed/sad Reed
-dia “I will accompany you on this journey.” 
+dia "I will accompany you on this journey." 
 speLeft Reed/closeEye Reed
 Doctor a
 dia Reed then continues.
 speLeft Reed/serious Reed
-dia “You, no, we will get to know Tara better, as its ruler and the Leader of its people. Per the terms of the Prophecy.”
+dia "You, no, we will get to know Tara better, as its ruler and the Leader of its people. Per the terms of the Prophecy."
 speRight Necrass/normal Eblana
-dia “Ah-ah, elegancia y nobleza.”
+dia "Ah-ah, elegancia y nobleza."
 Doctor a
 dia The song runs to an end, and the warm, lamenting male vocal fades into ashen dust.
-dia In a torrent of bright, shining purple fire, Eblana appears right at her sister’s side. Her left hand glides from the back of Reed’s neck to the tip of her shoulder, the gesture full of meaning, full of tease. It entertains her to see Loughshinny's eyebrow raised slightly in fluster and surprise, along with reluctant refusal. 
+dia In a torrent of bright, shining purple fire, Eblana appears right at her sister's side. Her left hand glides from the back of Reed's neck to the tip of her shoulder, the gesture full of meaning, full of tease. It entertains her to see Loughshinny's eyebrow raised slightly in fluster and surprise, along with reluctant refusal. 
 dia Maybe they should dance together sometimes.
 speRight Necrass/smile1 Eblana
-dia “I shall enjoy your company then. Let us depart, Loughshinny.”
+dia "I shall enjoy your company then. Let us depart, Loughshinny."
 end

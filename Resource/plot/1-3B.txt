@@ -1,95 +1,97 @@
 back 1-3B
+thanos
+spamton
 speRight Necrass/smile1 Eblana
 speLeft Reed/YouAreSoDead Reed
-dia “… I told you not to let your soldier rush into that cave–!!”
+dia "…I told you not to let your soldier rush into that cave–!!"
 speRight Necrass/smile1 Eblana
-dia “Oh come on, we got through them–”
+dia "Oh come on, we got through them–"
 speLeft Reed/YouAreSoDead Reed
-dia “Do not say that to me,”
+dia "Do not say that to me."
 Doctor a
 dia Reed coldly cuts her off, gripping her shoulder so tightly Eblana can hear the fabric creak under her fingers,
 speLeft Reed/YouAreSoDead Reed
-dia“You nearly got your leg crushed.”
+dia "You nearly got your leg crushed."
 speRight Necrass/smile2 Eblana
-dia “But I am indeed in one piece right in front of you.”
+dia "But I am indeed in one piece right in front of you."
 Doctor 1
-dia Eblana does not let her sister’s expression turn any more scary.
+dia Eblana does not let her sister's expression turn any more scary.
 speRight Necrass/smile2 Eblana
-dia “Be at ease. You know I still have another summon tucked away just in case.”
+dia "Be at ease. You know I still have another summon tucked away just in case."
 speLeft Reed/sad Reed
-dia “…”
+dia "…"
 Doctor a
 dia Reed closes her eyes for a moment, seemingly unwilling to listen.
 speRight Necrass/smile2 Eblana
-dia “Loughshinny?”
+dia "Loughshinny?"
 Doctor a
 dia Eblana only smiles, scooting closer
 speRight Necrass/smile2 Eblana
-“Loughshinny?”
+"Loughshinny?"
 Doctor a
 dia Reed purses her lips like a petulant child, against her will not to do it.
 speRight Necrass/happy Eblana
-dia “Aww…”
+dia "Aww…"
 Doctor a
 dia Eblana pats her cheeks teasingly
 speRight Necrass/happy Eblana
-dia “Dear sister?”
+dia "Dear sister?"
 speRight Necrass/smile2 Eblana
 Doctor a
-dia Reed is stubborn enough not to reply to Eblana’s antics, until they return to the camp, Eblana’s summoned soldiers dragging back the harvest of their hunt – Eight whole burdenbeasts, with their fur seared off conveniently by both sisters’ flames.
+dia Reed is stubborn enough not to reply to Eblana's antics, until they return to the camp, Eblana's summoned soldiers dragging back the harvest of their hunt – Eight whole burdenbeasts, with their fur seared off conveniently by both sisters' flames.
 back 1-3C
 speRight Necrass/smile1 Eblana
 speLeft Reed/AvertedEye Reed
 Doctor a
-dia She does not even react to any of Eblana’s actions, not even when she plays around with the flames on her tail.
-dia Not even when Eblana tells the soldiers and the Brigadier – to the poor commander’s horror – that she basically angered a whole herd of burdenbeasts and they charged straight at her. She even mentioned the part when one of the beasts nearly crushed her thigh, with a smile on her face.
+dia She does not even react to any of Eblana's actions, not even when she plays around with the flames on her tail.
+dia Not even when Eblana tells the soldiers and the Brigadier – to the poor commander's horror – that she basically angered a whole herd of burdenbeasts and they charged straight at her. She even mentioned the part when one of the beasts nearly crushed her thigh, with a smile on her face.
 dia And only when Eblana sits right beside her in front of the campfire does she realise how relieved she is, to still have her sister alive right there, laughing and telling jokes that are not funny at all.
 speLeft Reed/sad Reed
-dia “…”
+dia "…"
 speLeft Reed/surprised Reed
 speRight Necrass/smile3 Eblana
 Doctor a
 dia A bowl of soup is placed onto her lap, the liquid piping hot with a generous serving of meat floating in it.
 speRight Necrass/smile3 Eblana
-dia “At least try to enjoy your own victory’s harvest, Loughshinny.”
+dia "At least try to enjoy your own victory's harvest, Loughshinny."
 speRight Necrass/smile2 Eblana
 speLeft Reed/serious Reed
 Doctor a
 dia The caring gesture from Eblana almost makes her feel guilty for acting like this. Like a child being mad at her sister for suddenly leaving her in the middle of a hide-and-seek game. Almost.
 dia Reed holds up the bowl
 speLeft Reed/AvertedEye Reed
-dia “… Fine.”
+dia "… Fine."
 speLeft Reed/serious Reed
 speRight Necrass/smile2 Eblana
-dia “That’s my Loughshinny.”
+dia "That's my Loughshinny."
 Doctor a
 dia Eblana coos, the smirk in her voice way too smug and taunting for a person at fault.
 dia After an inhale, and a sigh, Reed gives in
 speLeft Reed/serious Reed
-dia “Please try your best not to be so reckless again.”
+dia "Please try your best not to be so reckless again."
 speRight Necrass/smile2 Eblana
-dia “Mmhmm, alright. Sure. I will try.”
+dia "Mmhmm, alright. Sure. I will try."
 speLeft Reed/serious Reed
-dia “I need something more reassuring, Eblana.”
+dia "I need something more reassuring, Eblana."
 speRight Necrass/smile2 Eblana
-dia “You don’t seem so, my dear sister.”
+dia "You don't seem so, my dear sister."
 speLeft Reed/sad Reed
-dia “…”
+dia "…"
 speRight Necrass/smile2 Eblana
-dia “Too much?”
+dia "Too much?"
 speLeft Reed/normal Reed
-dia “… Sister.”
+dia "… Sister."
 speLeft Reed/serious Reed
 Doctor a
 dia Eblana puts her bowl of soup to the side, maybe because she is giggling way too hard her hands are shaking.
 speRight Necrass/smile2 Eblana
-dia “Now that’s it. I’m going to try to be more considerate of my own safety. Is that good enough?”
+dia "Now that's it. I'm going to try to be more considerate of my own safety. Is that good enough?"
 Doctor a
 dia Reed looks skeptical, but she does her best not to show her doubt
 speLeft Reed/serious Reed
-dia “I suppose.”
+dia "I suppose."
 Doctor a
-dia A little encouragement here and there can’t hurt. She thinks. Anyway, I should have some food.
+dia A little encouragement here and there can't hurt. She thinks. Anyway, I should have some food.
 dia And only when she looks down at her bowl does she realise she does not have a spoon. 
 dia Eblana is already laughing so hard she is hugging her own stomach, her whole body lurching forward.
 dia Reed takes a look at her, then at her bowl of soup. She snatches the spoon from it.
