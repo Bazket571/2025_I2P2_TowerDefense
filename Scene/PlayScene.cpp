@@ -346,10 +346,10 @@ void PlayScene::ReadMap()
                     break;
                 case TILE_LOW | TILE_FORBIDDEN:
                     //TileMapGroup->AddNewObject(new Engine::Image("play/floor.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
-                    //FieldGroup->AddNewObject(new Object3D("Resource/3D/lground white.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 2 }, scale));
+                    FieldGroup->AddNewObject(new Object3D("Resource/3D/TileLowForbid2.glb", { (float)j * BlockSize, (float)i * BlockSize, 0.f }, scale));
                     break;
                 case TILE_HIGH | TILE_FORBIDDEN:
-                    //FieldGroup->AddNewObject(new Object3D("Resource/3D/hground black.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 4 }, scale));
+                    FieldGroup->AddNewObject(new Object3D("Resource/3D/TileHighForbid2.glb", { (float)j * BlockSize, (float)i * BlockSize, BlockSize / 4.f }, scale));
                     break;
                 case TILE_SPAWN:
                     SpawnGridPoint[spawnIndexOrder.front()] = Engine::Point(j, i);
