@@ -4,7 +4,7 @@
 
 std::multimap<std::string, Effect*> Entity::effects;
 
-PlayScene* Entity::GetPlayScene() const
+PlayScene* Entity::GetPlayScene()
 {
 	return dynamic_cast<PlayScene*>(Engine::GameEngine::GetInstance().GetScene("play"));
 }

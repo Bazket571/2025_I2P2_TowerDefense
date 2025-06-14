@@ -92,6 +92,7 @@ void PlayScene::Initialize() {
     imgTarget->Visible = false;
     preview = nullptr;
     UIGroup->AddNewObject(imgTarget);
+    mouseDownPos = { -1, -1 };
     // Start BGM.
     bgmId = AudioHelper::PlayBGM("play.ogg");
 }
@@ -161,8 +162,8 @@ void PlayScene::Update(float deltaTime) {
         }
     }
     if (preview) {
-
-        preview->Position = Billboard::MousePlane(Engine::GameEngine::GetInstance().GetMousePosition(), 0);
+        if (mouseDownPos == Engine::Point(-1, -1, 0))
+            preview->Position = Entity::GetTile(Billboard::MousePlane(Engine::GameEngine::GetInstance().GetMousePosition(), 0)) * BlockSize;
         // To keep responding when paused.
         preview->Update(deltaTime);
     }
@@ -185,53 +186,57 @@ void PlayScene::Draw() const {
     }
 }
 void PlayScene::OnMouseDown(int button, int mx, int my) {
-    if ((button & 1) && !imgTarget->Visible && preview) {
-        // Cancel turret construct.
-        FieldGroup->GetBillboards()->RemoveObject(preview->GetObjectIterator());
-        preview = nullptr;
+    if ((button & 1) && preview) {
+        if (mouseDownPos == Engine::Point(-1, -1, 0)) {
+            mouseDownPos.x = mx;
+            mouseDownPos.y = my;
+        }
     }
     IScene::OnMouseDown(button, mx, my);
 }
 void PlayScene::OnMouseMove(int mx, int my) {
-    IScene::OnMouseMove(mx, my);
-    const int x = mx / BlockSize;
-    const int y = my / BlockSize;
-    if (!preview || x < 0 || x >= MapWidth || y < 0 || y >= MapHeight) {
-        imgTarget->Visible = false;
-        return;
+    if (mouseDownPos != Engine::Point(-1, -1) && preview) {
+        //Get vector angle to the negative y axis
+        Engine::Point v = mouseDownPos - Engine::Point(mx, my);
+        //Engine::LOG(Engine::INFO) << v.x << " " << v.y;
+        if (abs(v.x) > abs(v.y)) {
+            preview->direction = (v.x > 0) ? Right : Left;
+        }
+        else {
+            preview->direction = (v.y > 0) ? Up : Down;
+        }
     }
-    imgTarget->Visible = true;
-    imgTarget->Position = Billboard::MousePlane({ (float)mx, (float)my }, 0);
+    IScene::OnMouseMove(mx, my);
 }
 void PlayScene::OnMouseUp(int button, int mx, int my) {
     IScene::OnMouseUp(button, mx, my);
-    if (!imgTarget->Visible)
-        return;
-    const Engine::Point curTile = Entity::GetTile(Billboard::MousePlane({ (float)mx, (float)my }, 0));
+    /*if (!imgTarget->Visible)
+        return;*/
     if (button & 1) {
-        if (curTile.x >= MapWidth || curTile.y >= MapHeight || curTile.x < 0 || curTile.y < 0) {
+        const Engine::Point mouseDownTile = Entity::GetTile(Billboard::MousePlane(mouseDownPos, 0));
+        if (mouseDownTile.x >= MapWidth || mouseDownTile.y >= MapHeight || mouseDownTile.x < 0 || mouseDownTile.y < 0) {
             return;
         }
-        if (mapState[curTile.y][curTile.x] != TILE_OCCUPIED_TURRET) {
+        if (mapState[mouseDownTile.y][mouseDownTile.x] != TILE_OCCUPIED_TURRET) {
             if (!preview)
                 return;
             // Check if valid.
-            auto result = CheckSpaceValid(curTile.x, curTile.y, TILE_OCCUPIED_TURRET);
-            if (!result.first || !(mapState[curTile.y][curTile.x] & preview->tileType)) {
+            auto result = CheckSpaceValid(mouseDownTile.x, mouseDownTile.y, TILE_OCCUPIED_TURRET);
+            if (!result.first || !(mapState[mouseDownTile.y][mouseDownTile.x] & preview->tileType)) {
                 Engine::Sprite *sprite;
-                FieldGroup->AddNewObject(sprite = new DirtyEffect("play/target-invalid.png", 1, curTile.x * BlockSize, curTile.y * BlockSize));
+                FieldGroup->AddNewObject(sprite = new DirtyEffect("play/target-invalid.png", 1, mouseDownTile.x * BlockSize, mouseDownTile.y * BlockSize));
                 sprite->Rotation = 0;
                 return;
             }
             // Purchase.
             EarnMoney(-preview->cost);
             //Deploy preview
-            Engine::Point deployPos = curTile * BlockSize;
-            preview->Deploy(deployPos.x, deployPos.y, deployPos.z, Right);
+            Engine::Point deployPos = mouseDownTile * BlockSize;
+            preview->Deploy(deployPos.x, deployPos.y, deployPos.z, preview->direction);
             // Remove Preview.
             preview = nullptr;
             
-            mapState[curTile.y][curTile.x] |= TILE_OCCUPIED_TURRET;
+            mapState[mouseDownTile.y][mouseDownTile.x] |= TILE_OCCUPIED_TURRET;
             mapDistance = result.second;
             SpeedMult = PrevSpeedMult;
             operators[curSelectIndex].first = -1;
@@ -255,6 +260,7 @@ void PlayScene::OnKeyDown(int keyCode) {
             preview = nullptr;
             SpeedMult = PrevSpeedMult;
             curSelectIndex = -1;
+            mouseDownPos = { -1, -1, 0 };
         }
         else SpeedMult = 0;
     }

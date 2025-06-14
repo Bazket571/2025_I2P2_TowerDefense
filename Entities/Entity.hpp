@@ -40,7 +40,7 @@ public:
     void SetSpeed(float to) { speed = std::max(0.f, to); };
 };
 
-enum EntityDirection{Down, Left, Up, Right};
+enum EntityDirection{Down, Right, Up, Left};
 
 class Effect;
 
@@ -49,7 +49,7 @@ protected:
     //Atk speed will be the time for the animation to run
     Engine::Point Velocity;
     virtual std::vector<Engine::Point> getRangeDeltas() const = 0;
-    PlayScene* GetPlayScene() const;
+    PlayScene* GetPlayScene();
     bool shouldDie = false;
 
 public:

@@ -25,6 +25,7 @@ private:
     ALLEGRO_SAMPLE_ID bgmId;
     //std::shared_ptr<ALLEGRO_SAMPLE_INSTANCE> deathBGMInstance;
     int curSelectIndex = -1;
+    Engine::Point mouseDownPos;
 
 protected:
     int lives;

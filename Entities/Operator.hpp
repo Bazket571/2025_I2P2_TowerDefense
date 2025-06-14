@@ -12,13 +12,14 @@
 //Amiya, Necrass, Reed2, Wisadel, Theresa (Damage in range), Kaltsit
 
 class Operator : public Entity {
+	std::vector<Engine::Point> RangePreview;
 protected:
-    virtual std::vector<Engine::Point> getRange() const;
+    virtual std::vector<Engine::Point> getRange();
 public:
 	std::vector<Enemy*> enemiesInRange;
 	bool Preview = true;
 	bool Enabled = false;
-	EntityDirection direction;
+	mutable EntityDirection direction;
 	int cost = 0;
 	float redeployTime;
 	//Must be inherited
