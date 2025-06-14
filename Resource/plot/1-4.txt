@@ -48,7 +48,7 @@ dia Not even when Eblana tells the soldiers and the Brigadier – to the poor comm
 dia And only when Eblana sits right beside her in front of the campfire does she realise how relieved she is, to still have her sister alive right there, laughing and telling jokes that are not funny at all.
 speLeft Reed/sad Reed
 dia "…"
-speLeft Reed/surprised Reed
+speLeft Reed/suprised Reed
 speRight Necrass/smile3 Eblana
 Doctor a
 dia A bowl of soup is placed onto her lap, the liquid piping hot with a generous serving of meat floating in it.

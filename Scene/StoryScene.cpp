@@ -13,10 +13,10 @@
 #include "StoryScene.h"
 
 void StoryScene::Initialize() {
-    dialogue = new Engine::Label("","pirulen.ttf",20,100,700,255,255,255);
+    dialogue = new Engine::Label("","DepartureMono-Regular.otf",20,100,700,255,255,255);
     dialogue->Size.x = 1400;
-    speaker = new Engine::Label("","pirulen.ttf",24,70,650,255,255,255);
-    openingline = new Engine::Label("", "pirulen.ttf", 24, 0, 0, 255, 255, 255);
+    speaker = new Engine::Label("","DepartureMono-Regular.otf",24,70,650,255,255,255);
+    openingline = new Engine::Label("", "DepartureMono-Regular.otf", 24, 0, 0, 255, 255, 255);
     dialoguebar = new Engine::Image("background/dialoguebar.png",0,0, 1650, 920);
     background = new Engine::Image("background/1-1.png",0,0,1680,920);
     character = new Engine::Image("char/Amiya.png",-120,25,0,0);
@@ -134,9 +134,13 @@ void StoryScene::ReadAndExecute()
         ReadAndExecute();
     }
     else if (cmd == "end") {
-        //AudioHelper::StopSample(bgmInstance);
         cmdFile.close();
-        //bgmInstance = std::shared_ptr<ALLEGRO_SAMPLE_INSTANCE>();
+        if (StageID == "1-4") {
+            IScene::Terminate();
+            Engine::GameEngine::GetInstance().ChangeScene("stage-select");
+            return;
+        }
+        dynamic_cast<PlayScene*>(Engine::GameEngine::GetInstance().GetScene("play"))->MapId = StageID;
         IScene::Terminate();
         Engine::GameEngine::GetInstance().ChangeScene("play");
     }
