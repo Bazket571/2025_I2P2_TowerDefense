@@ -178,7 +178,7 @@ void PlayScene::Draw() const {
 void PlayScene::OnMouseDown(int button, int mx, int my) {
     const Engine::Point mouseDownTile = Entity::GetTile(Billboard::MousePlane({ (float)mx, (float)my }, 0));
     if ((button & 1) && preview) {
-        if (Engine::Collider::IsPointInRect(mouseDownTile,{ 0.f, 0.f}, { MapWidth - 1.f,MapHeight - 1.f }))
+        if (mouseDownTile.x >= 0 && mouseDownTile.y >= 0 && mouseDownTile.x < MapWidth && mouseDownTile.y < MapHeight)
         if (!(mapState[mouseDownTile.y][mouseDownTile.x] & (TILE_OCCUPIED_TURRET | TILE_FORBIDDEN)))
         if (mapState[mouseDownTile.y][mouseDownTile.x] & preview->tileType)
         if (mouseDownPos == Engine::Point(-1, -1, 0)) {
