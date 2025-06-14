@@ -2,9 +2,11 @@
 #include "Engine/LOG.hpp"
 
 Amiya::Amiya() :
-	Operator("amiya/char_002_amiya.skel", "amiya/char_002_amiya.atlas", Stats( 1059, 442, 93, 0), 20, 70)
+	Operator("amiya/char_002_amiya.skel", "amiya/char_002_amiya.atlas", Stats(1548, 634, 110, 20, 0), 20, 70)
 {
 	tileType = TILE_HIGH;
+	atkType = TILE_LOW | TILE_HIGH;
+	dmgType = Arts;
 }
 
 std::string Amiya::getIconPath() {
@@ -45,17 +47,15 @@ std::vector<Engine::Point> Amiya::getRangeDeltas() const
 
 void Amiya::OnAttack()
 {
+	if (enemiesInRange.empty()) return;
 	Enemy* target = enemiesInRange[0];
 	AddEffect(new Damage(this, target));
-	Engine::LOG(Engine::INFO) << "Amiya attack";
 }
 
 void Amiya::OnStart()
 {
-	Engine::LOG(Engine::INFO) << "Amiya start";
 }
 
 void Amiya::IsClickedOn()
 {
-	Engine::LOG(Engine::INFO) << "Amiya clicked";
 }

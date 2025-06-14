@@ -11,6 +11,7 @@ private:
 
 public:
     explicit StageSelectScene() = default;
+    static std::unordered_map<std::string, bool> isComplete;
     void Initialize() override;
     void Terminate() override;
     void PlayOnClick(std::string stage);

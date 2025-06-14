@@ -29,7 +29,7 @@ private:
 
 protected:
     int lives;
-    int money;
+    int DP;
     int SpeedMult;
     int PrevSpeedMult;
 
@@ -42,11 +42,14 @@ public:
     static const int WindowWidth, WindowHeight;
     static int BlockSize;
     //static const float DangerTime;
-    static Engine::Point SpawnGridPoint;
+    static std::vector<Engine::Point> SpawnGridPoint;
     static Engine::Point EndGridPoint;
     static int score;
     std::string MapId;
-    float ticks;
+    int SpawnCount;
+    float DPRegenRate;
+    float DPTick;
+    std::vector<float> ticks;
     float deathCountDown;
     //Operators and their re-deploy timer
     std::vector<std::pair<float, Operator*>> operators;
@@ -61,15 +64,17 @@ public:
     Group *EffectGroup;
     Group *UIGroup;
     Group* OperatorButtons;
+    Group* OperatorButtonsFrames;
+    Engine::Label* UIDP;
     //Engine::Label *UIMoney;
     Engine::Label *UILives;
     Engine::Label *UIScore;
-    Engine::Image *imgTarget;
+    //Engine::Image *imgTarget;
     //Engine::Sprite *dangerIndicator;
     Operator *preview;
     std::vector<std::vector<int>> mapState;
     std::vector<std::vector<int>> mapDistance;
-    std::list<std::pair<int, float>> enemyWaveData;
+    std::vector<std::list<std::pair<std::string, float>>> enemyWaveData;
     std::list<int> keyStrokes;
     static Engine::Point GetClientSize();
     explicit PlayScene() = default;
@@ -82,11 +87,12 @@ public:
     void OnMouseUp(int button, int mx, int my) override;
     void OnKeyDown(int keyCode) override;
     void Hit();
-    int GetMoney() const;
-    void EarnMoney(int money);
+    int GetDP() const;
+    void EarnDP(int DP);
     void AddScore(int point);
     void ReadMap();
-    void ReadEnemyWave();
+    void ReadEnemyWave(int spawnNo);
+    void UpdateEnemyWave(float deltaTime);
     void UpdateOperatorUI();
     void ConstructOperatorUI();
     //void ConstructTurretList();

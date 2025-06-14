@@ -36,6 +36,7 @@
 #include <Engine/spine/spine.hpp>
 #include "Entities/Operators.hpp"
 #include "UI/Video.hpp"
+#include "Engine/Collider.hpp"
 
 // TODO HACKATHON-4 (1/3): Trace how the game handles keyboard input.
 // TODO HACKATHON-4 (2/3): Find the cheat code sequence in this file.
@@ -50,7 +51,7 @@ int PlayScene::MapWidth = 0, PlayScene::MapHeight = 0;
 int PlayScene::BlockSize = 96;
 int PlayScene::score = 0;
 const int PlayScene::WindowWidth = (64*21), PlayScene::WindowHeight = 64*13;
-Engine::Point PlayScene::SpawnGridPoint = Engine::Point(0, 0);
+std::vector<Engine::Point> PlayScene::SpawnGridPoint = {};
 Engine::Point PlayScene::EndGridPoint = Engine::Point(MapWidth, MapHeight - 1);
 int PlayScene::OperatorUISize = 96;
 
@@ -60,10 +61,13 @@ Engine::Point PlayScene::GetClientSize() {
 void PlayScene::Initialize() {
     mapState.clear();
     keyStrokes.clear();
-    ticks = 0;
+    enemyWaveData.clear();
+    ticks.clear();
     deathCountDown = -1;
-    lives = 10;
-    money = 150;
+    lives = 3;
+    DP = 10;
+    DPRegenRate = 1;
+    DPTick = 0;
     SpeedMult = 1;
     score = 0;
     // Add groups from bottom to top.
@@ -78,21 +82,32 @@ void PlayScene::Initialize() {
     // Should support buttons.
     AddNewControlObject(UIGroup = new Group());
     AddNewControlObject(OperatorButtons = new Group());
+    AddNewControlObject(OperatorButtonsFrames = new Group());
+    operators.clear();
     operators.push_back({ 0, new Amiya() });
+    operators.push_back({ 0, new Logos() });
+    operators.push_back({ 0, new Necrass() });
+    operators.push_back({ 0, new Reed2() });
+    operators.push_back({ 0, new Wisadel() });
+    operators.push_back({ 0, new Cetsyr() });
+    operators.push_back({ 0, new Shu() });
+
     std::sort(operators.begin(), operators.end(), 
         [](std::pair<float, Operator*> a, std::pair<float, Operator*> b) {return a.second->cost > b.second->cost;});
     //FieldGroup->AddNewControlBillboard(amiyi); //Low ground offset
     //amiyi->Deploy(5 * BlockSize, 2 * BlockSize, 0, Right);
     //FieldGroup->AddNewControlBillboard(new Amiya(5 * BlockSize, (2) * BlockSize, 0, Right));        //High ground
     ReadMap();
-    ReadEnemyWave();
+    for(int i = 0; i < SpawnCount; i++)
+        ReadEnemyWave(i);
     mapDistance = CalculateBFSDistance();
     ConstructUI();
-    imgTarget = new Engine::Image("play/target.png", 0, 0);
-    imgTarget->Visible = false;
+    //imgTarget = new Engine::Image("play/target.png", 0, 0);
+    //imgTarget->Visible = false;
     preview = nullptr;
-    UIGroup->AddNewObject(imgTarget);
+    //UIGroup->AddNewObject(imgTarget);
     mouseDownPos = { -1, -1 };
+
     // Start BGM.
     bgmId = AudioHelper::PlayBGM("play.ogg");
 }
@@ -124,41 +139,13 @@ void PlayScene::Update(float deltaTime) {
     for (int i = 0; i < SpeedMult; i++) {
         IScene::Update(deltaTime);
         Entity::UpdateEffects();
-        // Check if we should create new enemy.
-        ticks += deltaTime;
-        if (enemyWaveData.empty()) {
-            if (FieldGroup->GetFromBillboard<Enemy>().empty()) {
-                // Win.
-                Engine::GameEngine::GetInstance().ChangeScene("win");
-            }
-            continue;
-        }
-        auto current = enemyWaveData.front();
-        if (ticks < current.second)
-            continue;
-        ticks -= current.second;
-        enemyWaveData.pop_front();
-        const Engine::Point SpawnCoordinate = Engine::Point(SpawnGridPoint.x * BlockSize, SpawnGridPoint.y * BlockSize);
-        Enemy *enemy = nullptr;
-        switch (current.first) {
-            case 1:
-                //EnemyGroup->AddNewObject(enemy = new SoldierEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
-                FieldGroup->AddNewBillboard(enemy = new Slime(SpawnCoordinate.x, SpawnCoordinate.y,0));
-                break;
-            // TODO HACKATHON-3 (2/3): Add your new enemy here.
-            case 2:
-                //EnemyGroup->AddNewObject(enemy = new PlaneEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
-                break;
-            case 3:
-                //EnemyGroup->AddNewObject(enemy = new TankEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
-                break;
-            default:
-                continue;
-        }
-        if (enemy != nullptr) {
-            enemy->UpdatePath(mapDistance);
-            // Compensate the time lost.
-            enemy->Update(ticks);
+        UpdateEnemyWave(deltaTime);
+        //Update DP
+        if(GetDP() <= 99)
+            DPTick += deltaTime;
+        if (DPTick >= DPRegenRate) {
+            DPTick = 0;
+            EarnDP(1);
         }
     }
     if (preview) {
@@ -186,7 +173,11 @@ void PlayScene::Draw() const {
     }
 }
 void PlayScene::OnMouseDown(int button, int mx, int my) {
+    const Engine::Point mouseDownTile = Entity::GetTile(Billboard::MousePlane({ (float)mx, (float)my }, 0));
     if ((button & 1) && preview) {
+        if (Engine::Collider::IsPointInRect(mouseDownTile,{ 0.f, 0.f}, { MapWidth - 1.f,MapHeight - 1.f }))
+        if (!(mapState[mouseDownTile.y][mouseDownTile.x] & (TILE_OCCUPIED_TURRET | TILE_FORBIDDEN)))
+        if (mapState[mouseDownTile.y][mouseDownTile.x] & preview->tileType)
         if (mouseDownPos == Engine::Point(-1, -1, 0)) {
             mouseDownPos.x = mx;
             mouseDownPos.y = my;
@@ -217,7 +208,8 @@ void PlayScene::OnMouseUp(int button, int mx, int my) {
         if (mouseDownTile.x >= MapWidth || mouseDownTile.y >= MapHeight || mouseDownTile.x < 0 || mouseDownTile.y < 0) {
             return;
         }
-        if (mapState[mouseDownTile.y][mouseDownTile.x] != TILE_OCCUPIED_TURRET) {
+        //Check if allowed
+        if (!(mapState[mouseDownTile.y][mouseDownTile.x] & (TILE_OCCUPIED_TURRET|TILE_FORBIDDEN))) {
             if (!preview)
                 return;
             // Check if valid.
@@ -229,7 +221,7 @@ void PlayScene::OnMouseUp(int button, int mx, int my) {
                 return;
             }
             // Purchase.
-            EarnMoney(-preview->cost);
+            EarnDP(-preview->cost);
             //Deploy preview
             Engine::Point deployPos = mouseDownTile * BlockSize;
             preview->Deploy(deployPos.x, deployPos.y, deployPos.z, preview->direction);
@@ -241,6 +233,7 @@ void PlayScene::OnMouseUp(int button, int mx, int my) {
             SpeedMult = PrevSpeedMult;
             operators[curSelectIndex].first = -1;
             curSelectIndex = -1;
+            mouseDownPos = { -1, -1, 0 };
             OnMouseMove(mx, my);
         }
     }
@@ -267,17 +260,17 @@ void PlayScene::OnKeyDown(int keyCode) {
 }
 void PlayScene::Hit() {
     lives--;
-    UILives->Text = "Life " + std::to_string(lives);
+    //UILives->Text = "Life " + std::to_string(lives);
     if (lives <= 0) {
         Engine::GameEngine::GetInstance().ChangeScene("lose");
     }
 }
-int PlayScene::GetMoney() const {
-    return money;
+int PlayScene::GetDP() const {
+    return DP;
 }
-void PlayScene::EarnMoney(int money) {
-    this->money += money;
-    //UIMoney->Text = "$" + std::to_string(this->money);
+void PlayScene::EarnDP(int DP) {
+    this->DP += DP;
+    UIDP->Text = std::to_string(this->DP);
 }
 void PlayScene::AddScore(int point)
 {
@@ -286,10 +279,12 @@ void PlayScene::AddScore(int point)
 }
 void PlayScene::ReadMap()
 {
+    SpawnCount = 0;
     std::string filename = std::string("Resource/map") + MapId + ".txt";
     // Read map file.
     //TODO MapData has 2 states only, change this
     std::vector<int> mapData;
+    std::list<int> spawnIndexOrder;
     std::ifstream fin(filename);
     MapWidth = MapHeight = 0;
     while (1) {
@@ -297,11 +292,19 @@ void PlayScene::ReadMap()
         std::getline(fin, line);
         if (line.length() == 0) break;
         for(char c : line) {
+            if (isdigit(c)) {
+                mapData.push_back(TILE_SPAWN);
+                spawnIndexOrder.push_back(c - '0');
+                SpawnCount++;
+                continue;
+            }
             switch (c) {
-            case '0': mapData.push_back(TILE_LOW); break;
-            case '1': mapData.push_back(TILE_HIGH); break;
-            case 's': mapData.push_back(TILE_SPAWN); break;
+            case 'l': mapData.push_back(TILE_LOW); break;
+            case 'h': mapData.push_back(TILE_HIGH); break;
+            case 'L': mapData.push_back(TILE_LOW | TILE_FORBIDDEN); break;
+            case 'H': mapData.push_back(TILE_HIGH | TILE_FORBIDDEN); break;
             case 'o': mapData.push_back(TILE_OBJECTIVE); break;
+
             case '\r':
             case '\n':
                 break;
@@ -316,6 +319,9 @@ void PlayScene::ReadMap()
             throw std::ios_base::failure("Map data is not rectangular.");;
     }
     fin.close();
+    SpawnGridPoint.resize(SpawnCount);
+    ticks.resize(SpawnCount, 0);
+    enemyWaveData.resize(SpawnCount);
     // Store map in 2d array.
     // Test Change buffer depth
     //al_set_new_bitmap_depth(16);
@@ -333,8 +339,16 @@ void PlayScene::ReadMap()
                 case TILE_HIGH:
                     FieldGroup->AddNewObject(new Object3D("Resource/3D/TileHigh.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 4 }, scale));
                     break;
+                case TILE_LOW | TILE_FORBIDDEN:
+                    //TileMapGroup->AddNewObject(new Engine::Image("play/floor.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+                    FieldGroup->AddNewObject(new Object3D("Resource/3D/TileLow.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 2 }, scale));
+                    break;
+                case TILE_HIGH | TILE_FORBIDDEN:
+                    FieldGroup->AddNewObject(new Object3D("Resource/3D/TileHigh.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 4 }, scale));
+                    break;
                 case TILE_SPAWN:
-                    SpawnGridPoint = Engine::Point(j, i);
+                    SpawnGridPoint[spawnIndexOrder.front()] = Engine::Point(j, i);
+                    spawnIndexOrder.pop_front();
                     FieldGroup->AddNewObject(new Object3D("Resource/3D/TileLow.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 2 }, scale));
                     FieldGroup->AddNewObject(new Object3D("Resource/3D/RedBox.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)BlockSize / 2 }, scale));
                     break;
@@ -352,19 +366,53 @@ void PlayScene::ReadMap()
     //al_set_new_bitmap_depth(0);
     //Change blockSize according to aspect ratio
 }
-void PlayScene::ReadEnemyWave() {
-    std::string filename = std::string("Resource/enemy") + MapId + ".txt";
+void PlayScene::ReadEnemyWave(int spawnNo) {
+    std::string filename = std::string("Resource/enemy") + MapId + "$" + std::to_string(spawnNo) + ".txt";
     // Read enemy file.
-    float type, wait, repeat;
-    enemyWaveData.clear();
+    std::string type;
+    float wait, repeat;
+    enemyWaveData[spawnNo].clear();
     std::ifstream fin(filename);
     while (fin >> type && fin >> wait && fin >> repeat) {
         for (int i = 0; i < repeat; i++)
-            enemyWaveData.emplace_back(type, wait);
+            enemyWaveData[spawnNo].emplace_back(type, wait);
     }
     fin.close();
 }
-//TODO improve(automate) this horrid piece of shit
+void PlayScene::UpdateEnemyWave(float deltaTime)
+{
+    bool ShouldWin = true;
+    // Check if we should create new enemy.
+    for (int i = 0; i < SpawnCount; i++) {
+        if (!enemyWaveData[i].empty()) {
+            ShouldWin = false; break;
+        }
+    }
+    if (!FieldGroup->GetFromBillboard<Enemy>().empty()) {
+        ShouldWin = false;
+    }
+    if(ShouldWin) Engine::GameEngine::GetInstance().ChangeScene("win");
+    for (int i = 0; i < SpawnCount; i++) {
+        ticks[i] += deltaTime;
+        if (enemyWaveData[i].empty()) continue;
+        auto current = enemyWaveData[i].front();
+        if (ticks[i] < current.second)
+            continue;
+        ticks[i] -= current.second;
+        enemyWaveData[i].pop_front();
+        const Engine::Point SpawnCoordinate = Engine::Point(SpawnGridPoint[i].x * BlockSize, SpawnGridPoint[i].y * BlockSize);
+        Enemy* enemy = nullptr;
+        //TODO Add enemy here
+        if (current.first == "B1") {
+            FieldGroup->AddNewBillboard(enemy = new Slime(SpawnCoordinate.x, SpawnCoordinate.y, 0));
+        }
+        if (enemy != nullptr) {
+            enemy->UpdatePath(mapDistance);
+            // Compensate the time lost.
+            enemy->Update(ticks[i]);
+        }
+    }
+}
 
 void PlayScene::UpdateOperatorUI() {
     Engine::Point screenSize = Engine::GameEngine::GetInstance().GetScreenSize();
@@ -372,12 +420,14 @@ void PlayScene::UpdateOperatorUI() {
     int i = -1;
     for (auto &button : OperatorButtons->GetObjects()) {
         i++;
-        if (operators[i].first == -1) {
+        if (operators[i].first == -1 || operators[i].second->cost > GetDP()) {
             button->Visible = false;
+            dynamic_cast<Engine::ImageButton*>(button)->Enabled = false;
             continue;
         }
         button->Visible = true;
-        Engine::Point pos = { screenSize.x - OperatorUISize * (opNo + 1), screenSize.y - OperatorUISize};
+        dynamic_cast<Engine::ImageButton*>(button)->Enabled = true;
+        Engine::Point pos = { screenSize.x - OperatorUISize * (opNo + 1) - 109, screenSize.y - OperatorUISize};
         button->Position = pos;
         opNo++;
     }
@@ -388,34 +438,52 @@ void PlayScene::ConstructOperatorUI() {
     int i = 0;
     for (auto it = operators.begin(); it != operators.end(); it++) {
         std::string filepath = it->second->getIconPath();
-        auto button = new Engine::ImageButton(filepath, filepath, screenSize.x - OperatorUISize * (i++ + 1), screenSize.y - OperatorUISize, OperatorUISize, OperatorUISize);
+        Engine::Point pos = { screenSize.x - OperatorUISize * (i++ + 1) - 109, screenSize.y - OperatorUISize };
+        auto button = new Engine::ImageButton(filepath, filepath, pos.x, pos.y, OperatorUISize, OperatorUISize);
         button->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, it));
         OperatorButtons->AddNewControlObject(button);
+        OperatorButtonsFrames->AddNewControlObject(new Engine::ImageButton("Ingame/char.png", "Ingame/charhov.png", pos.x, pos.y, OperatorUISize, OperatorUISize));
     }
 }
 
 void PlayScene::ConstructUI() {
+    Engine::Point scrSize = Engine::GameEngine::GetInstance().GetScreenSize();
     // Background
     //UIGroup->AddNewObject(new Engine::Image("play/sand.png", 1280, 0, 320, 832));
     // Text
     //UIGroup->AddNewObject(new Engine::Label(std::string("Stage ") + std::to_string(MapId), "pirulen.ttf", 32, 1294, 0));
-    //UIGroup->AddNewObject(UIMoney = new Engine::Label(std::string("$") + std::to_string(money), "pirulen.ttf", 24, 1294, 48));
+    UIGroup->AddNewObject(new Engine::Image("Ingame/dp ui.png", scrSize.x - 109, scrSize.y - 176));
+    UIGroup->AddNewObject(UIDP = new Engine::Label(std::to_string(DP), "pirulen.ttf", 24, scrSize.x - OperatorUISize, scrSize.y - OperatorUISize - 45, 255, 255, 255));
     //UIGroup->AddNewObject(UILives = new Engine::Label(std::string("Life ") + std::to_string(lives), "pirulen.ttf", 24, 1294, 88));
     //UIGroup->AddNewObject(UIScore = new Engine::Label(std::string("Score ") + std::to_string(score), "pirulen.ttf", 24, 1294, 128));
     
     //TODO: render frame and cost
     ConstructOperatorUI();
-
-    int w = Engine::GameEngine::GetInstance().GetScreenSize().x;
-    int h = Engine::GameEngine::GetInstance().GetScreenSize().y;
-    int shift = 135 + 25;
 }
 
 void PlayScene::UIBtnClicked(std::vector<std::pair<float, Operator*>>::iterator it) {
     if (preview)
-        UIGroup->RemoveObject(preview->GetObjectIterator());
+        FieldGroup->GetBillboards()->RemoveControlObject(preview->GetControlIterator(), preview->GetObjectIterator());
     if (dynamic_cast<Amiya*>(it->second)) {
         preview = new Amiya();
+    }
+    else if (dynamic_cast<Logos*>(it->second)) {
+        preview = new Logos();
+    }
+    else if (dynamic_cast<Necrass*>(it->second)) {
+        preview = new Necrass();
+    }
+    else if (dynamic_cast<Reed2*>(it->second)) {
+        preview = new Reed2();
+    }
+    else if (dynamic_cast<Wisadel*>(it->second)) {
+        preview = new Wisadel();
+    }
+    else if (dynamic_cast<Cetsyr*>(it->second)) {
+        preview = new Cetsyr();
+    }
+    else if (dynamic_cast<Shu*>(it->second)) {
+        preview = new Shu();
     }
     if (!preview)
         return;
@@ -446,8 +514,9 @@ std::pair<bool, std::vector<std::vector<int>>> PlayScene::CheckSpaceValid(int x,
     mapState[y][x] |= type;
     std::vector<std::vector<int>> map = CalculateBFSDistance();
     mapState[y][x] = map00;
-    if (map[SpawnGridPoint.y][SpawnGridPoint.x] == -1)
-        return {false, {}};
+    //Assume path is always found
+    /*if (map[SpawnGridPoint.y][SpawnGridPoint.x] == -1)
+        return {false, {}};*/
     return {true, map};
 }
 std::vector<std::vector<int>> PlayScene::CalculateBFSDistance() {
@@ -482,6 +551,6 @@ std::vector<std::vector<int>> PlayScene::CalculateBFSDistance() {
 void PlayScene::TriggerCheat()
 {
     Engine::LOG(Engine::INFO) << "Triggering cheat";
-    EarnMoney(10000);
+    EarnDP(10000);
     EffectGroup->AddNewObject(new Plane());
 }

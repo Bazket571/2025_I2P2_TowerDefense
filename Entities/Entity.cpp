@@ -82,7 +82,7 @@ void Entity::DrawHP() const
 	ALLEGRO_TRANSFORM trans; al_identity_transform(&trans);
 	al_translate_transform_3d(&trans, Position.x - barSize / 2, Position.y + 20, Position.z);
 	al_set_shader_matrix("model_matrix", &trans);
-	al_draw_filled_rectangle(0, 0, barSize, 5, al_map_rgba_f(0, 0, 0, 0.5));
+	al_draw_filled_rectangle(0, 0, barSize, 5, al_map_rgba_f(0, 0, 0, 0.1));
 	al_draw_filled_rectangle(0, 0, barSize * HpPercent, 5, al_map_rgba_f(1, 0, 0, 1));
 }
 
@@ -101,13 +101,13 @@ void Entity::UpdateEffects()
 {
 	for(auto iter = effects.begin(); iter != effects.end();){
 		auto cur = iter++;
-		cur->second->effect();
-		cur->second->duration--;
 		if (cur->second->duration <= 0) {
 			cur->second->after();
 			effects.erase(cur);
+			continue;
 		}
-
+		cur->second->effect();
+		cur->second->duration--;
 	}
 }
 
@@ -130,5 +130,17 @@ Damage::Damage(Entity* from, Entity* to): Effect("Damage", from, to, 1) {}
 void Damage::effect()
 {
 	Effect::effect();
-	to->stat.SetHP(to->stat.GetHP() - std::max(5, from->stat.GetAtk() - to->stat.GetDef()));
+	if (from->dmgType == Entity::Physical)
+		to->stat.SetHP(to->stat.GetHP() - std::max(from->stat.GetAtk() * 0.05, (double)from->stat.GetAtk() - to->stat.GetDef()));
+	else if (from->dmgType == Entity::Arts)
+		to->stat.SetHP(to->stat.GetHP() - std::max(from->stat.GetAtk() * 0.05, (double)from->stat.GetAtk() * (1 - to->stat.GetRes() / 100.)));
+}
+Block::Block(Entity* from, Entity* to) :Effect("Block", from, to, 1), prevSpd(0) {}
+void Block::effect()
+{
+	prevSpd = to->stat.GetSpeed();
+	to->stat.SetSpeed(0);
+}
+void Block::after() {
+	prevSpd = prevSpd;
 }

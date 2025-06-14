@@ -1,12 +1,25 @@
 #include "Enemy.hpp"
+#include "Operator.hpp"
 #include <random>
 
 Enemy::Enemy(std::string skel, std::string atlas, float x, float y, float z, Stats stat) :
     Entity(skel, atlas, x, y, z, stat), reachEndTime(0)
 {
+    blockedBy = nullptr;
 }
 
 void Enemy::OnStart() {}
+
+void Enemy::OnDie()
+{
+    if(reachEndTime == 0)
+        GetPlayScene()->Hit();
+    if (blockedBy) {
+        blockedBy->Blocking.erase(this);
+        blockedBy = nullptr;
+    }
+    Entity::OnDie();
+}
 
 void Enemy::UpdatePath(const std::vector<std::vector<int>>& mapDistance) {
     int x = static_cast<int>(floor(Position.x / PlayScene::BlockSize));
@@ -42,22 +55,27 @@ void Enemy::UpdatePath(const std::vector<std::vector<int>>& mapDistance) {
     path[0] = PlayScene::EndGridPoint;
 }
 
+
+
 void Enemy::Update(float delta)
 {
+    Entity::Update(delta);
+    if (shouldDie) return;
+    if (state->getCurrent(0)->getAnimation()->getName() == "Die") return;
     Stats curStat = stat;
     //Apply effects on curStat.
-    
-	//TODO: Move enemies here
+
+    //TODO: Move enemies here
     // Pre-calculate the velocity.
     float remainSpeed = curStat.GetSpeed() * delta * PlayScene::BlockSize / 2;
+    if (blockedBy != nullptr) remainSpeed = 0;
     if (remainSpeed == 0) {
         Velocity = { 0,0 };
     }
     while (remainSpeed != 0) {
         if (path.empty()) {
             // Reach end point.
-            //Hit(hp);
-            //getPlayScene()->Hit();
+            state->setAnimation(0, "Die", false);
             reachEndTime = 0;
             return;
         }
@@ -80,5 +98,4 @@ void Enemy::Update(float delta)
             remainSpeed = 0;
         }
     }
-    Entity::Update(delta);
 }

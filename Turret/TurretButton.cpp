@@ -12,7 +12,7 @@ TurretButton::TurretButton(std::string img, std::string imgIn, Engine::Sprite Ba
 }
 void TurretButton::Update(float deltaTime) {
     ImageButton::Update(deltaTime);
-    if (getPlayScene()->GetMoney() >= money) {
+    if (getPlayScene()->GetDP() >= money) {
         Enabled = true;
         Base.Tint = Turret.Tint = al_map_rgba(255, 255, 255, 255);
     } else {

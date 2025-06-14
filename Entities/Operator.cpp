@@ -28,6 +28,7 @@ void Operator::Deploy(float x, float y, float z, EntityDirection direction)
     Position.z = z;
     Preview = false;
     Enabled = true;
+    //Flip if direction is Left
     //this->direction = direction;
     state->addAnimation(0, "Start", false, 0);
     state->addAnimation(0, "Idle", true, 0);
@@ -54,6 +55,8 @@ void Operator::Update(float delta)
 {
     Entity::Update(delta);
     if (Preview) {
+        if (direction == Left) skeleton->setScaleX(Scale.x);
+        else skeleton->setScaleX(-Scale.x);
         RangePreview.clear();
         for (Engine::Point it : getRange()) {
             PlayScene* playScene = GetPlayScene();
@@ -68,8 +71,22 @@ void Operator::Update(float delta)
     //Find enemies
     enemiesInRange.clear();
     std::vector<Enemy*> enemies = GetPlayScene()->FieldGroup->GetFromBillboard<Enemy>();
-    auto range = getRange();
+
+    //Get blocked enemies
     for (Enemy* e : enemies) {
+        //Dont block them if they are dying
+        if (e->shouldDie || e->state->getCurrent(0)->getAnimation()->getName() == "Die") continue;
+        if (!(e->tileType & atkType)) continue; //Airborne enemies
+        if (Blocking.size() == stat.GetBlockCount()) 
+            break;
+        if (e->GetCurrentTile() == GetCurrentTile()) {
+            Blocking.insert(e);
+            e->blockedBy = this;
+        }
+    }
+    for (Enemy* e : enemies) {
+        if (!(e->tileType & atkType)) continue; //Airborne enemies
+        if (Blocking.find(e) != Blocking.end()) continue;
         for (Engine::Point p : getRange()) {
             if (p == e->GetCurrentTile() && e->stat.GetHP() > 0) {
                 enemiesInRange.push_back(e);
@@ -79,6 +96,18 @@ void Operator::Update(float delta)
     }
     //Sort enemies by their distance to objective
     std::sort(enemiesInRange.begin(), enemiesInRange.end(), [](Enemy* a, Enemy* b) {return a->reachEndTime < b->reachEndTime;});
+    //Prioritize blocking enemy
+    for(Enemy* e : Blocking)
+        enemiesInRange.insert(enemiesInRange.begin(), e);
 }
 
 void Operator::IsClickedOn(){}
+
+void Operator::OnDie()
+{
+    Entity::OnDie();
+    for (Enemy* e : Blocking) {
+        e->blockedBy = nullptr;
+    }
+    Blocking.clear();
+}

@@ -3,13 +3,12 @@
 
 #include <string>
 #include <vector>
+#include <set>
 
 #include "Entity.hpp"
 #include "Enemy.hpp"
 
 #include <Scene/PlayScene.hpp>
-
-//Amiya, Necrass, Reed2, Wisadel, Theresa (Damage in range), Kaltsit
 
 class Operator : public Entity {
 	std::vector<Engine::Point> RangePreview;
@@ -17,6 +16,7 @@ protected:
     virtual std::vector<Engine::Point> getRange();
 public:
 	std::vector<Enemy*> enemiesInRange;
+	std::set<Enemy*> Blocking;
 	bool Preview = true;
 	bool Enabled = false;
 	mutable EntityDirection direction;
@@ -32,4 +32,5 @@ public:
 	virtual void Draw() const;
 	virtual void Update(float delta);
 	virtual void IsClickedOn();
+	virtual void OnDie();
 };
