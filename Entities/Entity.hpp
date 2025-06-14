@@ -23,21 +23,18 @@ class Stats {
     int maxHp = 0;
     int atk = 0;
     int def = 0;
+    int res = 0;
     float speed = 0;
 public:
-    Stats(int hp, int atk, int def, float speed) :
-        hp(hp), maxHp(hp), def(def), atk(atk), speed(speed) { };
+    Stats(int hp, int atk, int def, int res, float speed) :
+        hp(hp), maxHp(hp), def(def), atk(atk), res(res), speed(speed) { };
 
-    int GetHP() const { return hp; };
-    void SetHP(int to) { hp = std::max(0, to); };
-    int GetMaxHP() const { return maxHp; };
-    void SetMaxHP(int to) { maxHp = std::max(0, to); };
-    int GetDef() const { return def; }
-    void SetDef(int to) { def = std::max(0, to); };
-    int GetAtk() const { return atk; }
-    void SetAtk(int to) { atk = std::max(0, to); };
-    float GetSpeed() const { return speed; }
-    void SetSpeed(float to) { speed = std::max(0.f, to); };
+    int GetHP() const { return hp; }; void SetHP(int to) { hp = std::max(0, to); };
+    int GetMaxHP() const { return maxHp; }; void SetMaxHP(int to) { maxHp = std::max(0, to); };
+    int GetDef() const { return def; }; void SetDef(int to) { def = std::max(0, to); };
+    int GetRes() const { return res; }; void SetRes(int to) { res = std::max(0, to); };
+    int GetAtk() const { return atk; }; void SetAtk(int to) { atk = std::max(0, to); };
+    float GetSpeed() const { return speed; }; void SetSpeed(float to) { speed = std::max(0.f, to); };
 };
 
 enum EntityDirection{Down, Right, Up, Left};
@@ -57,6 +54,7 @@ public:
     enum AttackType { Ground = 0b1, Air = 0b10, Both = 0b11 };
     enum DamageType { Physical = 0b1, Arts = 0b10 };
     TileType tileType;
+    DamageType dmgType;
 
     Entity(std::string skel, std::string atlas, float x, float y, float z, Stats stat);
     Engine::Point GetCurrentTile() const;
@@ -95,4 +93,11 @@ class Damage : public Effect {
 public:
     Damage(Entity* from, Entity* to);
     void effect();
+};
+
+class Block : public Effect {
+    float prevSpd;
+    Block(Entity* from, Entity* to);
+    void effect();
+    void after();
 };

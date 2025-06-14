@@ -2,9 +2,10 @@
 #include "Engine/LOG.hpp"
 
 Amiya::Amiya() :
-	Operator("amiya/char_002_amiya.skel", "amiya/char_002_amiya.atlas", Stats( 1059, 442, 93, 0), 20, 70)
+	Operator("amiya/char_002_amiya.skel", "amiya/char_002_amiya.atlas", Stats( 1059, 442, 93, 15, 0), 20, 70)
 {
 	tileType = TILE_HIGH;
+	dmgType = Arts;
 }
 
 std::string Amiya::getIconPath() {

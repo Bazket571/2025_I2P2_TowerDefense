@@ -79,6 +79,8 @@ void PlayScene::Initialize() {
     AddNewControlObject(UIGroup = new Group());
     AddNewControlObject(OperatorButtons = new Group());
     operators.push_back({ 0, new Amiya() });
+    operators.push_back({ 0, new Logos() });
+
     std::sort(operators.begin(), operators.end(), 
         [](std::pair<float, Operator*> a, std::pair<float, Operator*> b) {return a.second->cost > b.second->cost;});
     //FieldGroup->AddNewControlBillboard(amiyi); //Low ground offset
@@ -241,6 +243,7 @@ void PlayScene::OnMouseUp(int button, int mx, int my) {
             SpeedMult = PrevSpeedMult;
             operators[curSelectIndex].first = -1;
             curSelectIndex = -1;
+            mouseDownPos = { -1, -1, 0 };
             OnMouseMove(mx, my);
         }
     }
@@ -413,9 +416,12 @@ void PlayScene::ConstructUI() {
 
 void PlayScene::UIBtnClicked(std::vector<std::pair<float, Operator*>>::iterator it) {
     if (preview)
-        UIGroup->RemoveObject(preview->GetObjectIterator());
+        FieldGroup->GetBillboards()->RemoveControlObject(preview->GetControlIterator(), preview->GetObjectIterator());
     if (dynamic_cast<Amiya*>(it->second)) {
         preview = new Amiya();
+    }
+    else if (dynamic_cast<Logos*>(it->second)) {
+        preview = new Logos();
     }
     if (!preview)
         return;

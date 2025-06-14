@@ -28,6 +28,7 @@ void Operator::Deploy(float x, float y, float z, EntityDirection direction)
     Position.z = z;
     Preview = false;
     Enabled = true;
+    //Flip if direction is Left
     //this->direction = direction;
     state->addAnimation(0, "Start", false, 0);
     state->addAnimation(0, "Idle", true, 0);
@@ -54,6 +55,8 @@ void Operator::Update(float delta)
 {
     Entity::Update(delta);
     if (Preview) {
+        if (direction == Left) skeleton->setScaleX(Scale.x);
+        else skeleton->setScaleX(-Scale.x);
         RangePreview.clear();
         for (Engine::Point it : getRange()) {
             PlayScene* playScene = GetPlayScene();
