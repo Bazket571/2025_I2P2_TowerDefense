@@ -4,7 +4,8 @@
 O3::O3(float x, float y, float z) :
 	Enemy("O3/enemy_1000_gopro_3.skel", "O3/enemy_1000_gopro_3.atlas", x, y, z, Stats(3000, 370, 0, 0, 1.9))
 {
-	state->setAnimation(0, "Move", true);
+	state->setAnimation(0, "Run_Begin", false);
+	state->addAnimation(0, "Run_Loop", true, 0);
 	tileType = TILE_LOW;
 }
 
