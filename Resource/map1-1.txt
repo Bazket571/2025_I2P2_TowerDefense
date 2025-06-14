@@ -1,7 +1,5 @@
 HHHHHHHHHHHHHHHHHH
-H0lllllllllllllllH
-HhhhhhhhhhhhhhhhlH
-HllllllllllllllllH
-HlhhhhhhhhhhhhhhhH
-HllllllllllllllllH
-HHHHHHHHHHHHHHHHoH
+0lhllllllllllllllo
+HlhlhhhhhhhhhhhhhH
+Hllllllllllllllll1
+HhhhhhhhhhhhhhhhhH
