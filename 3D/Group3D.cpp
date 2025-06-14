@@ -279,7 +279,7 @@ void Group3D::Draw() const
     al_set_render_state(ALLEGRO_DEPTH_TEST, false);    
     al_set_target_backbuffer(al_get_current_display());
     al_draw_bitmap(render.get(), 0, 0, 0);
-    al_draw_scaled_bitmap(depthbuffer.get(), 0, 0, al_get_bitmap_width(depthbuffer.get()), al_get_bitmap_height(depthbuffer.get()), 0, 0, al_get_bitmap_width(depthbuffer.get()) / 4, al_get_bitmap_height(depthbuffer.get()) / 4, 0);
+    //al_draw_scaled_bitmap(depthbuffer.get(), 0, 0, al_get_bitmap_width(depthbuffer.get()), al_get_bitmap_height(depthbuffer.get()), 0, 0, al_get_bitmap_width(depthbuffer.get()) / 4, al_get_bitmap_height(depthbuffer.get()) / 4, 0);
 }
 
 //Manually handle billboard updates

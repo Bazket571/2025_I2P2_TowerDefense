@@ -44,7 +44,7 @@ std::vector<Engine::Point> Logos::getRangeDeltas() const
 
 void Logos::OnAttack()
 {
-
+	if (enemiesInRange.empty()) return;
 	Enemy* target = enemiesInRange[0];
 	AddEffect(new Damage(this, target));
 }

@@ -69,7 +69,7 @@ public:
     Operator *preview;
     std::vector<std::vector<int>> mapState;
     std::vector<std::vector<int>> mapDistance;
-    std::list<std::pair<int, float>> enemyWaveData;
+    std::list<std::pair<std::string, float>> enemyWaveData;
     std::list<int> keyStrokes;
     static Engine::Point GetClientSize();
     explicit PlayScene() = default;

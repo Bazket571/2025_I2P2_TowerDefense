@@ -46,17 +46,15 @@ std::vector<Engine::Point> Amiya::getRangeDeltas() const
 
 void Amiya::OnAttack()
 {
+	if (enemiesInRange.empty()) return;
 	Enemy* target = enemiesInRange[0];
 	AddEffect(new Damage(this, target));
-	Engine::LOG(Engine::INFO) << "Amiya attack";
 }
 
 void Amiya::OnStart()
 {
-	Engine::LOG(Engine::INFO) << "Amiya start";
 }
 
 void Amiya::IsClickedOn()
 {
-	Engine::LOG(Engine::INFO) << "Amiya clicked";
 }

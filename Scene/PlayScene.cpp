@@ -62,8 +62,8 @@ void PlayScene::Initialize() {
     keyStrokes.clear();
     ticks = 0;
     deathCountDown = -1;
-    lives = 10;
-    money = 150;
+    lives = 3;
+    money = 20;
     SpeedMult = 1;
     score = 0;
     // Add groups from bottom to top.
@@ -142,20 +142,10 @@ void PlayScene::Update(float deltaTime) {
         enemyWaveData.pop_front();
         const Engine::Point SpawnCoordinate = Engine::Point(SpawnGridPoint.x * BlockSize, SpawnGridPoint.y * BlockSize);
         Enemy *enemy = nullptr;
-        switch (current.first) {
-            case 1:
-                //EnemyGroup->AddNewObject(enemy = new SoldierEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
-                FieldGroup->AddNewBillboard(enemy = new Slime(SpawnCoordinate.x, SpawnCoordinate.y,0));
-                break;
-            // TODO HACKATHON-3 (2/3): Add your new enemy here.
-            case 2:
-                //EnemyGroup->AddNewObject(enemy = new PlaneEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
-                break;
-            case 3:
-                //EnemyGroup->AddNewObject(enemy = new TankEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
-                break;
-            default:
-                continue;
+        //TODO Add enemy here
+        if (current.first == "slime") {
+            //EnemyGroup->AddNewObject(enemy = new SoldierEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
+            FieldGroup->AddNewBillboard(enemy = new Slime(SpawnCoordinate.x, SpawnCoordinate.y, 0));
         }
         if (enemy != nullptr) {
             enemy->UpdatePath(mapDistance);
@@ -358,7 +348,8 @@ void PlayScene::ReadMap()
 void PlayScene::ReadEnemyWave() {
     std::string filename = std::string("Resource/enemy") + std::to_string(MapId) + ".txt";
     // Read enemy file.
-    float type, wait, repeat;
+    std::string type;
+    float wait, repeat;
     enemyWaveData.clear();
     std::ifstream fin(filename);
     while (fin >> type && fin >> wait && fin >> repeat) {
