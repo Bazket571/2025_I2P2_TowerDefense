@@ -332,7 +332,7 @@ void PlayScene::ReadMap()
     for (int i = 0; i < MapHeight; i++) {
         for (int j = 0; j < MapWidth; j++) {
             mapState[i][j] = mapData[i * MapWidth + j];
-            Engine::Point scale = { (float)BlockSize/2, (float)BlockSize/2, 1 };
+            Engine::Point scale = { (float)BlockSize/2, (float)BlockSize/2, (float)BlockSize / 2 };
             //TODO Map has only 2 states, change this
             switch(mapState[i][j]){
                 case TILE_LOW:
