@@ -1,0 +1,25 @@
+back background/A1-1.png
+play 1
+speRight char/Medic.png Medic
+dia Amiya! Don't panic, just calm down first!
+speLeft char/Amiya.png Amiya
+dia Ah... S-sorry.
+speRight char/Medic.png Medic
+dia You always get so flustered when it comes to the doctor.
+dia But, Amiya, if the worst came to pass... what would you do then?
+speLeft char/Amiya.png Amiya	
+dia ...I'm already mentally prepared for that. We would continue to follow the plan.
+speRight char/Medic.png Medic
+dia ...I understand. Anyway, I'll do what you requested.
+speLeft char/Amiya.png Amiya
+dia All right... I appreciate it.
+dia About the Doctor...
+speRight char/Medic.png Medic
+dia Don't worry, Amiya. All the vital signs are stable now.
+dia I'll do one more inspection, just for you.
+speLeft char/Amiya.png Amiya
+dia Thank you... Thank you very much!
+speRight char/Medic.png Medic
+dia Mhm. Breathing is slightly shallow, but blood pressure is normal. 
+dia There should be no cause for concern.
+end

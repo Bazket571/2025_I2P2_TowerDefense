@@ -286,7 +286,7 @@ void PlayScene::AddScore(int point)
 }
 void PlayScene::ReadMap()
 {
-    std::string filename = std::string("Resource/map") + std::to_string(MapId) + ".txt";
+    std::string filename = std::string("Resource/map") + MapId + ".txt";
     // Read map file.
     //TODO MapData has 2 states only, change this
     std::vector<int> mapData;
@@ -353,7 +353,7 @@ void PlayScene::ReadMap()
     //Change blockSize according to aspect ratio
 }
 void PlayScene::ReadEnemyWave() {
-    std::string filename = std::string("Resource/enemy") + std::to_string(MapId) + ".txt";
+    std::string filename = std::string("Resource/enemy") + MapId + ".txt";
     // Read enemy file.
     float type, wait, repeat;
     enemyWaveData.clear();

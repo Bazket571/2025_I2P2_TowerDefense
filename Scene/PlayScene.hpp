@@ -45,7 +45,7 @@ public:
     static Engine::Point SpawnGridPoint;
     static Engine::Point EndGridPoint;
     static int score;
-    int MapId;
+    std::string MapId;
     float ticks;
     float deathCountDown;
     //Operators and their re-deploy timer
