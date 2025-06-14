@@ -25,6 +25,7 @@ class Stats {
     int def = 0;
     int res = 0;
     float speed = 0;
+    int blockCount = 1;
 public:
     Stats(int hp, int atk, int def, int res, float speed) :
         hp(hp), maxHp(hp), def(def), atk(atk), res(res), speed(speed) { };
@@ -35,6 +36,7 @@ public:
     int GetRes() const { return res; }; void SetRes(int to) { res = std::max(0, to); };
     int GetAtk() const { return atk; }; void SetAtk(int to) { atk = std::max(0, to); };
     float GetSpeed() const { return speed; }; void SetSpeed(float to) { speed = std::max(0.f, to); };
+    int GetBlockCount() const { return blockCount; } void SetBlockCoung(int to) { blockCount = std::max(0, to); };
 };
 
 enum EntityDirection{Down, Right, Up, Left};

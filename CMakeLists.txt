@@ -110,7 +110,7 @@ add_executable(2025_I2P2_TowerDefense
 
     "Entities/Operators/Amiya.cpp" 
     "Entities/Operators/Logos.cpp" 
-)
+ "Entities/Operators/Necras.cpp" "Entities/Operators/Reed2.cpp" "Entities/Operators/Wisadel.cpp" "Entities/Operators/Cetsyr.cpp")
 
 #add_custom_command(TARGET 2025_I2P2_TowerDefense POST_BUILD
 #                  COMMAND ${CMAKE_COMMAND} -E copy_directory

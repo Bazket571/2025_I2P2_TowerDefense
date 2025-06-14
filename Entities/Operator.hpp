@@ -18,6 +18,7 @@ public:
 	bool Preview = true;
 	bool Enabled = false;
 	mutable EntityDirection direction;
+	std::vector<Enemy*> Blocking;
 	int cost = 0;
 	float redeployTime;
 	//Must be inherited

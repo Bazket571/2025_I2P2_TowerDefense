@@ -4,6 +4,7 @@ class Enemy : public Entity {
 	std::vector<Engine::Point> path;
 public:
 	float reachEndTime;
+	Operator* blockedBy;
 
 	Enemy(std::string skel, std::string atlas, float x, float y, float z, Stats stat);
 	virtual void OnAttack() = 0;

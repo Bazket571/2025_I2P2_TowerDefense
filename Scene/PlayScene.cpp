@@ -80,6 +80,10 @@ void PlayScene::Initialize() {
     AddNewControlObject(OperatorButtons = new Group());
     operators.push_back({ 0, new Amiya() });
     operators.push_back({ 0, new Logos() });
+    operators.push_back({ 0, new Necrass() });
+    operators.push_back({ 0, new Reed2() });
+    operators.push_back({ 0, new Wisadel() });
+    operators.push_back({ 0, new Cetsyr() });
 
     std::sort(operators.begin(), operators.end(), 
         [](std::pair<float, Operator*> a, std::pair<float, Operator*> b) {return a.second->cost > b.second->cost;});
@@ -415,6 +419,18 @@ void PlayScene::UIBtnClicked(std::vector<std::pair<float, Operator*>>::iterator 
     }
     else if (dynamic_cast<Logos*>(it->second)) {
         preview = new Logos();
+    }
+    else if (dynamic_cast<Necrass*>(it->second)) {
+        preview = new Necrass();
+    }
+    else if (dynamic_cast<Reed2*>(it->second)) {
+        preview = new Reed2();
+    }
+    else if (dynamic_cast<Wisadel*>(it->second)) {
+        preview = new Wisadel();
+    }
+    else if (dynamic_cast<Cetsyr*>(it->second)) {
+        preview = new Cetsyr();
     }
     if (!preview)
         return;
