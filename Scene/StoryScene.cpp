@@ -11,7 +11,7 @@
 #include "UI/Component/ImageButton.hpp"
 #include "UI/Component/Label.hpp"
 #include "StoryScene.h"
-
+bool StoryScene::Intro = false;
 void StoryScene::Initialize() {
     dialogue = new Engine::Label("","DepartureMono-Regular.otf",20,100,700,255,255,255);
     dialogue->Size.x = 1400;
@@ -56,7 +56,7 @@ void StoryScene::OnKeyDown(int keyCode)
     }
     if (keyCode == ALLEGRO_KEY_ESCAPE) {
         cmdFile.close();
-        if (StageID == "1-4") {
+        if (StageID == "1-3B" || StageID == "Intro") {
             IScene::Terminate();
             Engine::GameEngine::GetInstance().ChangeScene("stage-select");
             return;
@@ -105,7 +105,7 @@ void StoryScene::ReadAndExecute()
         cmdFile >> imgFile;
         std::getline(cmdFile, speLeft2);
         speaker->Text = speLeft2;
-        character->bmp = Engine::Resources::GetInstance().GetBitmap("char/" + imgFile + ".png");
+        character4->bmp = Engine::Resources::GetInstance().GetBitmap("char/" + imgFile + ".png");
         shade->Visible = false;
         character4->Visible = true;
         speaker->Visible = true;
@@ -135,7 +135,7 @@ void StoryScene::ReadAndExecute()
     }
     else if (cmd == "end") {
         cmdFile.close();
-        if (StageID == "1-4") {
+        if (StageID == "1-3B" || StageID == "Intro") {
             IScene::Terminate();
             Engine::GameEngine::GetInstance().ChangeScene("stage-select");
             return;

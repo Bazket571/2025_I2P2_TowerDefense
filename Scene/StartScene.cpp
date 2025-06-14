@@ -16,7 +16,7 @@
 #include "Scene/StartScene.h"
 #include "UI/Component/ImageButton.hpp"
 #include "UI/Component/Label.hpp"
-#include "UI/Component/Slider.hpp"
+#include "StoryScene.h"
 
 // TODO HACKATHON-2 (1/3): You can imitate the 2 files: 'StartScene.hpp', 'StartScene.cpp' to implement your SettingsScene.
 void StartScene::Initialize() {
@@ -56,6 +56,13 @@ void StartScene::Terminate() {
     IScene::Terminate();
 }
 void StartScene::PlayOnClick(int stage) {
+    if (!StoryScene::Intro) {
+        StoryScene::Intro = true;
+        StoryScene* scene = dynamic_cast<StoryScene*>(Engine::GameEngine::GetInstance().GetScene("story"));
+        scene->StageID = "Intro";
+        Engine::GameEngine::GetInstance().ChangeScene("story");
+        return;
+    }
     Engine::GameEngine::GetInstance().ChangeScene("stage-select");
 }
 void StartScene::SettingsOnClick(int stage) {

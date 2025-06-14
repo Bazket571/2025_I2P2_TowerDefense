@@ -2,39 +2,39 @@ back intro
 thanos
 spamton
 speRight Necrass/smile3 Eblana
-dia "Oh, los peligros he sorteado…" 
+dia "Oh, los peligros he sorteado..." 
 Doctor a
 dia Eblana thinks she has found a new favourite song recently. A pretty catchy, romantic ancient relic from Iberia. Well, her subordinates told her that this thing is ancient, but judging from the unique beat drops, and how exactly this piece of music came into her possession, Eblana doubted otherwise.
 dia That doesn't really affect her good mood, however. She shifts on the makeshift couch, leaning her head back. Some chatting words flow into her ears from outside the fabric of her tent.
 speRight Necrass/smile3 Eblana
-dia "Oh, he cumplido mi contrato…"
-speLeft NPC/soldier Soldier1
-dia "The Leader is going on a trip with… Uh, you know, the other Leader?"
-speLeft2 NPC/soldier2 Soldier2
+dia "Oh, he cumplido mi contrato..."
+speLeft NPC/soldier Soldier 1
+dia "The Leader is going on a trip with... Uh, you know, the other Leader?"
+speLeft2 NPC/soldier2 Soldier 2
 dia "Yeah, the other Leader brought her own Taran forces too."
-speLeft NPC/soldier Soldier1
+speLeft NPC/soldier Soldier 1
 dia "Are they fighting? I'm kind' worried, y'know. Internal ruptures gon' put us into a more vulnerable position than we already are."
-speLeft2 NPC/soldier2 Soldier2
+speLeft2 NPC/soldier2 Soldier 2
 dia "From what I observe, no. The Brigadier said nothing either."
 speRight Necrass/smile3 Eblana
-dia "Honrado y preparado, visto de negro siempre a tu lado…"
-speLeft2 NPC/soldier2 Soldier2
+dia "Honrado y preparado, visto de negro siempre a tu lado..."
+speLeft2 NPC/soldier2 Soldier 2
 dia "Leader seemed pretty cheerful with her, err, sister by her side. She sticks to her side very often."
-speLeft NPC/soldier Soldier1
+speLeft NPC/soldier Soldier 1
 dia "That's good, ain't it? We get stronger now with them united."
-speLeft NPC/soldier2 Soldier2
-dia "Oh, bu' I recall the Brigadier sayin' someth'n along the line of ‘the other Leader won't be staying for lo—"
+speLeft NPC/soldier2 Soldier 2
+dia "Oh, bu' I recall the Brigadier sayin' someth'n along the line of 'the other Leader won't be staying for lo—"
 Doctor a
 dia A gentle voice pries its way into the conversation. Eblana likes hearing the soft edges around its edges, sounding like herself, but not quite.
 dia Their shared accent puts a smile on her face as she rolls to fully lie on top of the couch, her heels on one of the armrests.
 speLeft2 Reed/normal Reed
 dia "Gentlemen."
-speLeft NPC/soldier2 Soldier2
+speLeft NPC/soldier2 Soldier 2
 dia "Leader!" The soldier's voices ring out in surprise.
 speLeft2 Reed/normal Reed
 dia "Excuse me."
 speRight Necrass/smile3 Eblana
-dia "Palomas vuelan en el cielo alto…"
+dia "Palomas vuelan en el cielo alto..."
 Doctor a
 dia Loughshinny pushes her way into Eblana's tent, the black gloves on her right hand standing out against the withered green of the fabric. Eblana feels her own eyes narrow in a welcoming smile.
 thanos

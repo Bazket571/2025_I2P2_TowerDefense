@@ -35,7 +35,7 @@ dia She tries to focus, chasing that hovering hint of Loughshinny's presence gen
 speRight Necrass/smile3 Eblana
 dia "...lana."
 Doctor a
-dia Such an adorable thing that ball of warmth is. She can roughly estimate the distance from herself to where Loughshinny is. It's… alarmingly close?
+dia Such an adorable thing that ball of warmth is. She can roughly estimate the distance from herself to where Loughshinny is. It's... alarmingly close?
 speLeft Reed/sad Reed
 dia "Eblana."
 Doctor a 
@@ -66,13 +66,13 @@ Doctor a
 dia She is letting her guard down way too soon. Eblana muses to herself, biting back her simmering laughter at her sister's relief.
 Doctor a
 dia Eblana hops down from the rock she is sitting on, and grabs Reed's hand. That startles the blooming respite budding at the corner of her sister's mouth away. 
-dia She might need to restrain herself from enjoying disrupting her poor Loughshinny's happiness at one point – teasing her feels way too fun not to do, and it's so very easy to overdo that.
+dia She might need to restrain herself from enjoying disrupting her poor Loughshinny's happiness at one point - teasing her feels way too fun not to do, and it's so very easy to overdo that.
 speLeft Reed/suprised Reed
 dia "Eblana?"
 speRight Necrass/smile1 Eblana
 dia "Come, I want some fresh roast for dinner."
 speLeft Reed/sad Reed
-dia "You–"
+dia "You-"
 speRight Necrass/smile1 Eblana
 dia "Everyone should eat well too, don't you think, Loughshinny?"
 speLeft Reed/serious Reed

@@ -23,5 +23,6 @@ class StoryScene : public Engine::IScene {
     void OnKeyDown(int keyCode) override;
     void ReadAndExecute();
 public:
+    static bool Intro;
     std::string StageID;
 };
