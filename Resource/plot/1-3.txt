@@ -28,12 +28,12 @@ dia Soon though, the two moons will appear on the canva of the night sky. And th
 dia Out of all the people on this land, Taran, Victorian, Yan and others alike, her little sister Loughshinny is still the best at capturing her attention.
 dia Maybe there really is something artistic about the bond running through their blood.
 speRight Necrass/smile3 Eblana
-dia "…na."
+dia "...na."
 speRight Necrass/closeEye Eblana
 Doctor a
 dia She tries to focus, chasing that hovering hint of Loughshinny's presence gently nudging inside her.
 speRight Necrass/smile3 Eblana
-dia "…lana."
+dia "...lana."
 Doctor a
 dia Such an adorable thing that ball of warmth is. She can roughly estimate the distance from herself to where Loughshinny is. It's… alarmingly close?
 speLeft Reed/sad Reed
@@ -53,7 +53,7 @@ dia And she still has to ask. Such a worrywart.
 speRight Necrass/smile1 Eblana
 dia "I am feeling delightful."
 speLeft Reed/sad Reed
-dia "…"
+dia "..."
 Doctor a
 dia Reed doesn't flinch, but she reluctantly asks, since Eblana's amusement usually spells trouble
 speLeft Reed/sad Reed
@@ -61,7 +61,7 @@ dia "And why is that?"
 speRight Necrass/smile1 Eblana
 dia "Dinner time is coming."
 speLeft Reed/serious Reed
-dia "… Oh."
+dia "...Oh."
 Doctor a
 dia She is letting her guard down way too soon. Eblana muses to herself, biting back her simmering laughter at her sister's relief.
 Doctor a
@@ -76,11 +76,11 @@ dia "You–"
 speRight Necrass/smile1 Eblana
 dia "Everyone should eat well too, don't you think, Loughshinny?"
 speLeft Reed/serious Reed
-dia "…"
+dia "..."
 Doctor a
 dia And as simple as that, Reed says nothing more, just squeezing her hand to pull her back, insistent on being the one at the front.
 dia The kind of patients like Eblana is the one that Reed dislikes the most: Stubborn, neglectful, and taking their own health way too lightly. She is confident in convincing her patients, but convincing Eblana?
 dia That is as hard as negotiating with the Victorian nobles for more lands.
 dia If she cannot convince her, then she will stick with protecting her for now. And that is her choice. Eblana can do nothing about it.
-dia As if reading her sister's mind, Eblana bursts into laughter right beside her
+dia As if reading her sister's mind, Eblana bursts into laughter right beside her.
 end

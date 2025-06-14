@@ -37,6 +37,8 @@
 #include "Entities/Operators.hpp"
 #include "UI/Video.hpp"
 #include "Engine/Collider.hpp"
+#include "StoryScene.h"
+#include "StageSelectScene.hpp"
 
 // TODO HACKATHON-4 (1/3): Trace how the game handles keyboard input.
 // TODO HACKATHON-4 (2/3): Find the cheat code sequence in this file.
@@ -262,7 +264,7 @@ void PlayScene::Hit() {
     lives--;
     //UILives->Text = "Life " + std::to_string(lives);
     if (lives <= 0) {
-        Engine::GameEngine::GetInstance().ChangeScene("lose");
+        Engine::GameEngine::GetInstance().ChangeScene("stage-select");
     }
 }
 int PlayScene::GetDP() const {
@@ -391,7 +393,16 @@ void PlayScene::UpdateEnemyWave(float deltaTime)
     if (!FieldGroup->GetFromBillboard<Enemy>().empty()) {
         ShouldWin = false;
     }
-    if(ShouldWin) Engine::GameEngine::GetInstance().ChangeScene("win");
+    if (ShouldWin) {
+        StageSelectScene::isComplete[MapId] = true;
+        if (MapId == "1-3") {
+            StoryScene* scene = dynamic_cast<StoryScene*>(Engine::GameEngine::GetInstance().GetScene("story"));
+            scene->StageID = "1-4";
+            Engine::GameEngine::GetInstance().ChangeScene("story");
+            return;
+        }
+        Engine::GameEngine::GetInstance().ChangeScene("stage-select");
+    }
     for (int i = 0; i < SpawnCount; i++) {
         ticks[i] += deltaTime;
         if (enemyWaveData[i].empty()) continue;

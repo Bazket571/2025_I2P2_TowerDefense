@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
 	game.AddNewScene("story", new StoryScene());
 
     // TODO HACKATHON-1 (1/1): Change the start scene
-	game.Start("story", 60, 1600, 832);
+	game.Start("start", 60, 1600, 832);
 	return 0;
 }
 /* vim: set sts=3 sw=3 et: */
