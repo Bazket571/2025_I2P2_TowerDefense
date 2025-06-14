@@ -326,7 +326,7 @@ void PlayScene::AddScore(int point)
 }
 void PlayScene::ReadMap()
 {
-    std::string filename = std::string("Resource/map") + MapId + ".txt";
+    std::string filename = std::string("Resource/map" + MapId + ".txt");
     // Read map file.
     //TODO MapData has 2 states only, change this
     std::vector<int> mapData;

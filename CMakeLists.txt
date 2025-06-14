@@ -110,10 +110,10 @@ add_executable(2025_I2P2_TowerDefense
     main.cpp
     "Turret/FreezeTurret.cpp")
 
-add_custom_command(TARGET 2025_I2P2_TowerDefense PRE_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy_directory
-                    ${CMAKE_SOURCE_DIR}/Resource $<TARGET_FILE_DIR:2025_I2P2_TowerDefense>/Resource)
-
+#add_custom_command(TARGET 2025_I2P2_TowerDefense PRE_BUILD
+#                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+#                    ${CMAKE_SOURCE_DIR}/Resource $<TARGET_FILE_DIR:2025_I2P2_TowerDefense>/Resource)
+file(COPY ${CMAKE_SOURCE_DIR}/Resource DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 add_subdirectory(lunasvg)
 add_subdirectory(spine-runtimes/spine-cpp spine-runtimes)
 target_link_libraries(2025_I2P2_TowerDefense lunasvg::lunasvg spine-cpp)

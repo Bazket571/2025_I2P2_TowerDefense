@@ -1,0 +1,80 @@
+back 1-3A
+speRight Necrass/smile3 Eblana
+Doctor a
+dia Eblana sits on a rock to rest, humming a melody idly to the newly recruited members of her army after the battle.
+dia In the background, her sister Loughshinny is still busy leading the soldiers to clear out the debris. The bright golden flames from the tip of her tail are very, very noticeable, carrying a warm, lively glow. Eblana feels her eyes narrow in a smile.
+speRight NPC/soldier Soldier
+speLeft Reed/serious Reed
+dia “Team 1, please shift these boulders to the furthest right corner in the back of our camp.”
+Doctor a
+dia The purple flames dance around Eblana’s fingers.
+speLeft NPC/soldier2 Soldier
+speRight Reed/serious Reed
+dia “Can the leader of team 2 come to see the medics for some emergency Oripathy treatment? I heard your subordinates talk about you getting hit by Originium shards?”
+Doctor a
+dia She leans back against the rock, refusing the Brigadier’s offered mattress. The rock underneath her seat is already covered in a layer of dry hay. It’s comfortable enough as it is.
+speRight NPC/soldier Soldier
+speLeft Reed/serious Reed
+dia “Where is team 3’s leader? He just got dragged out of the mud? Move him carefully to the riverside, please.”
+spamton
+speRight Necrass/smile2 Eblana
+Doctor a
+dia Eblana’s right eyebrow twitches a little, she rolls over onto her stomach, finally watching Reed working under the setting dusk. Her sister’s silhouette is like a tiny sun under the dome of this world.
+dia Soon though, the two moons will appear on the canva of the night sky. And that shall be the stage for Eblana.
+dia Out of all the people on this land, Taran, Victorian, Yan and others alike, her little sister Loughshinny is still the best at capturing her attention.
+dia Maybe there really is something artistic about the bond running through their blood.
+speRight Necrass/smile3 Eblana
+dia “…na.”
+speRight Necrass/closeEye Eblana
+Doctor a
+dia She tries to focus, chasing that hovering hint of Loughshinny’s presence gently nudging inside her.
+speRight Necrass/smile3 Eblana
+dia “…lana.”
+Doctor a
+dia Such an adorable thing that ball of warmth is. She can roughly estimate the distance from herself to where Loughshinny is. It’s… alarmingly close?
+speLeft Reed/sad Reed
+“Eblana.”
+Doctor a 
+dia Someone grabs her shoulder. That familiar gloved hand squeezes at it.
+speRight Necrass/smile3 Eblana
+dia “I’m here. What is it?”
+Doctor a
+dia She smiles, still not opening her eyes.
+dia There is a short silence. Loughshinny is probably trying to judge if she is alright or not. Eblana can picture the growing frown on her sister’s serious face.
+dia She giggles a little, and that seems to convince Reed to let out a sigh. Half-relieved, half-annoyed, all with a fondness that she herself doesn’t even know.
+speLeft Reed/sad Reed
+dia “I take it as you feel fine?” And she still has to ask. Such a worrywart.
+speRight Necrass/smile1 Eblana
+dia “I am feeling delightful.”
+speLeft Reed/sad Reed
+dia “…”
+Doctor a
+dia Reed doesn’t flinch, but she reluctantly asks, since Eblana’s amusement usually spells trouble
+speLeft Reed/sad Reed
+dia “And why is that?”
+speRight Necrass/smile1 Eblana
+dia “Dinner time is coming.”
+speLeft Reed/serious Reed
+dia “… Oh.”
+Doctor a
+dia She is letting her guard down way too soon. Eblana muses to herself, biting back her simmering laughter at her sister’s relief.
+Doctor a
+dia Eblana hops down from the rock she is sitting on, and grabs Reed’s hand. That startles the blooming respite budding at the corner of her sister’s mouth away. 
+dia She might need to restrain herself from enjoying disrupting her poor Loughshinny’s happiness at one point – teasing her feels way too fun not to do, and it’s so very easy to overdo that.
+speLeft Reed/suprised Reed
+dia “Eblana?”
+speRight Necrass/smile1 Eblana
+dia “Come, I want some fresh roast for dinner.”
+speLeft Reed/sad Reed
+dia “You–”
+speRight Necrass/smile1 Eblana
+dia “Everyone should eat well too, don’t you think, Loughshinny?”
+speLeft Reed/serious Reed
+dia “…”
+Doctor a
+dia And as simple as that, Reed says nothing more, just squeezing her hand to pull her back, insistent on being the one at the front.
+dia The kind of patients like Eblana is the one that Reed dislikes the most: Stubborn, neglectful, and taking their own health way too lightly. She is confident in convincing her patients, but convincing Eblana?
+dia That is as hard as negotiating with the Victorian nobles for more lands.
+dia If she cannot convince her, then she will stick with protecting her for now. And that is her choice. Eblana can do nothing about it.
+dia As if reading her sister’s mind, Eblana bursts into laughter right beside her
+end

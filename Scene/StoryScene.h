@@ -11,7 +11,10 @@ class StoryScene : public Engine::IScene {
     Engine::Image* background;
     Engine::Image* character;
     Engine::Image* character2;
+    Engine::Image* character3;
     Engine::Image* dialoguebar;
+    Engine::Label* openingline;
+    Engine::Image* shade;
     //Engine::ImageButton* skip;
     std::ifstream cmdFile;
     void Initialize() override;

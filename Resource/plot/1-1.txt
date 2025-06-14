@@ -1,6 +1,7 @@
-back A1-1
+﻿back 1-1
 Doctor a
-dia It definitely was not in Eblana’s plan to have a whole journey this year. And definitely not one with the purpose of trying to get to know her subordinates’ life better. Not getting how the people below her feel and live was something that she is fully ready to let go, not because she finds it a hassle, no. Human emotions is something she always finds intriguing, but her path to get Tara its independence is already busy enough as it is. Letting go of certain things was a necessary sacrifice, in her opinion.
+dia It definitely was not in Eblana’s plan to have a whole journey this year. And definitely not one with the purpose of trying to get to know her subordinates’ life better. Not getting how the people below her feel and live was something that she is fully ready to let go, not because she finds it a hassle, no.
+dia Human emotions is something she always finds intriguing, but her path to get Tara its independence is already busy enough as it is. Letting go of certain things was a necessary sacrifice, in her opinion.
 speLeft Reed/serious Reed
 speRight Necrass/normal Eblana
 Doctor a
@@ -48,7 +49,8 @@ speLeft Reed/closeEye Reed
 dia “...”
 Doctor a
 dia Reed goes silent, how should she reply? She doesn’t want to give this wretched tyrant of a sister her satisfaction right away by admitting her care for her. 
-dia Reed, no, Loughshinny has never been a ruthless person. And because of that, she is not fit to lead the military force of the Taran people – Dublinn. By no means her hands are clean, but she would never, and shall never kill with confidence like Eblana. She cannot convince herself to turn into an executor devoid of sympathy, and she cannot bear to turn to the option of ignoring the cries and pleas of the victims under the flames of her spear. 
+dia Reed, no, Loughshinny has never been a ruthless person. And because of that, she is not fit to lead the military force of the Taran people – Dublinn. By no means her hands are clean, but she would never, and shall never kill with confidence like Eblana.
+dia She cannot convince herself to turn into an executor devoid of sympathy, and she cannot bear to turn to the option of ignoring the cries and pleas of the victims under the flames of her spear. 
 dia Invoking such dilemmas inside her has always been one of the twisted ways that the other Leader of Dublinn – Eblana – used to entertain herself.
 speRight Necrass/smile1 Eblana 
 dia “Loughshinny, oh Loughshinny.” 
