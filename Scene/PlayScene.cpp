@@ -406,6 +406,25 @@ void PlayScene::UpdateEnemyWave(float deltaTime)
         if (current.first == "B1") {
             FieldGroup->AddNewBillboard(enemy = new Slime(SpawnCoordinate.x, SpawnCoordinate.y, 0));
         }
+        else if (current.first == "O3") {
+            FieldGroup->AddNewBillboard(enemy = new O3(SpawnCoordinate.x, SpawnCoordinate.y, 0));
+        }
+        else if (current.first == "N4") {
+            FieldGroup->AddNewBillboard(enemy = new N4(SpawnCoordinate.x, SpawnCoordinate.y, 0));
+        }
+        else if (current.first == "N5") {
+            FieldGroup->AddNewBillboard(enemy = new N5(SpawnCoordinate.x, SpawnCoordinate.y, 0));
+        }
+        else if (current.first == "N6") {
+            FieldGroup->AddNewBillboard(enemy = new N6(SpawnCoordinate.x, SpawnCoordinate.y, 0));
+        }
+        else if (current.first == "N7") {
+            FieldGroup->AddNewBillboard(enemy = new N7(SpawnCoordinate.x, SpawnCoordinate.y, 0));
+        }
+        else if (current.first == "N9") {
+            FieldGroup->AddNewBillboard(enemy = new N9(SpawnCoordinate.x, SpawnCoordinate.y, 0));
+        }
+
         if (enemy != nullptr) {
             enemy->UpdatePath(mapDistance);
             // Compensate the time lost.
