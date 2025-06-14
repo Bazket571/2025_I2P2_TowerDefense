@@ -9,8 +9,6 @@
 
 #include <Scene/PlayScene.hpp>
 
-//Amiya, Necrass, Reed2, Wisadel, Theresa (Damage in range), Logos
-
 class Operator : public Entity {
 	std::vector<Engine::Point> RangePreview;
 protected:

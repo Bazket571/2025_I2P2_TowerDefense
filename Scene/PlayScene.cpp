@@ -270,7 +270,7 @@ void PlayScene::OnKeyDown(int keyCode) {
 }
 void PlayScene::Hit() {
     lives--;
-    UILives->Text = "Life " + std::to_string(lives);
+    //UILives->Text = "Life " + std::to_string(lives);
     if (lives <= 0) {
         Engine::GameEngine::GetInstance().ChangeScene("lose");
     }
@@ -377,9 +377,11 @@ void PlayScene::UpdateOperatorUI() {
         i++;
         if (operators[i].first == -1) {
             button->Visible = false;
+            dynamic_cast<Engine::ImageButton*>(button)->Enabled = false;
             continue;
         }
         button->Visible = true;
+        dynamic_cast<Engine::ImageButton*>(button)->Enabled = true;
         Engine::Point pos = { screenSize.x - OperatorUISize * (opNo + 1), screenSize.y - OperatorUISize};
         button->Position = pos;
         opNo++;

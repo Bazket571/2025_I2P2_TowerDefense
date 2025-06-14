@@ -56,8 +56,8 @@ void Enemy::Update(float delta)
     while (remainSpeed != 0) {
         if (path.empty()) {
             // Reach end point.
-            //Hit(hp);
-            //getPlayScene()->Hit();
+            state->setAnimation(0, "Die", false);
+            GetPlayScene()->Hit();
             reachEndTime = 0;
             return;
         }
