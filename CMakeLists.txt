@@ -75,18 +75,18 @@ add_executable(2025_I2P2_TowerDefense
     Scene/WinScene.cpp
     Scene/WinScene.hpp
 
-    Turret/LaserTurret.cpp
-    Turret/LaserTurret.hpp
-    Turret/MachineGunTurret.cpp
-    Turret/MachineGunTurret.hpp
-    Turret/Turret.cpp
-    Turret/Turret.hpp
-    Turret/DefenderTurret.cpp
-    Turret/DefenderTurret.hpp
-    Turret/TurretButton.cpp
-    Turret/TurretButton.hpp
-    Turret/HomingTurret.cpp
-    Turret/HomingTurret.hpp
+    #Turret/LaserTurret.cpp
+    #Turret/LaserTurret.hpp
+    #Turret/MachineGunTurret.cpp
+    #Turret/MachineGunTurret.hpp
+    #Turret/Turret.cpp
+    #Turret/Turret.hpp
+    #Turret/DefenderTurret.cpp
+    #Turret/DefenderTurret.hpp
+    #Turret/TurretButton.cpp
+    #Turret/TurretButton.hpp
+    #Turret/HomingTurret.cpp
+    #Turret/HomingTurret.hpp
 
     UI/Animation/DirtyEffect.cpp
     UI/Animation/DirtyEffect.hpp
@@ -105,14 +105,14 @@ add_executable(2025_I2P2_TowerDefense
     UI/Component/Slider.hpp
     
     main.cpp
-    "Turret/FreezeTurret.cpp"  
+    #"Turret/FreezeTurret.cpp"  
     "3D/Object3D.cpp" "3D/Group3D.cpp" "3D/Billboard.cpp"
     "Entities/Entity.cpp" "Entities/Operator.cpp" "Entities/Enemy.cpp" "Entities/Enemies/Slime.cpp"
     "UI/Video.cpp"
 
     "Entities/Operators/Amiya.cpp" 
     "Entities/Operators/Logos.cpp" 
- "Entities/Operators/Necras.cpp" "Entities/Operators/Reed2.cpp" "Entities/Operators/Wisadel.cpp" "Entities/Operators/Cetsyr.cpp" "Entities/Operators/Shu.cpp"        )
+ "Entities/Operators/Necras.cpp" "Entities/Operators/Reed2.cpp" "Entities/Operators/Wisadel.cpp" "Entities/Operators/Cetsyr.cpp" "Entities/Operators/Shu.cpp" "Entities/Enemies/O3.cpp" "Entities/Enemies/N4.cpp" "Entities/Enemies/N5.cpp" "Entities/Enemies/N6.cpp" "Entities/Enemies/N7.cpp" "Entities/Enemies/N9.cpp" )
 
 #add_custom_command(TARGET 2025_I2P2_TowerDefense POST_BUILD
 #                  COMMAND ${CMAKE_COMMAND} -E copy_directory
