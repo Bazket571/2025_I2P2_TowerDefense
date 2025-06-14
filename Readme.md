@@ -23,7 +23,7 @@ This is my final project for the Introduction To Programming 2 course at Nationa
 - 113006238 吳君賢 (10%): Stage design, create Story Scene
 
 # External Credits
-- Nguyen Tu Phuong 阮秀鈁: Plot Chef
+- Nguyen Tu Phuong 112006106 阮秀鈁: Plot Chef
 - Nguyen Thu An: UI Designer https://www.facebook.com/siir.lancelot.2024
 
 ## Libraries
