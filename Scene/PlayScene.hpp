@@ -45,7 +45,7 @@ public:
     static std::vector<Engine::Point> SpawnGridPoint;
     static Engine::Point EndGridPoint;
     static int score;
-    int MapId;
+    std::string MapId;
     int SpawnCount;
     float DPRegenRate;
     float DPTick;
@@ -64,6 +64,7 @@ public:
     Group *EffectGroup;
     Group *UIGroup;
     Group* OperatorButtons;
+    Group* OperatorButtonsFrames;
     Engine::Label* UIDP;
     //Engine::Label *UIMoney;
     Engine::Label *UILives;

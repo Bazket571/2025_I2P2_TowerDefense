@@ -10,12 +10,13 @@
 #include <Scene/PlayScene.hpp>
 
 enum TileType {
-    TILE_LOW = 0b1,
-    TILE_HIGH = 0b10,
-    TILE_SPAWN = 0b100,
-    TILE_OBJECTIVE = 0b1000,
-    TILE_BLOCKED = 0b10000, //For roadblocks
-    TILE_OCCUPIED_TURRET = 0b100000
+    TILE_LOW             = 0b1,
+    TILE_HIGH            = 0b10,
+    TILE_SPAWN           = 0b100,
+    TILE_OBJECTIVE       = 0b1000,
+    TILE_BLOCKED         = 0b10000, //For roadblocks
+    TILE_FORBIDDEN       = 0b100000,
+    TILE_OCCUPIED_TURRET = 0b1000000
 };
 
 class Stats {

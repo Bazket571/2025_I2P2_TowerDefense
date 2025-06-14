@@ -82,6 +82,7 @@ void PlayScene::Initialize() {
     // Should support buttons.
     AddNewControlObject(UIGroup = new Group());
     AddNewControlObject(OperatorButtons = new Group());
+    AddNewControlObject(OperatorButtonsFrames = new Group());
     operators.clear();
     operators.push_back({ 0, new Amiya() });
     operators.push_back({ 0, new Logos() });
@@ -175,6 +176,7 @@ void PlayScene::OnMouseDown(int button, int mx, int my) {
     const Engine::Point mouseDownTile = Entity::GetTile(Billboard::MousePlane({ (float)mx, (float)my }, 0));
     if ((button & 1) && preview) {
         if (Engine::Collider::IsPointInRect(mouseDownTile,{ 0.f, 0.f}, { MapWidth - 1.f,MapHeight - 1.f }))
+        if (!(mapState[mouseDownTile.y][mouseDownTile.x] & (TILE_OCCUPIED_TURRET | TILE_FORBIDDEN)))
         if (mapState[mouseDownTile.y][mouseDownTile.x] & preview->tileType)
         if (mouseDownPos == Engine::Point(-1, -1, 0)) {
             mouseDownPos.x = mx;
@@ -206,7 +208,8 @@ void PlayScene::OnMouseUp(int button, int mx, int my) {
         if (mouseDownTile.x >= MapWidth || mouseDownTile.y >= MapHeight || mouseDownTile.x < 0 || mouseDownTile.y < 0) {
             return;
         }
-        if (mapState[mouseDownTile.y][mouseDownTile.x] != TILE_OCCUPIED_TURRET) {
+        //Check if allowed
+        if (!(mapState[mouseDownTile.y][mouseDownTile.x] & (TILE_OCCUPIED_TURRET|TILE_FORBIDDEN))) {
             if (!preview)
                 return;
             // Check if valid.
@@ -277,7 +280,7 @@ void PlayScene::AddScore(int point)
 void PlayScene::ReadMap()
 {
     SpawnCount = 0;
-    std::string filename = std::string("Resource/map") + std::to_string(MapId) + ".txt";
+    std::string filename = std::string("Resource/map") + MapId + ".txt";
     // Read map file.
     //TODO MapData has 2 states only, change this
     std::vector<int> mapData;
@@ -298,6 +301,8 @@ void PlayScene::ReadMap()
             switch (c) {
             case 'l': mapData.push_back(TILE_LOW); break;
             case 'h': mapData.push_back(TILE_HIGH); break;
+            case 'L': mapData.push_back(TILE_LOW | TILE_FORBIDDEN); break;
+            case 'H': mapData.push_back(TILE_HIGH | TILE_FORBIDDEN); break;
             case 'o': mapData.push_back(TILE_OBJECTIVE); break;
 
             case '\r':
@@ -334,6 +339,13 @@ void PlayScene::ReadMap()
                 case TILE_HIGH:
                     FieldGroup->AddNewObject(new Object3D("Resource/3D/TileHigh.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 4 }, scale));
                     break;
+                case TILE_LOW | TILE_FORBIDDEN:
+                    //TileMapGroup->AddNewObject(new Engine::Image("play/floor.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+                    FieldGroup->AddNewObject(new Object3D("Resource/3D/TileLow.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 2 }, scale));
+                    break;
+                case TILE_HIGH | TILE_FORBIDDEN:
+                    FieldGroup->AddNewObject(new Object3D("Resource/3D/TileHigh.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 4 }, scale));
+                    break;
                 case TILE_SPAWN:
                     SpawnGridPoint[spawnIndexOrder.front()] = Engine::Point(j, i);
                     spawnIndexOrder.pop_front();
@@ -355,7 +367,7 @@ void PlayScene::ReadMap()
     //Change blockSize according to aspect ratio
 }
 void PlayScene::ReadEnemyWave(int spawnNo) {
-    std::string filename = std::string("Resource/enemy") + std::to_string(MapId) + "$" + std::to_string(spawnNo) + ".txt";
+    std::string filename = std::string("Resource/enemy") + MapId + "$" + std::to_string(spawnNo) + ".txt";
     // Read enemy file.
     std::string type;
     float wait, repeat;
@@ -415,7 +427,7 @@ void PlayScene::UpdateOperatorUI() {
         }
         button->Visible = true;
         dynamic_cast<Engine::ImageButton*>(button)->Enabled = true;
-        Engine::Point pos = { screenSize.x - OperatorUISize * (opNo + 1), screenSize.y - OperatorUISize};
+        Engine::Point pos = { screenSize.x - OperatorUISize * (opNo + 1) - 109, screenSize.y - OperatorUISize};
         button->Position = pos;
         opNo++;
     }
@@ -426,9 +438,11 @@ void PlayScene::ConstructOperatorUI() {
     int i = 0;
     for (auto it = operators.begin(); it != operators.end(); it++) {
         std::string filepath = it->second->getIconPath();
-        auto button = new Engine::ImageButton(filepath, filepath, screenSize.x - OperatorUISize * (i++ + 1), screenSize.y - OperatorUISize, OperatorUISize, OperatorUISize);
+        Engine::Point pos = { screenSize.x - OperatorUISize * (i++ + 1) - 109, screenSize.y - OperatorUISize };
+        auto button = new Engine::ImageButton(filepath, filepath, pos.x, pos.y, OperatorUISize, OperatorUISize);
         button->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, it));
         OperatorButtons->AddNewControlObject(button);
+        OperatorButtonsFrames->AddNewControlObject(new Engine::ImageButton("Ingame/char.png", "Ingame/charhov.png", pos.x, pos.y, OperatorUISize, OperatorUISize));
     }
 }
 
@@ -438,6 +452,7 @@ void PlayScene::ConstructUI() {
     //UIGroup->AddNewObject(new Engine::Image("play/sand.png", 1280, 0, 320, 832));
     // Text
     //UIGroup->AddNewObject(new Engine::Label(std::string("Stage ") + std::to_string(MapId), "pirulen.ttf", 32, 1294, 0));
+    UIGroup->AddNewObject(new Engine::Image("Ingame/dp ui.png", scrSize.x - 109, scrSize.y - 176));
     UIGroup->AddNewObject(UIDP = new Engine::Label(std::to_string(DP), "pirulen.ttf", 24, scrSize.x - OperatorUISize, scrSize.y - OperatorUISize - 45, 255, 255, 255));
     //UIGroup->AddNewObject(UILives = new Engine::Label(std::string("Life ") + std::to_string(lives), "pirulen.ttf", 24, 1294, 88));
     //UIGroup->AddNewObject(UIScore = new Engine::Label(std::string("Score ") + std::to_string(score), "pirulen.ttf", 24, 1294, 128));
