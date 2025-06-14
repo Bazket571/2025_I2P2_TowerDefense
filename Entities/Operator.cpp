@@ -76,6 +76,7 @@ void Operator::Update(float delta)
     for (Enemy* e : enemies) {
         //Dont block them if they are dying
         if (e->shouldDie || e->state->getCurrent(0)->getAnimation()->getName() == "Die") continue;
+        if (!(e->tileType & atkType)) continue; //Airborne enemies
         if (Blocking.size() == stat.GetBlockCount()) 
             break;
         if (e->GetCurrentTile() == GetCurrentTile()) {
@@ -84,6 +85,7 @@ void Operator::Update(float delta)
         }
     }
     for (Enemy* e : enemies) {
+        if (!(e->tileType & atkType)) continue; //Airborne enemies
         if (Blocking.find(e) != Blocking.end()) continue;
         for (Engine::Point p : getRange()) {
             if (p == e->GetCurrentTile() && e->stat.GetHP() > 0) {

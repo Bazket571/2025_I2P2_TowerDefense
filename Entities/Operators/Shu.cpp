@@ -5,6 +5,7 @@ Shu::Shu() :
 	Operator("shu/char_2025_shu.skel", "shu/char_2025_shu.atlas", Stats(1991, 377, 475, 10, 0), 20, 70)
 {
 	tileType = TILE_LOW;
+	atkType = TILE_LOW;
 	dmgType = Physical;
 	stat.SetBlockCount(3);
 }
@@ -29,7 +30,7 @@ void Shu::Update(float delta)
 		}
 	}
 	else {
-		if (curAnim == "Attack") {
+		if (curAnim == "Attack_1") {
 			state->setAnimation(0, "Idle", true);
 		}
 	}

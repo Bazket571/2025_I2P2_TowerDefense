@@ -56,6 +56,7 @@ public:
     enum AttackType { Ground = 0b1, Air = 0b10, Both = 0b11 };
     enum DamageType { Physical = 0b1, Arts = 0b10 };
     TileType tileType;
+    int atkType;
     DamageType dmgType;
 
     Entity(std::string skel, std::string atlas, float x, float y, float z, Stats stat);

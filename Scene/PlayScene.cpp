@@ -36,6 +36,7 @@
 #include <Engine/spine/spine.hpp>
 #include "Entities/Operators.hpp"
 #include "UI/Video.hpp"
+#include "Engine/Collider.hpp"
 
 // TODO HACKATHON-4 (1/3): Trace how the game handles keyboard input.
 // TODO HACKATHON-4 (2/3): Find the cheat code sequence in this file.
@@ -50,7 +51,7 @@ int PlayScene::MapWidth = 0, PlayScene::MapHeight = 0;
 int PlayScene::BlockSize = 96;
 int PlayScene::score = 0;
 const int PlayScene::WindowWidth = (64*21), PlayScene::WindowHeight = 64*13;
-Engine::Point PlayScene::SpawnGridPoint = Engine::Point(0, 0);
+std::vector<Engine::Point> PlayScene::SpawnGridPoint = {};
 Engine::Point PlayScene::EndGridPoint = Engine::Point(MapWidth, MapHeight - 1);
 int PlayScene::OperatorUISize = 96;
 
@@ -60,7 +61,8 @@ Engine::Point PlayScene::GetClientSize() {
 void PlayScene::Initialize() {
     mapState.clear();
     keyStrokes.clear();
-    ticks = 0;
+    enemyWaveData.clear();
+    ticks.clear();
     deathCountDown = -1;
     lives = 3;
     DP = 10;
@@ -80,6 +82,7 @@ void PlayScene::Initialize() {
     // Should support buttons.
     AddNewControlObject(UIGroup = new Group());
     AddNewControlObject(OperatorButtons = new Group());
+    operators.clear();
     operators.push_back({ 0, new Amiya() });
     operators.push_back({ 0, new Logos() });
     operators.push_back({ 0, new Necrass() });
@@ -94,7 +97,8 @@ void PlayScene::Initialize() {
     //amiyi->Deploy(5 * BlockSize, 2 * BlockSize, 0, Right);
     //FieldGroup->AddNewControlBillboard(new Amiya(5 * BlockSize, (2) * BlockSize, 0, Right));        //High ground
     ReadMap();
-    ReadEnemyWave();
+    for(int i = 0; i < SpawnCount; i++)
+        ReadEnemyWave(i);
     mapDistance = CalculateBFSDistance();
     ConstructUI();
     //imgTarget = new Engine::Image("play/target.png", 0, 0);
@@ -169,7 +173,9 @@ void PlayScene::Draw() const {
 }
 void PlayScene::OnMouseDown(int button, int mx, int my) {
     const Engine::Point mouseDownTile = Entity::GetTile(Billboard::MousePlane({ (float)mx, (float)my }, 0));
-    if ((button & 1) && preview && (mapState[mouseDownTile.y][mouseDownTile.x] & preview->tileType)) {
+    if ((button & 1) && preview) {
+        if (Engine::Collider::IsPointInRect(mouseDownTile,{ 0.f, 0.f}, { MapWidth - 1.f,MapHeight - 1.f }))
+        if (mapState[mouseDownTile.y][mouseDownTile.x] & preview->tileType)
         if (mouseDownPos == Engine::Point(-1, -1, 0)) {
             mouseDownPos.x = mx;
             mouseDownPos.y = my;
@@ -270,10 +276,12 @@ void PlayScene::AddScore(int point)
 }
 void PlayScene::ReadMap()
 {
+    SpawnCount = 0;
     std::string filename = std::string("Resource/map") + std::to_string(MapId) + ".txt";
     // Read map file.
     //TODO MapData has 2 states only, change this
     std::vector<int> mapData;
+    std::list<int> spawnIndexOrder;
     std::ifstream fin(filename);
     MapWidth = MapHeight = 0;
     while (1) {
@@ -281,11 +289,17 @@ void PlayScene::ReadMap()
         std::getline(fin, line);
         if (line.length() == 0) break;
         for(char c : line) {
+            if (isdigit(c)) {
+                mapData.push_back(TILE_SPAWN);
+                spawnIndexOrder.push_back(c - '0');
+                SpawnCount++;
+                continue;
+            }
             switch (c) {
-            case '0': mapData.push_back(TILE_LOW); break;
-            case '1': mapData.push_back(TILE_HIGH); break;
-            case 's': mapData.push_back(TILE_SPAWN); break;
+            case 'l': mapData.push_back(TILE_LOW); break;
+            case 'h': mapData.push_back(TILE_HIGH); break;
             case 'o': mapData.push_back(TILE_OBJECTIVE); break;
+
             case '\r':
             case '\n':
                 break;
@@ -300,6 +314,9 @@ void PlayScene::ReadMap()
             throw std::ios_base::failure("Map data is not rectangular.");;
     }
     fin.close();
+    SpawnGridPoint.resize(SpawnCount);
+    ticks.resize(SpawnCount, 0);
+    enemyWaveData.resize(SpawnCount);
     // Store map in 2d array.
     // Test Change buffer depth
     //al_set_new_bitmap_depth(16);
@@ -318,7 +335,8 @@ void PlayScene::ReadMap()
                     FieldGroup->AddNewObject(new Object3D("Resource/3D/TileHigh.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 4 }, scale));
                     break;
                 case TILE_SPAWN:
-                    SpawnGridPoint = Engine::Point(j, i);
+                    SpawnGridPoint[spawnIndexOrder.front()] = Engine::Point(j, i);
+                    spawnIndexOrder.pop_front();
                     FieldGroup->AddNewObject(new Object3D("Resource/3D/TileLow.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 2 }, scale));
                     FieldGroup->AddNewObject(new Object3D("Resource/3D/RedBox.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)BlockSize / 2 }, scale));
                     break;
@@ -336,46 +354,51 @@ void PlayScene::ReadMap()
     //al_set_new_bitmap_depth(0);
     //Change blockSize according to aspect ratio
 }
-void PlayScene::ReadEnemyWave() {
-    std::string filename = std::string("Resource/enemy") + std::to_string(MapId) + ".txt";
+void PlayScene::ReadEnemyWave(int spawnNo) {
+    std::string filename = std::string("Resource/enemy") + std::to_string(MapId) + "$" + std::to_string(spawnNo) + ".txt";
     // Read enemy file.
     std::string type;
     float wait, repeat;
-    enemyWaveData.clear();
+    enemyWaveData[spawnNo].clear();
     std::ifstream fin(filename);
     while (fin >> type && fin >> wait && fin >> repeat) {
         for (int i = 0; i < repeat; i++)
-            enemyWaveData.emplace_back(type, wait);
+            enemyWaveData[spawnNo].emplace_back(type, wait);
     }
     fin.close();
 }
 void PlayScene::UpdateEnemyWave(float deltaTime)
 {
+    bool ShouldWin = true;
     // Check if we should create new enemy.
-    ticks += deltaTime;
-    if (enemyWaveData.empty()) {
-        if (FieldGroup->GetFromBillboard<Enemy>().empty()) {
-            // Win.
-            Engine::GameEngine::GetInstance().ChangeScene("win");
+    for (int i = 0; i < SpawnCount; i++) {
+        if (!enemyWaveData[i].empty()) {
+            ShouldWin = false; break;
         }
-        return;
     }
-    auto current = enemyWaveData.front();
-    if (ticks < current.second)
-        return;
-    ticks -= current.second;
-    enemyWaveData.pop_front();
-    const Engine::Point SpawnCoordinate = Engine::Point(SpawnGridPoint.x * BlockSize, SpawnGridPoint.y * BlockSize);
-    Enemy* enemy = nullptr;
-    //TODO Add enemy here
-    if (current.first == "slime") {
-        //EnemyGroup->AddNewObject(enemy = new SoldierEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
-        FieldGroup->AddNewBillboard(enemy = new Slime(SpawnCoordinate.x, SpawnCoordinate.y, 0));
+    if (!FieldGroup->GetFromBillboard<Enemy>().empty()) {
+        ShouldWin = false;
     }
-    if (enemy != nullptr) {
-        enemy->UpdatePath(mapDistance);
-        // Compensate the time lost.
-        enemy->Update(ticks);
+    if(ShouldWin) Engine::GameEngine::GetInstance().ChangeScene("win");
+    for (int i = 0; i < SpawnCount; i++) {
+        ticks[i] += deltaTime;
+        if (enemyWaveData[i].empty()) continue;
+        auto current = enemyWaveData[i].front();
+        if (ticks[i] < current.second)
+            continue;
+        ticks[i] -= current.second;
+        enemyWaveData[i].pop_front();
+        const Engine::Point SpawnCoordinate = Engine::Point(SpawnGridPoint[i].x * BlockSize, SpawnGridPoint[i].y * BlockSize);
+        Enemy* enemy = nullptr;
+        //TODO Add enemy here
+        if (current.first == "B1") {
+            FieldGroup->AddNewBillboard(enemy = new Slime(SpawnCoordinate.x, SpawnCoordinate.y, 0));
+        }
+        if (enemy != nullptr) {
+            enemy->UpdatePath(mapDistance);
+            // Compensate the time lost.
+            enemy->Update(ticks[i]);
+        }
     }
 }
 
@@ -476,8 +499,9 @@ std::pair<bool, std::vector<std::vector<int>>> PlayScene::CheckSpaceValid(int x,
     mapState[y][x] |= type;
     std::vector<std::vector<int>> map = CalculateBFSDistance();
     mapState[y][x] = map00;
-    if (map[SpawnGridPoint.y][SpawnGridPoint.x] == -1)
-        return {false, {}};
+    //Assume path is always found
+    /*if (map[SpawnGridPoint.y][SpawnGridPoint.x] == -1)
+        return {false, {}};*/
     return {true, map};
 }
 std::vector<std::vector<int>> PlayScene::CalculateBFSDistance() {

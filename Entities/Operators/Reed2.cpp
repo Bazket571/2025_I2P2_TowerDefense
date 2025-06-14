@@ -5,6 +5,7 @@ Reed2::Reed2() :
 	Operator("reed2/char_1020_reed2.skel", "reed2/char_1020_reed2.atlas", Stats(1223, 412, 88, 15, 0), 17, 70)
 {
 	tileType = TILE_HIGH;
+	atkType = TILE_LOW | TILE_HIGH;
 	dmgType = Arts;
 }
 

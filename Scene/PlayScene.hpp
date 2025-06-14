@@ -42,13 +42,14 @@ public:
     static const int WindowWidth, WindowHeight;
     static int BlockSize;
     //static const float DangerTime;
-    static Engine::Point SpawnGridPoint;
+    static std::vector<Engine::Point> SpawnGridPoint;
     static Engine::Point EndGridPoint;
     static int score;
     int MapId;
+    int SpawnCount;
     float DPRegenRate;
     float DPTick;
-    float ticks;
+    std::vector<float> ticks;
     float deathCountDown;
     //Operators and their re-deploy timer
     std::vector<std::pair<float, Operator*>> operators;
@@ -72,7 +73,7 @@ public:
     Operator *preview;
     std::vector<std::vector<int>> mapState;
     std::vector<std::vector<int>> mapDistance;
-    std::list<std::pair<std::string, float>> enemyWaveData;
+    std::vector<std::list<std::pair<std::string, float>>> enemyWaveData;
     std::list<int> keyStrokes;
     static Engine::Point GetClientSize();
     explicit PlayScene() = default;
@@ -89,7 +90,7 @@ public:
     void EarnDP(int DP);
     void AddScore(int point);
     void ReadMap();
-    void ReadEnemyWave();
+    void ReadEnemyWave(int spawnNo);
     void UpdateEnemyWave(float deltaTime);
     void UpdateOperatorUI();
     void ConstructOperatorUI();
