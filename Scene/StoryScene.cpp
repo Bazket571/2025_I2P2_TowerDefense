@@ -22,14 +22,17 @@ void StoryScene::Initialize() {
     character = new Engine::Image("char/Amiya.png",-120,25,0,0);
     character2 = new Engine::Image("char/Medic.png",550,-200,1300,1300);
     character3 = new Engine::Image("char/Medic.png", 650, 25, 0, 0);
+    character4 = new Engine::Image("char/Amiya.png", -100, 25, 0, 0);
     shade = new Engine::Image("background/shade.png", 0, 0, 1680, 920);
     character->Visible = false;
     character2->Visible = false;
+    character3->Visible = false;
     character3->Visible = false;
     AddNewObject(background);
     AddNewObject(character);
     AddNewObject(character2);
     AddNewObject(character3);
+    AddNewObject(character4);
     AddNewObject(shade);
     shade->Visible = false;
     AddNewObject(dialoguebar);
@@ -89,6 +92,17 @@ void StoryScene::ReadAndExecute()
         speaker->Visible = true;
         ReadAndExecute();
     }
+    else if (cmd == "speLeft2") {
+        std::string imgFile, speLeft2;
+        cmdFile >> imgFile;
+        std::getline(cmdFile, speLeft2);
+        speaker->Text = speLeft2;
+        character->bmp = Engine::Resources::GetInstance().GetBitmap("char/" + imgFile + ".png");
+        shade->Visible = false;
+        character4->Visible = true;
+        speaker->Visible = true;
+        ReadAndExecute();
+    }
     else if (cmd == "speRight") {
         std::string imgFile, speRight;
         cmdFile >> imgFile; //THIS SHIT IMPORTANT DUMBASS
@@ -127,6 +141,7 @@ void StoryScene::ReadAndExecute()
     else if (cmd == "thanos") {
         std::string imgFile;
         std::getline(cmdFile, imgFile);
+        character4->Visible = false;
         character3->Visible = false;
         ReadAndExecute();
     }
