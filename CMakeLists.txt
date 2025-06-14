@@ -57,9 +57,6 @@ add_executable(2025_I2P2_TowerDefense
     Engine/spine/spine.cpp
     Engine/spine/spine.hpp
 
-    Operator/Operator.cpp
-    Operator/Operator.hpp
-    
     # TODO HACKATHON-2 (3/3): Add the new scene source files here
     Scene/LoseScene.cpp
     Scene/LoseScene.hpp
@@ -73,6 +70,8 @@ add_executable(2025_I2P2_TowerDefense
     Scene/SettingsScene.hpp
     Scene/StartScene.cpp
     Scene/StartScene.h
+    Scene/StoryScene.cpp
+    Scene/StoryScene.h
     Scene/WinScene.cpp
     Scene/WinScene.hpp
 
@@ -106,15 +105,26 @@ add_executable(2025_I2P2_TowerDefense
     UI/Component/Slider.hpp
     
     main.cpp
-    "Turret/FreezeTurret.cpp")
+    "Turret/FreezeTurret.cpp"  
+    "3D/Object3D.cpp" "3D/Group3D.cpp" "3D/Billboard.cpp"
+    "Entities/Entity.cpp" "Entities/Operator.cpp" "Entities/Enemy.cpp" "Entities/Enemies/Slime.cpp"
+    "UI/Video.cpp"
 
-add_custom_command(TARGET 2025_I2P2_TowerDefense PRE_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy_directory
-                    ${CMAKE_SOURCE_DIR}/Resource $<TARGET_FILE_DIR:2025_I2P2_TowerDefense>/Resource)
+    "Entities/Operators/Amiya.cpp" 
+    "Entities/Operators/Logos.cpp" 
+ "Entities/Operators/Necras.cpp" "Entities/Operators/Reed2.cpp" "Entities/Operators/Wisadel.cpp" "Entities/Operators/Cetsyr.cpp" "Entities/Operators/Shu.cpp" "Entities/Enemies/DU1.cpp" "Entities/Enemies/DU2.cpp" "Entities/Enemies/DU3.cpp" "Entities/Enemies/DU4.cpp" "Entities/Enemies/DU12.cpp" "Entities/Enemies/DU13.cpp" "Entities/Enemies/DU14.cpp" "Entities/Enemies/DU17.cpp" "Entities/Enemies/DU38.cpp")
 
+#add_custom_command(TARGET 2025_I2P2_TowerDefense POST_BUILD
+#                  COMMAND ${CMAKE_COMMAND} -E copy_directory
+#                    ${CMAKE_SOURCE_DIR}/Resource $<TARGET_FILE_DIR:2025_I2P2_TowerDefense>/Resource)
+file(COPY ${CMAKE_SOURCE_DIR}/Resource DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+set(TINYGLTF_INSTALL OFF CACHE INTERNAL "" FORCE)
+set(TINYGLTF_BUILD_LOADER_EXAMPLE OFF CACHE INTERNAL "" FORCE)
+set(TINYGLTF_HEADER_ONLY OFF CACHE INTERNAL "" FORCE)
+add_subdirectory(tinygltf)
 add_subdirectory(lunasvg)
-add_subdirectory(spine-runtimes/spine-cpp spine-runtimes)
-target_link_libraries(2025_I2P2_TowerDefense lunasvg::lunasvg spine-cpp)
+add_subdirectory(spine-runtimes/spine-cpp)
+target_link_libraries(2025_I2P2_TowerDefense lunasvg::lunasvg spine-cpp tinygltf)
 
 IF (WIN32)
     find_package(allegro REQUIRED PATHS allegro)

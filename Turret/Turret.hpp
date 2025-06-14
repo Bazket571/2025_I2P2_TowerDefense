@@ -7,7 +7,7 @@
 #include "Engine/Sprite.hpp"
 #include "Scene/PlayScene.hpp"
 
-class Enemy;
+class Enemy2;
 class PlayScene;
 
 class Turret : public Engine::Sprite {
@@ -27,7 +27,7 @@ public:
     int tileType;
     bool Enabled = true;
     bool Preview = false;
-    Enemy *Target = nullptr;
+    Enemy2 *Target = nullptr;
     Turret(std::string imgBase, std::string imgTurret, float x, float y, float radius, int price, float coolDown, int blockCount);
     void Update(float deltaTime) override;
     void Draw() const override;

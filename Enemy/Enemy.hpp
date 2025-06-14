@@ -11,7 +11,7 @@ class Bullet;
 class PlayScene;
 class Turret;
 
-class Enemy : public Engine::Sprite {
+class Enemy2 : public Engine::Sprite {
 protected:
     std::vector<Engine::Point> path;
     float speed;
@@ -25,7 +25,7 @@ public:
     float speedMultiplier;
     std::list<Turret *> lockedTurrets;
     std::list<Bullet *> lockedBullets;
-    Enemy(std::string img, float x, float y, float radius, float speed, float hp, int money);
+    Enemy2(std::string img, float x, float y, float radius, float speed, float hp, int money);
     void Hit(float damage);
     void UpdatePath(const std::vector<std::vector<int>> &mapDistance);
     void Update(float deltaTime) override;

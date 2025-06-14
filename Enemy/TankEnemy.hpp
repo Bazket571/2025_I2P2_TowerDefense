@@ -3,7 +3,7 @@
 #include "Enemy.hpp"
 #include "Engine/Sprite.hpp"
 
-class TankEnemy : public Enemy {
+class TankEnemy : public Enemy2 {
 private:
     Sprite head;
     float targetRotation;

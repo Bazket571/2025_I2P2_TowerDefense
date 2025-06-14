@@ -1,11 +1,15 @@
 #ifndef RESOURCES_HPP
 #define RESOURCES_HPP
+#include <allegro5/allegro.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_font.h>
+#include <allegro5/allegro_primitives.h>
 #include <allegro5/bitmap.h>
+
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 namespace Engine {
     /// <summary>
@@ -20,6 +24,16 @@ namespace Engine {
         static const std::string fontPathPrefix;
         // The path prefix for loading samples.
         static const std::string samplePathPrefix;
+
+        struct Vertex {
+            float x, y, z;
+            float u, v;
+            float nx, ny, nz;
+            ALLEGRO_COLOR color;
+        };
+        static std::vector<ALLEGRO_VERTEX_ELEMENT> vertexElems;
+        static std::shared_ptr<ALLEGRO_VERTEX_DECL> vertexDecl;
+
         // All bitmaps are stored in hash table for easy access and management.
         // Note: std::shared_ptr is a kind of smart pointer.
         //       To put it simple, it's a pointer that will delete itself when no one has reference to it.
@@ -37,6 +51,8 @@ namespace Engine {
         std::unordered_map<std::string, std::shared_ptr<ALLEGRO_SAMPLE>> samples;
         // All (sample instance, sample) pairs are stored in hash table for easy access and management.
         std::unordered_map<std::string, std::pair<std::shared_ptr<ALLEGRO_SAMPLE_INSTANCE>, std::shared_ptr<ALLEGRO_SAMPLE>>> sample_instance_pairs;
+
+        std::unordered_map<std::string, std::pair<std::shared_ptr<ALLEGRO_VERTEX_BUFFER>, std::shared_ptr<ALLEGRO_INDEX_BUFFER>>> models;
         /// <summary>
         /// Private constructor since this class is a Singleton.
         /// </summary>
@@ -65,6 +81,8 @@ namespace Engine {
         /// <param name="name">The filename of the image. (Including extension)</param>
         /// <returns>The smart pointer of the bitmap.</returns>
         std::shared_ptr<ALLEGRO_BITMAP> GetBitmap(std::string name, std::string pathPrefix = bitmapPathPrefix);
+        std::pair<std::shared_ptr<ALLEGRO_VERTEX_BUFFER>,std::shared_ptr<ALLEGRO_INDEX_BUFFER>> GetModel(std::string name, std::shared_ptr<ALLEGRO_BITMAP> &retTexture);
+        std::shared_ptr<ALLEGRO_BITMAP> GetMemory(std::string name, uint8_t* data, int width, int height, int stride, int pixelFormat, std::string announce = "");
         /// <summary>
         /// Get bitmap pointer by name, and resize it. The file should be put under "resources/images/".
         /// </summary>

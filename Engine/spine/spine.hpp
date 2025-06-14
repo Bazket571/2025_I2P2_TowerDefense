@@ -3,7 +3,6 @@
 #include <list>
 #include <string>
 #include <memory>
-
 #include <spine/spine.h>
 #include <Engine/IObject.hpp>
 #include <Engine/IControl.hpp>
@@ -14,7 +13,7 @@ namespace Engine {
     /// <summary>
     /// An animated image exported from Spine2D
     /// </summary>
-    class SpineSprite : public Engine::IObject {
+    class SpineSprite : public Engine::IObject{
         static const std::string spinePathPrefix;
         mutable spine::SkeletonClipping clipper;
         mutable bool usePremultipliedAlpha;
@@ -26,6 +25,7 @@ namespace Engine {
     public:
         spine::Skeleton* skeleton;
         spine::AnimationState* state;
+        spine::SkeletonBounds bounds;
         float timeScale;
 
         SpineSprite(std::string skeletonFile, std::string atlasFile,

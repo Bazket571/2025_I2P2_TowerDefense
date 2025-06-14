@@ -3,7 +3,7 @@
 #include <unordered_set>
 
 class DefenderTurret : public Turret {
-    std::vector<Enemy*> blocking;
+    std::vector<Enemy2*> blocking;
     
 public:
     static const int Price;

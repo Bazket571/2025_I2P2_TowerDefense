@@ -7,7 +7,7 @@ const int FreezeTurret::Price = 50;
 FreezeTurret::FreezeTurret(float x, float y, float freezeRate) :
     Turret("play/tower-base.png", "svgs/regular/snowflake.svg", x, y, 200, Price, 1, 1)
 {
-    tileType = TILE_HIGH;
+    //tileType = TILE_HIGH;
     slowRate = freezeRate;
     Size = Engine::Point(48, 48);
 }
@@ -25,10 +25,10 @@ void FreezeTurret::Update(float delta)
     if (!Enabled) return;
 
     //Freeze all enemy in range
-    for (auto &it : scene->EnemyGroup->GetObjects()) {
-        Enemy* e = dynamic_cast<Enemy*>(it);
+    /*for (auto &it : scene->EnemyGroup->GetObjects()) {
+        Enemy2* e = dynamic_cast<Enemy2*>(it);
         if (Engine::Collider::IsCircleOverlap(e->Position, e->CollisionRadius, Position, CollisionRadius)) {
             e->speedMultiplier *= slowRate;
         }
-    }
+    }*/
 }

@@ -46,15 +46,18 @@ Engine::SpineSprite::SpineSprite(std::string skeletonFile, std::string atlasFile
 	Engine::SpineTextureLoader textureLoader;
 	spine::Atlas *atlas = new spine::Atlas((pathPrefix + atlasFile).c_str(), &textureLoader);
 	spine::SkeletonBinary skeletonBinary(atlas);
-	//TODO scale
-	skeletonBinary.setScale(scale);
+	//skeletonBinary.setScale(scale);
+	skeletonBinary.setScale(1);
 	spine::SkeletonData* skeletonData = skeletonBinary.readSkeletonDataFile((pathPrefix + skeletonFile).c_str());
 	setUsePremultipliedAlpha(true);
 
 	spine::Bone::setYDown(true);
 	skeleton = new spine::Skeleton(skeletonData);
+	skeleton->setScaleX(scale);
+	skeleton->setScaleY(scale);
+	//skeleton->setPosition(Position.x, Position.y);
 	state = new spine::AnimationState(new spine::AnimationStateData(skeletonData));
-
+	Scale = { scale, scale, 1 };
 	quadIndices.add(0);
 	quadIndices.add(1);
 	quadIndices.add(2);
@@ -75,7 +78,8 @@ void Engine::SpineSprite::Update(float deltaTime)
 	state->update(deltaTime * timeScale);
 	state->apply(*skeleton);
 	skeleton->update(deltaTime * timeScale);
-	skeleton->setPosition(Position.x, Position.y);
+	bounds.update(*skeleton, true);
+	//skeleton->setPosition(Position.x, Position.y);
 	skeleton->updateWorldTransform();
 }
 

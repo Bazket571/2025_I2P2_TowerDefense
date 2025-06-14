@@ -17,7 +17,6 @@
 #include "UI/Component/ImageButton.hpp"
 #include "UI/Component/Label.hpp"
 #include "UI/Component/Slider.hpp"
-#include "StartScene.h"
 
 // TODO HACKATHON-2 (1/3): You can imitate the 2 files: 'StartScene.hpp', 'StartScene.cpp' to implement your SettingsScene.
 void StartScene::Initialize() {
@@ -27,7 +26,7 @@ void StartScene::Initialize() {
     int halfH = h / 2;
     Engine::ImageButton *btn;
 
-    AddNewObject(new Engine::Label("Tower Defense", "pirulen.ttf", 120, halfW, halfH / 3 + 50, 10, 255, 255, 255, 0.5, 0.5));
+    /*AddNewObject(new Engine::Label("Tower Defense", "pirulen.ttf", 120, halfW, halfH / 3 + 50, 10, 255, 255, 255, 0.5, 0.5));
 
     btn = new Engine::ImageButton("stage-select/dirt.png", "stage-select/floor.png", halfW - 200, halfH / 2 + 200, 400, 100);
     btn->SetOnClickCallback(std::bind(&StartScene::PlayOnClick, this, 1));
@@ -42,12 +41,16 @@ void StartScene::Initialize() {
     btn = new Engine::ImageButton("stage-select/dirt.png", "stage-select/floor.png", halfW - 200, halfH * 3 / 2 + 100, 400, 100);
     btn->SetOnClickCallback(std::bind(&StartScene::ScoreOnClick, this));
     AddNewControlObject(btn);
-    AddNewObject(new Engine::Label("Score", "pirulen.ttf", 48, halfW, halfH * 3 / 2 + 150, 0, 0, 0, 255, 0.5, 0.5));
+    AddNewObject(new Engine::Label("Score", "pirulen.ttf", 48, halfW, halfH * 3 / 2 + 150, 0, 0, 0, 255, 0.5, 0.5));*/
+    AddNewObject(new Engine::Image("MainMenu/main menu.png", 0, 0, w, h));
 
-    Engine::SpineSprite* supremeLeader;
-    supremeLeader = new Engine::SpineSprite("amiya/build_char_002_amiya.skel", "amiya/build_char_002_amiya.atlas", halfW, halfH, 0.5, 0.5, 0.5);
-    supremeLeader->state->setAnimation(1, "Interact", true);
-    AddNewObject(supremeLeader);
+    btn = new Engine::ImageButton("MainMenu/start.png", "MainMenu/starthov.png", halfW - 108 / 2 - 25, halfH * 1.5);
+    btn->SetOnClickCallback(std::bind(&StartScene::PlayOnClick, this, 0));
+    AddNewControlObject(btn);
+
+    btn = new Engine::ImageButton("MainMenu/cred.png", "MainMenu/credhov.png", halfW - 150 / 2 - 25, halfH * 1.5 + 50);
+    btn->SetOnClickCallback(std::bind(&StartScene::SettingsOnClick, this, 0));
+    AddNewControlObject(btn);
 }
 void StartScene::Terminate() {
     IScene::Terminate();

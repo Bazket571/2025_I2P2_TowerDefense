@@ -40,6 +40,7 @@ namespace Engine {
         Point Position;
         // The object's size.
         Point Size;
+        Point Scale;
         // The center of the object. (0, 0) means top-left, (1, 1) means bottom-right.
         Point Anchor;
         /// <summary>
