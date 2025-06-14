@@ -18,7 +18,7 @@ void StoryScene::Initialize() {
     speaker = new Engine::Label("","pirulen.ttf",24,70,650,255,255,255);
     openingline = new Engine::Label("", "pirulen.ttf", 24, 0, 0, 255, 255, 255);
     dialoguebar = new Engine::Image("background/dialoguebar.png",0,0, 1650, 920);
-    background = new Engine::Image("background/A1-1.png",0,0,1680,920);
+    background = new Engine::Image("background/1-1.png",0,0,1680,920);
     character = new Engine::Image("char/Amiya.png",-120,25,0,0);
     character2 = new Engine::Image("char/Medic.png",550,-200,1300,1300);
     character3 = new Engine::Image("char/Medic.png", 650, 25, 0, 0);
@@ -39,8 +39,8 @@ void StoryScene::Initialize() {
     AddNewObject(dialogue);
     AddNewObject(speaker);
     cmdFile.open("Resource/plot/"+StageID+".txt");
-    dynamic_cast<PlayScene*>(Engine::GameEngine::GetInstance().GetScene("play"))->MapId = StageID;
-    bgmInstance = AudioHelper::PlaySample("story1-1.ogg", true, AudioHelper::BGMVolume);
+    //std::string temp; cmdFile >> temp; //Error, somehow
+    //bgmInstance = AudioHelper::PlaySample("story1-1.ogg", true, AudioHelper::BGMVolume);
     ReadAndExecute();
 }
 
@@ -55,6 +55,14 @@ void StoryScene::OnKeyDown(int keyCode)
         ReadAndExecute();
     }
     if (keyCode == ALLEGRO_KEY_ESCAPE) {
+        cmdFile.close();
+        if (StageID == "1-4") {
+            IScene::Terminate();
+            Engine::GameEngine::GetInstance().ChangeScene("stage-select");
+            return;
+        }
+        dynamic_cast<PlayScene*>(Engine::GameEngine::GetInstance().GetScene("play"))->MapId = StageID;
+        IScene::Terminate();
         Engine::GameEngine::GetInstance().ChangeScene("play");
     }
 }
@@ -126,8 +134,9 @@ void StoryScene::ReadAndExecute()
         ReadAndExecute();
     }
     else if (cmd == "end") {
-        AudioHelper::StopSample(bgmInstance);
-        bgmInstance = std::shared_ptr<ALLEGRO_SAMPLE_INSTANCE>();
+        //AudioHelper::StopSample(bgmInstance);
+        cmdFile.close();
+        //bgmInstance = std::shared_ptr<ALLEGRO_SAMPLE_INSTANCE>();
         IScene::Terminate();
         Engine::GameEngine::GetInstance().ChangeScene("play");
     }

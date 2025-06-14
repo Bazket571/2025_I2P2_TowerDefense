@@ -13,7 +13,7 @@ Doctor a
 dia The purple flames dance around Eblana's fingers.
 speRight2 NPC/soldier2 Soldier
 speLeft Reed/serious Reed
-dia "Can the leader of team 2 come to see the medics for some emergency Oripathy treatment? I heard your subordinates talk about you getting hit by Originium shards?”"
+dia "Can the leader of team 2 come to see the medics for some emergency Oripathy treatment? I heard your subordinates talk about you getting hit by Originium shards?"
 Doctor a
 dia She leans back against the rock, refusing the Brigadier's offered mattress. The rock underneath her seat is already covered in a layer of dry hay. It's comfortable enough as it is.
 speRight2 NPC/soldier Soldier

@@ -1,82 +1,82 @@
-﻿back 1-1
+back 1-1
 thanos
 spamton
 Doctor a
-dia It definitely was not in Eblana’s plan to have a whole journey this year. And definitely not one with the purpose of trying to get to know her subordinates’ life better. Not getting how the people below her feel and live was something that she is fully ready to let go, not because she finds it a hassle, no.
+dia It definitely was not in Eblana�s plan to have a whole journey this year. And definitely not one with the purpose of trying to get to know her subordinates� life better. Not getting how the people below her feel and live was something that she is fully ready to let go, not because she finds it a hassle, no.
 dia Human emotions is something she always finds intriguing, but her path to get Tara its independence is already busy enough as it is. Letting go of certain things was a necessary sacrifice, in her opinion.
 speLeft Reed/serious Reed
 speRight Necrass/normal Eblana
 Doctor a
-dia Eblana is the determined, ruthless leader that is brave and capable enough to make the Taran people weather through storms and battles to reach their goal, while Reed, or Loughshinny, as Eblana prefers to call her, is the other merciful, gentle side of the coin that holds control over Tara’s fate.
+dia Eblana is the determined, ruthless leader that is brave and capable enough to make the Taran people weather through storms and battles to reach their goal, while Reed, or Loughshinny, as Eblana prefers to call her, is the other merciful, gentle side of the coin that holds control over Tara�s fate.
 
 speLeft Reed/serious Reed 
-dia “What are you thinking about? You have been silent for quite a while ever since we departed.” Eblana hears her sister say.
+dia "What are you thinking about? You have been silent for quite a while ever since we departed." Eblana hears her sister say.
 speRight Necrass/smile3 Eblana 
-dia “Nothing much.” She looks outside of their vehicle’s window. “I cannot help but feel like this is a vacation somehow.”
+dia "Nothing much." She looks outside of their vehicle�s window. "I cannot help but feel like this is a vacation somehow."
 speLeft Reed/avertedEye Reed 
-dia “...” 
+dia "..." 
 Doctor a
-dia Reed doesn’t say anything to reply to her words, probably mulling over something in her own head. Eblana has indeed been very dutiful, occupied all day with her work as the Leader for the Dublinn.
+dia Reed doesn�t say anything to reply to her words, probably mulling over something in her own head. Eblana has indeed been very dutiful, occupied all day with her work as the Leader for the Dublinn.
 
 Doctor a
-dia Compared to Reed who focuses on the fieldwork, Eblana’s job is indeed much more complicated. She doesn’t let the fatigue show, though, instead laughing it off, full of confidence to the point of arrogance.
+dia Compared to Reed who focuses on the fieldwork, Eblana�s job is indeed much more complicated. She doesn�t let the fatigue show, though, instead laughing it off, full of confidence to the point of arrogance.
 
 speRight Necrass/happy Eblana
-dia “Relax. Getting to observe my people’s feelings is intriguing for me. I won’t get bored on this meager trip at least.”
+dia "Relax. Getting to observe my people�s feelings is intriguing for me. I won�t get bored on this meager trip at least."
 Doctor a
-dia Reed frowns, but doesn’t pry any further. 
+dia Reed frowns, but doesn�t pry any further. 
 speLeft Reed/normal Reed 
-dia “... If that is all there is to it.”
+dia "... If that is all there is to it."
 speRight Necrass/smile2 Eblana 
-dia “What do you mean, Loughshinny?”
+dia "What do you mean, Loughshinny?"
 speLeft Reed/serious Reed 
-dia “... To be honest with you, and I know you must feel it too, there must be something more to this Prophecy that suddenly struck down on us.”
+dia "... To be honest with you, and I know you must feel it too, there must be something more to this Prophecy that suddenly struck down on us."
 speRight Necrass/smile1 Eblana 
-dia “Aha.”
-dia “Please do not devalue my concern like that.”
+dia "Aha."
+dia "Please do not devalue my concern like that."
 speRight Necrass/smile3 Eblana
-dia “You are still as bad at catching my humour as ever, sister. I see there are things we both have not managed to improve even after all these years of separation.”
+dia "You are still as bad at catching my humour as ever, sister. I see there are things we both have not managed to improve even after all these years of separation."
 speRight Necrass/smile1
 Doctor a
 dia Reed does not admit it, but the change in the way Eblana addressed her catches her off guard.
 speLeft Reed/normal Reed
-dia She winces at it, “And please do not change the topic either.”
+dia She winces at it, "And please do not change the topic either."
 speRight Necrass/smile1 Eblana
-dia “Tsk.” Eblana tuts. “You are no fun.”
+dia "Tsk." Eblana tuts. "You are no fun."
 speLeft Reed/serious Reed
-dia “You know better than to disregard a very real threat that has endangered your life. It did it once, and it can do it again.”
+dia "You know better than to disregard a very real threat that has endangered your life. It did it once, and it can do it again."
 speRight Necrass/smile2 Eblana
-dia “And why do you feel fear? You know a potent Caster—‒a brilliant Necromancer like me, can reanimate myself when I’m dead, right?”
+dia "And why do you feel fear? You know a potent Caster�-a brilliant Necromancer like me, can reanimate myself when I�m dead, right?"
 speLeft Reed/closeEye Reed
-dia “...”
+dia "..."
 Doctor a
-dia Reed goes silent, how should she reply? She doesn’t want to give this wretched tyrant of a sister her satisfaction right away by admitting her care for her. 
-dia Reed, no, Loughshinny has never been a ruthless person. And because of that, she is not fit to lead the military force of the Taran people – Dublinn. By no means her hands are clean, but she would never, and shall never kill with confidence like Eblana.
+dia Reed goes silent, how should she reply? She doesn�t want to give this wretched tyrant of a sister her satisfaction right away by admitting her care for her. 
+dia Reed, no, Loughshinny has never been a ruthless person. And because of that, she is not fit to lead the military force of the Taran people � Dublinn. By no means her hands are clean, but she would never, and shall never kill with confidence like Eblana.
 dia She cannot convince herself to turn into an executor devoid of sympathy, and she cannot bear to turn to the option of ignoring the cries and pleas of the victims under the flames of her spear. 
-dia Invoking such dilemmas inside her has always been one of the twisted ways that the other Leader of Dublinn – Eblana – used to entertain herself.
+dia Invoking such dilemmas inside her has always been one of the twisted ways that the other Leader of Dublinn � Eblana � used to entertain herself.
 speRight Necrass/smile1 Eblana 
-dia “Loughshinny, oh Loughshinny.” 
+dia "Loughshinny, oh Loughshinny." 
 speLeft Reed/closeEye Reed
-dia “...”
+dia "..."
 speRight Necrass/smile1 Eblana
-dia “Why can’t you put more confidence in me?”
+dia "Why can�t you put more confidence in me?"
 speLeft Reed/serious Reed 
-dia “... I am confident in your combat abilities.”
+dia "... I am confident in your combat abilities."
 speRight Necrass/smile1 Eblana 
-dia “And my capabilities as a ruler, you doubt.”
+dia "And my capabilities as a ruler, you doubt."
 Doctor a
-dia Reed’s lips tremble, but she says nothing to the statement both know is accurate.
-dia Something nudges at her knee, scaly and cool. It’s Eblana’s tail flitting at her. 
+dia Reed�s lips tremble, but she says nothing to the statement both know is accurate.
+dia Something nudges at her knee, scaly and cool. It�s Eblana�s tail flitting at her. 
 speRight Necrass/smile3 Eblana
-dia “No matter. I am in no rush, and time can prove that to you, not me.”
+dia "No matter. I am in no rush, and time can prove that to you, not me."
 speRight Necrass/serious
 Doctor a
 dia Balls of mud suddenly hit the window of their vehicle. Both leaders of the Dublinn immediately look out. In mere seconds, the car comes to a halt.
 
 speRight Necrass/smile1 Eblana
-dia Eblana grips at the door handle, grinning, “Well, if it’s not some exercise coming to find us.”
+dia Eblana grips at the door handle, grinning, "Well, if it�s not some exercise coming to find us."
 speLeft Reed/normal Reed
-dia “Be careful.”
+dia "Be careful."
 speRight Necrass/smile1 Eblana 
-dia “You have my back, Loughshinny. You are careful.”
+dia "You have my back, Loughshinny. You are careful."
 end
