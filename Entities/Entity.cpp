@@ -82,7 +82,7 @@ void Entity::DrawHP() const
 	ALLEGRO_TRANSFORM trans; al_identity_transform(&trans);
 	al_translate_transform_3d(&trans, Position.x - barSize / 2, Position.y + 20, Position.z);
 	al_set_shader_matrix("model_matrix", &trans);
-	al_draw_filled_rectangle(0, 0, barSize, 5, al_map_rgba_f(0, 0, 0, 0.5));
+	al_draw_filled_rectangle(0, 0, barSize, 5, al_map_rgba_f(0, 0, 0, 0.1));
 	al_draw_filled_rectangle(0, 0, barSize * HpPercent, 5, al_map_rgba_f(1, 0, 0, 1));
 }
 

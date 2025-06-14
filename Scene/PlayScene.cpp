@@ -86,6 +86,7 @@ void PlayScene::Initialize() {
     operators.push_back({ 0, new Reed2() });
     operators.push_back({ 0, new Wisadel() });
     operators.push_back({ 0, new Cetsyr() });
+    operators.push_back({ 0, new Shu() });
 
     std::sort(operators.begin(), operators.end(), 
         [](std::pair<float, Operator*> a, std::pair<float, Operator*> b) {return a.second->cost > b.second->cost;});
@@ -377,7 +378,6 @@ void PlayScene::UpdateEnemyWave(float deltaTime)
         enemy->Update(ticks);
     }
 }
-//TODO improve(automate) this horrid piece of shit
 
 void PlayScene::UpdateOperatorUI() {
     Engine::Point screenSize = Engine::GameEngine::GetInstance().GetScreenSize();
@@ -443,6 +443,9 @@ void PlayScene::UIBtnClicked(std::vector<std::pair<float, Operator*>>::iterator 
     }
     else if (dynamic_cast<Cetsyr*>(it->second)) {
         preview = new Cetsyr();
+    }
+    else if (dynamic_cast<Shu*>(it->second)) {
+        preview = new Shu();
     }
     if (!preview)
         return;

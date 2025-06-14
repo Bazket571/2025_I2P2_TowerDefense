@@ -36,7 +36,7 @@ public:
     int GetRes() const { return res; }; void SetRes(int to) { res = std::max(0, to); };
     int GetAtk() const { return atk; }; void SetAtk(int to) { atk = std::max(0, to); };
     float GetSpeed() const { return speed; }; void SetSpeed(float to) { speed = std::max(0.f, to); };
-    int GetBlockCount() const { return blockCount; } void SetBlockCoung(int to) { blockCount = std::max(0, to); };
+    int GetBlockCount() const { return blockCount; } void SetBlockCount(int to) { blockCount = std::max(0, to); };
 };
 
 enum EntityDirection{Down, Right, Up, Left};
@@ -49,9 +49,9 @@ protected:
     Engine::Point Velocity;
     virtual std::vector<Engine::Point> getRangeDeltas() const = 0;
     PlayScene* GetPlayScene();
-    bool shouldDie = false;
 
 public:
+    bool shouldDie = false;
     Stats stat;
     enum AttackType { Ground = 0b1, Air = 0b10, Both = 0b11 };
     enum DamageType { Physical = 0b1, Arts = 0b10 };

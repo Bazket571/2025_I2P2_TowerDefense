@@ -71,8 +71,20 @@ void Operator::Update(float delta)
     //Find enemies
     enemiesInRange.clear();
     std::vector<Enemy*> enemies = GetPlayScene()->FieldGroup->GetFromBillboard<Enemy>();
-    auto range = getRange();
+
+    //Get blocked enemies
     for (Enemy* e : enemies) {
+        //Dont block them if they are dying
+        if (e->shouldDie || e->state->getCurrent(0)->getAnimation()->getName() == "Die") continue;
+        if (Blocking.size() == stat.GetBlockCount()) 
+            break;
+        if (e->GetCurrentTile() == GetCurrentTile()) {
+            Blocking.insert(e);
+            e->blockedBy = this;
+        }
+    }
+    for (Enemy* e : enemies) {
+        if (Blocking.find(e) != Blocking.end()) continue;
         for (Engine::Point p : getRange()) {
             if (p == e->GetCurrentTile() && e->stat.GetHP() > 0) {
                 enemiesInRange.push_back(e);
@@ -82,6 +94,18 @@ void Operator::Update(float delta)
     }
     //Sort enemies by their distance to objective
     std::sort(enemiesInRange.begin(), enemiesInRange.end(), [](Enemy* a, Enemy* b) {return a->reachEndTime < b->reachEndTime;});
+    //Prioritize blocking enemy
+    for(Enemy* e : Blocking)
+        enemiesInRange.insert(enemiesInRange.begin(), e);
 }
 
 void Operator::IsClickedOn(){}
+
+void Operator::OnDie()
+{
+    Entity::OnDie();
+    for (Enemy* e : Blocking) {
+        e->blockedBy = nullptr;
+    }
+    Blocking.clear();
+}

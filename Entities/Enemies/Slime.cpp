@@ -6,6 +6,7 @@ Slime::Slime(float x, float y, float z):
 {
 	state->addAnimation(0, "Move_Begin", false, 0);
 	state->addAnimation(0, "Move_Loop", true, 0);
+	tileType = TILE_LOW;
 }
 
 std::vector<Engine::Point> Slime::getRangeDeltas() const

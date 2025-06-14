@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.hpp"
+class Operator;
 class Enemy : public Entity {
 	std::vector<Engine::Point> path;
 public:

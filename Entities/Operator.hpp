@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <set>
 
 #include "Entity.hpp"
 #include "Enemy.hpp"
@@ -15,10 +16,10 @@ protected:
     virtual std::vector<Engine::Point> getRange();
 public:
 	std::vector<Enemy*> enemiesInRange;
+	std::set<Enemy*> Blocking;
 	bool Preview = true;
 	bool Enabled = false;
 	mutable EntityDirection direction;
-	std::vector<Enemy*> Blocking;
 	int cost = 0;
 	float redeployTime;
 	//Must be inherited
@@ -31,4 +32,5 @@ public:
 	virtual void Draw() const;
 	virtual void Update(float delta);
 	virtual void IsClickedOn();
+	virtual void OnDie();
 };

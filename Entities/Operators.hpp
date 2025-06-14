@@ -6,3 +6,4 @@
 #include "Operators/Reed2.hpp"
 #include "Operators/Wisadel.hpp"
 #include "Operators/Cetsyr.hpp"
+#include "Operators/Shu.hpp"
