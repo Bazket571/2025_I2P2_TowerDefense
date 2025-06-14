@@ -38,7 +38,7 @@ void StoryScene::Initialize() {
     AddNewObject(dialoguebar);
     AddNewObject(dialogue);
     AddNewObject(speaker);
-    cmdFile.open("Resource/plot/"+StageID+".txt");
+    cmdFile.open("Resource/plot/"+StageID+"txt");
     dynamic_cast<PlayScene*>(Engine::GameEngine::GetInstance().GetScene("play"))->MapId = StageID;
     bgmInstance = AudioHelper::PlaySample("story1-1.ogg", true, AudioHelper::BGMVolume);
     ReadAndExecute();
