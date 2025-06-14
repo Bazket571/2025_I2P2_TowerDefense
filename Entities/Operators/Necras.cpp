@@ -2,7 +2,7 @@
 #include "Engine/LOG.hpp"
 
 Necrass::Necrass() :
-	Operator("necrass/char_450_necras.skel", "necrass/char_450_necras.atlas", Stats(1433, 563, 137, 15, 0), 21, 70)
+	Operator("necrass/char_450_necras.skel", "necrass/char_450_necras.atlas", Stats(1443, 576, 155, 20, 0), 21, 70)
 {
 	tileType = TILE_HIGH;
 	atkType = TILE_LOW | TILE_HIGH;

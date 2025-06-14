@@ -2,7 +2,7 @@
 #include "Engine/LOG.hpp"
 
 Shu::Shu() :
-	Operator("shu/char_2025_shu.skel", "shu/char_2025_shu.atlas", Stats(1991, 377, 475, 10, 0), 20, 70)
+	Operator("shu/char_2025_shu.skel", "shu/char_2025_shu.atlas", Stats(2313, 442, 553, 10, 0), 22, 70)
 {
 	tileType = TILE_LOW;
 	atkType = TILE_LOW;

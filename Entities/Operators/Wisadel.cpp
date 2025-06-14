@@ -2,7 +2,7 @@
 #include "Engine/LOG.hpp"
 
 Wisadel::Wisadel() :
-	Operator("wisadel/char_1035_wisdel.skel", "wisadel/char_1035_wisdel.atlas", Stats(1243, 595, 182, 10, 0), 25, 70)
+	Operator("wisadel/char_1035_wisdel.skel", "wisadel/char_1035_wisdel.atlas", Stats(1434, 673, 209, 15, 0), 25, 70)
 {
 	tileType = TILE_HIGH;
 	atkType = TILE_LOW;

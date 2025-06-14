@@ -2,7 +2,7 @@
 #include "Engine/LOG.hpp"
 
 Logos::Logos() :
-	Operator("logos/char_4133_logos.skel", "logos/char_4133_logos.atlas", Stats(1108, 471, 87, 15, 0), 21, 70)
+	Operator("logos/char_4133_logos.skel", "logos/char_4133_logos.atlas", Stats(1297, 646, 106, 20, 0), 21, 70)
 {
 	tileType = TILE_HIGH;
 	atkType = TILE_LOW | TILE_HIGH;

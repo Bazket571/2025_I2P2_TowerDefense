@@ -3,7 +3,7 @@
 
 Cetsyr::Cetsyr() :
 	//Nerf theresa
-	Operator("cetsyr/char_4134_cetsyr.skel", "cetsyr/char_4134_cetsyr.atlas", Stats(1312, 287 / 4, 158, 0, 0), 10, 80)
+	Operator("cetsyr/char_4134_cetsyr.skel", "cetsyr/char_4134_cetsyr.atlas", Stats(1521, 336 / 4, 188, 0, 0), 10, 80)
 {
 	tileType = TILE_HIGH;
 	atkType = TILE_LOW | TILE_HIGH;
