@@ -29,7 +29,7 @@ private:
 
 protected:
     int lives;
-    int money;
+    int DP;
     int SpeedMult;
     int PrevSpeedMult;
 
@@ -46,6 +46,8 @@ public:
     static Engine::Point EndGridPoint;
     static int score;
     int MapId;
+    float DPRegenRate;
+    float DPTick;
     float ticks;
     float deathCountDown;
     //Operators and their re-deploy timer
@@ -61,10 +63,11 @@ public:
     Group *EffectGroup;
     Group *UIGroup;
     Group* OperatorButtons;
+    Engine::Label* UIDP;
     //Engine::Label *UIMoney;
     Engine::Label *UILives;
     Engine::Label *UIScore;
-    Engine::Image *imgTarget;
+    //Engine::Image *imgTarget;
     //Engine::Sprite *dangerIndicator;
     Operator *preview;
     std::vector<std::vector<int>> mapState;
@@ -82,11 +85,12 @@ public:
     void OnMouseUp(int button, int mx, int my) override;
     void OnKeyDown(int keyCode) override;
     void Hit();
-    int GetMoney() const;
-    void EarnMoney(int money);
+    int GetDP() const;
+    void EarnDP(int DP);
     void AddScore(int point);
     void ReadMap();
     void ReadEnemyWave();
+    void UpdateEnemyWave(float deltaTime);
     void UpdateOperatorUI();
     void ConstructOperatorUI();
     //void ConstructTurretList();

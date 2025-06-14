@@ -45,7 +45,7 @@ void Enemy2::Hit(float damage) {
             it->Target = nullptr;
         for (auto &it : lockedBullets)
             it->Target = nullptr;
-        getPlayScene()->EarnMoney(money);
+        //getPlayScene()->EarnDP(DP);
 
         int blockSize = getPlayScene()->BlockSize;
         Engine::Point curPos = Position / blockSize;

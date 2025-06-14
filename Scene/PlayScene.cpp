@@ -63,7 +63,9 @@ void PlayScene::Initialize() {
     ticks = 0;
     deathCountDown = -1;
     lives = 3;
-    money = 20;
+    DP = 10;
+    DPRegenRate = 1;
+    DPTick = 0;
     SpeedMult = 1;
     score = 0;
     // Add groups from bottom to top.
@@ -94,11 +96,12 @@ void PlayScene::Initialize() {
     ReadEnemyWave();
     mapDistance = CalculateBFSDistance();
     ConstructUI();
-    imgTarget = new Engine::Image("play/target.png", 0, 0);
-    imgTarget->Visible = false;
+    //imgTarget = new Engine::Image("play/target.png", 0, 0);
+    //imgTarget->Visible = false;
     preview = nullptr;
-    UIGroup->AddNewObject(imgTarget);
+    //UIGroup->AddNewObject(imgTarget);
     mouseDownPos = { -1, -1 };
+
     // Start BGM.
     bgmId = AudioHelper::PlayBGM("play.ogg");
 }
@@ -130,31 +133,13 @@ void PlayScene::Update(float deltaTime) {
     for (int i = 0; i < SpeedMult; i++) {
         IScene::Update(deltaTime);
         Entity::UpdateEffects();
-        // Check if we should create new enemy.
-        ticks += deltaTime;
-        if (enemyWaveData.empty()) {
-            if (FieldGroup->GetFromBillboard<Enemy>().empty()) {
-                // Win.
-                Engine::GameEngine::GetInstance().ChangeScene("win");
-            }
-            continue;
-        }
-        auto current = enemyWaveData.front();
-        if (ticks < current.second)
-            continue;
-        ticks -= current.second;
-        enemyWaveData.pop_front();
-        const Engine::Point SpawnCoordinate = Engine::Point(SpawnGridPoint.x * BlockSize, SpawnGridPoint.y * BlockSize);
-        Enemy *enemy = nullptr;
-        //TODO Add enemy here
-        if (current.first == "slime") {
-            //EnemyGroup->AddNewObject(enemy = new SoldierEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
-            FieldGroup->AddNewBillboard(enemy = new Slime(SpawnCoordinate.x, SpawnCoordinate.y, 0));
-        }
-        if (enemy != nullptr) {
-            enemy->UpdatePath(mapDistance);
-            // Compensate the time lost.
-            enemy->Update(ticks);
+        UpdateEnemyWave(deltaTime);
+        //Update DP
+        if(GetDP() <= 99)
+            DPTick += deltaTime;
+        if (DPTick >= DPRegenRate) {
+            DPTick = 0;
+            EarnDP(1);
         }
     }
     if (preview) {
@@ -182,7 +167,8 @@ void PlayScene::Draw() const {
     }
 }
 void PlayScene::OnMouseDown(int button, int mx, int my) {
-    if ((button & 1) && preview) {
+    const Engine::Point mouseDownTile = Entity::GetTile(Billboard::MousePlane({ (float)mx, (float)my }, 0));
+    if ((button & 1) && preview && (mapState[mouseDownTile.y][mouseDownTile.x] & preview->tileType)) {
         if (mouseDownPos == Engine::Point(-1, -1, 0)) {
             mouseDownPos.x = mx;
             mouseDownPos.y = my;
@@ -225,7 +211,7 @@ void PlayScene::OnMouseUp(int button, int mx, int my) {
                 return;
             }
             // Purchase.
-            EarnMoney(-preview->cost);
+            EarnDP(-preview->cost);
             //Deploy preview
             Engine::Point deployPos = mouseDownTile * BlockSize;
             preview->Deploy(deployPos.x, deployPos.y, deployPos.z, preview->direction);
@@ -269,12 +255,12 @@ void PlayScene::Hit() {
         Engine::GameEngine::GetInstance().ChangeScene("lose");
     }
 }
-int PlayScene::GetMoney() const {
-    return money;
+int PlayScene::GetDP() const {
+    return DP;
 }
-void PlayScene::EarnMoney(int money) {
-    this->money += money;
-    //UIMoney->Text = "$" + std::to_string(this->money);
+void PlayScene::EarnDP(int DP) {
+    this->DP += DP;
+    UIDP->Text = std::to_string(this->DP);
 }
 void PlayScene::AddScore(int point)
 {
@@ -362,6 +348,35 @@ void PlayScene::ReadEnemyWave() {
     }
     fin.close();
 }
+void PlayScene::UpdateEnemyWave(float deltaTime)
+{
+    // Check if we should create new enemy.
+    ticks += deltaTime;
+    if (enemyWaveData.empty()) {
+        if (FieldGroup->GetFromBillboard<Enemy>().empty()) {
+            // Win.
+            Engine::GameEngine::GetInstance().ChangeScene("win");
+        }
+        return;
+    }
+    auto current = enemyWaveData.front();
+    if (ticks < current.second)
+        return;
+    ticks -= current.second;
+    enemyWaveData.pop_front();
+    const Engine::Point SpawnCoordinate = Engine::Point(SpawnGridPoint.x * BlockSize, SpawnGridPoint.y * BlockSize);
+    Enemy* enemy = nullptr;
+    //TODO Add enemy here
+    if (current.first == "slime") {
+        //EnemyGroup->AddNewObject(enemy = new SoldierEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
+        FieldGroup->AddNewBillboard(enemy = new Slime(SpawnCoordinate.x, SpawnCoordinate.y, 0));
+    }
+    if (enemy != nullptr) {
+        enemy->UpdatePath(mapDistance);
+        // Compensate the time lost.
+        enemy->Update(ticks);
+    }
+}
 //TODO improve(automate) this horrid piece of shit
 
 void PlayScene::UpdateOperatorUI() {
@@ -370,7 +385,7 @@ void PlayScene::UpdateOperatorUI() {
     int i = -1;
     for (auto &button : OperatorButtons->GetObjects()) {
         i++;
-        if (operators[i].first == -1) {
+        if (operators[i].first == -1 || operators[i].second->cost > GetDP()) {
             button->Visible = false;
             dynamic_cast<Engine::ImageButton*>(button)->Enabled = false;
             continue;
@@ -395,20 +410,17 @@ void PlayScene::ConstructOperatorUI() {
 }
 
 void PlayScene::ConstructUI() {
+    Engine::Point scrSize = Engine::GameEngine::GetInstance().GetScreenSize();
     // Background
     //UIGroup->AddNewObject(new Engine::Image("play/sand.png", 1280, 0, 320, 832));
     // Text
     //UIGroup->AddNewObject(new Engine::Label(std::string("Stage ") + std::to_string(MapId), "pirulen.ttf", 32, 1294, 0));
-    //UIGroup->AddNewObject(UIMoney = new Engine::Label(std::string("$") + std::to_string(money), "pirulen.ttf", 24, 1294, 48));
+    UIGroup->AddNewObject(UIDP = new Engine::Label(std::to_string(DP), "pirulen.ttf", 24, scrSize.x - OperatorUISize, scrSize.y - OperatorUISize - 45, 255, 255, 255));
     //UIGroup->AddNewObject(UILives = new Engine::Label(std::string("Life ") + std::to_string(lives), "pirulen.ttf", 24, 1294, 88));
     //UIGroup->AddNewObject(UIScore = new Engine::Label(std::string("Score ") + std::to_string(score), "pirulen.ttf", 24, 1294, 128));
     
     //TODO: render frame and cost
     ConstructOperatorUI();
-
-    int w = Engine::GameEngine::GetInstance().GetScreenSize().x;
-    int h = Engine::GameEngine::GetInstance().GetScreenSize().y;
-    int shift = 135 + 25;
 }
 
 void PlayScene::UIBtnClicked(std::vector<std::pair<float, Operator*>>::iterator it) {
@@ -497,6 +509,6 @@ std::vector<std::vector<int>> PlayScene::CalculateBFSDistance() {
 void PlayScene::TriggerCheat()
 {
     Engine::LOG(Engine::INFO) << "Triggering cheat";
-    EarnMoney(10000);
+    EarnDP(10000);
     EffectGroup->AddNewObject(new Plane());
 }
