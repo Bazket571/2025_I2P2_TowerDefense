@@ -13,10 +13,10 @@
 #include <sstream>
 
 #include "Entities/Enemies.hpp"
-#include "Enemy/Enemy.hpp"
-#include "Enemy/PlaneEnemy.hpp"
-#include "Enemy/SoldierEnemy.hpp"
-#include "Enemy/TankEnemy.hpp"
+//#include "Enemy/Enemy.hpp"
+//#include "Enemy/PlaneEnemy.hpp"
+//#include "Enemy/SoldierEnemy.hpp"
+//#include "Enemy/TankEnemy.hpp"
 #include "Engine/AudioHelper.hpp"
 #include "Engine/GameEngine.hpp"
 #include "Engine/Group.hpp"
@@ -24,15 +24,16 @@
 #include "Engine/Resources.hpp"
 #include "PlayScene.hpp"
 #include "3D/Object3D.hpp"
-#include "Turret/LaserTurret.hpp"
-#include "Turret/MachineGunTurret.hpp"
-#include "Turret/HomingTurret.hpp"
-#include "Turret/TurretButton.hpp"
+//#include "Turret/LaserTurret.hpp"
+//#include "Turret/MachineGunTurret.hpp"
+//#include "Turret/HomingTurret.hpp"
+//#include "Turret/TurretButton.hpp"
 #include "UI/Animation/DirtyEffect.hpp"
 #include "UI/Animation/Plane.hpp"
 #include "UI/Component/Label.hpp"
-#include <Turret/DefenderTurret.hpp>
-#include <Turret/FreezeTurret.hpp>
+#include "UI/Component/ImageButton.hpp"
+//#include <Turret/DefenderTurret.hpp>
+//#include <Turret/FreezeTurret.hpp>
 #include <Engine/spine/spine.hpp>
 #include "Entities/Operators.hpp"
 #include "UI/Video.hpp"
@@ -399,7 +400,7 @@ void PlayScene::UpdateEnemyWave(float deltaTime)
         StageSelectScene::isComplete[MapId] = true;
         if (MapId == "1-3") {
             StoryScene* scene = dynamic_cast<StoryScene*>(Engine::GameEngine::GetInstance().GetScene("story"));
-            scene->StageID = "1-4";
+            scene->StageID = "1-3B";
             Engine::GameEngine::GetInstance().ChangeScene("story");
             return;
         }
