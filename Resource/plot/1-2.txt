@@ -1,0 +1,153 @@
+﻿back 1-2A
+speRight Necrass/smile3 Eblana
+dia "Loughshinny."
+Doctor a 
+dia That high-pitched, almost enticingly eerie tone immediately makes Reed's head turn at the source of the call.
+dia She has been tending to the wounds of the soldiers assigned to protect her and Eblana for a while now, thus, giving less attention to the Leader of Dublinn as a result. A few more heads of the soldiers perk up at the voice of their superior.
+speLeft Reed/normal reed
+Doctor a 
+speRight Necrass/smile2 Eblana
+dia Eblana’s eyes just narrow into that one signature smile of hers again. There is something else mixed in this time, Reed frowns, and sure enough, her sister sighs.
+speLeft Reed/suprised Reed
+Doctor A
+speRight Necrass/smile2 Eblana
+dia “Come to my side, Loughshinny. I think my chest feels a little heavy.”
+Doctor a 
+dia Reed’s tail whips down onto the ground in alert, giving her that momentum to dash back to Eblana’s side. They can’t afford another heart attack. 
+speRight Necrass/smile2 Eblana
+dia “Oh, there you are. My vision was flashing for a second there.”
+speLeft Reed/normal Reed
+dia “You—”
+Doctor a 
+dia And as she is about to reach out to check on her, to see if there are any signs of an impending stroke - a half-faltered expression, a sluggish gaze, or a half-coherent mumble - Eblana pulls at her hand when it’s about to touch her face instead.
+dia Effortlessly, smoothly, the other Leader of the Dublinn drags Reed into her personal space, one arm snaking around her waist, the other still busy grasping her fingers, raising them up.
+speLeft Reed/YouAreSoDead Reed
+dia “Eblana–!”
+speRight Necrass/happy Eblana
+Doctor a 
+dia Reed hears her sister’s laughter, bold, loud, and proud at the sight of her own little scheme succeeding so easily. 
+speRight Necrass/happy Eblana
+dia “Oh Loughshinny. Naive Loughshinny. You just have to fall for it every time.”
+Doctor a 
+dia Despite her struggles and arguments, Eblana is insistent on doing a dance with her right here, right now, after the victory over their ambushers.
+dia When the blood has yet dried and the fires of death have yet extinguished themselves. 
+Doctor a
+speLeft Reed/AvertedEye Reed
+Doctor a
+speRight Necrass/smile1 Eblana
+dia “Loughshinny? If she had remained that child shivering in the snowy night, I would have sent her away in a life of peace and prosperity. Until death reunited us.”
+Doctor a 
+dia Reed looks at the Leader of Dublinn beside her, commanding the soldiers to clean away the muddy debris obstructing the living quarters of civilians. Her voice is always nerve-wrackingly clear.
+speLeft Reed/serious Reed
+speRight Necrass/smile1 Eblana
+dia “However, unfortunately, she became proficient in dancing between blades and lies. And you know how rare it is… to have a good and adorable dance partner.”
+Doctor a
+dia Dance partner. Dance partner. Eblana sees her as a partner, an equal. The affirmation of her own power somehow pricks its way into her heart, despite all her attempts to shield it out with her flames.
+Doctor a
+back 1-2B
+spamton a
+dia ...
+dia Tara was a developing land. It is still a developing land. Reed knows that Eblana is not proud of it, nor does she feel good about it.
+dia They both needed to do something about it, and maybe fate, in an unexpected, cruel twist of mind or burst of ideas, came to the realisation that they seem to be fitting candidates for the position of the King of Taran after all. Reed has chosen to take up the responsibilities and made up her mind to get ready for the difficulties she will have to face. 
+dia There is just so much work to do together, from simple, straightforward things such as clearing away the threats from human and nature, arranging housings and supplying food and water, to more complicated deals like negotiating political matters, handling business opportunities, and expanding their territory, their influence.
+dia At least they are dealing with one pressing problem: Ensuring that their people are not getting mauled by beasts tonight, next week, and in the future.
+dia Reed has never seemed to be able to be unfeeling about her choices, unlike Eblana, who is fully ready for her so-called “necessary sacrifices”. The pain she goes through sometimes urges her to reminisce about Eblana’s words, recorded and tucked away in some files she accidentally came across on Rhodes Island.
+speRight Necrass/smile3 Eblana
+dia “Loughshinny.”
+speLeft Reed/suprised Reed
+dia “...!”
+dia She almost jumps from the sudden call.
+speLeft Reed/serious Reed
+dia “Yes?”
+speRight Necrass/smile2 Eblana
+dia “I made our subordinates clean up the surrounding area. I will leave the cremation of the bodies to you, if you don’t mind.”
+Doctor a 
+dia Empty words void of true care – Eblana knows too well that she will get anything she wants out of her sister. Reed takes in a breath, then exhales
+speLeft Reed/serious Reed
+dia “I shall get to it later.”
+Doctor a
+dia That still seems to please Eblana. She makes a hum, coveted into a smile
+speRight Necrass/smile2 Eblana
+dia “That’s my Loughshinny, very capable. Very trustworthy.”
+speLeft Reed/blush Reed
+dia “No need to offer me such pointless flatteries. It is only my duty.”
+speRight Necrass/smile2 Eblana
+dia “...”
+speRight Necrass/smile3 Eblana
+Doctor a
+dia And if Eblana notices that the tips of her ears have turned red beneath the shadow of her horns and hair, she does not say anything.
+speLeft Reed/serious Reed
+dia “Eblana.”
+speRight Necrass/smile3 Eblana
+dia “Yes?”
+speLeft Reed/serious Reed
+dia “Stop smiling.”
+speRight Necrass/smile3 Eblana
+dia “But I’m not?”
+speLeft Reed/serious Reed
+dia “Your eyes are. And you are not even covering your mouth.”
+speRight Necrass/smile3 Eblana
+dia “I don’t think I am smiling. Maybe you got it wrong.”
+Doctor a
+dia A pause, then that wretched smile morphs into an outright grin
+speRight Necrass/smile1 Eblana
+dia “Are you okay, Loughshinny? You have been tense lately.”
+speLeft Reed/scared Reed
+dia “I…”
+speRight Necrass/smile1 Eblana
+dia “Or is it the battles? You have been putting in a lot of work, from fighting to healing, it is only reasonable that you would be tired.”
+Doctor a 
+dia Before Reed can even utter a word, Eblana, still looking as provocative and enraging as ever, continues.
+speRight Necrass/smile3 Eblana
+dia “I should have paid more attention to you, dear sister. It is a failure of mine, not noticing such a sorry state my Loughshinny is in—”
+speLeft NPC/soldier Soldier
+dia “Leader!!”
+speRight2 Reed/closeeye Eblana
+speRight Necrass/stare Eblana
+Doctor a 
+dia Both sisters freeze in their place. Reed seems to be able to let out a soft exhale, feeling the heat escaping her ears, face and horns. Eblana is not so subtle, however. She is clearly unhappy about whoever just interrupted her daily session of teasing Loughshinny, the flames on her chest fluttering in wild, pumping strokes.
+speRight Necrass/disgust Eblana
+Doctor a
+dia She turns her back to Reed to face the poor soldier that rushed in, 
+speRight Necrass/disgust Eblana
+dia “What is it?”
+Doctor a 
+dia And goodness gracious the smile on her face is scary. Like she is about to recruit this soldier right away into her personal Army of the Dead.
+speRight2 Reed/serious Reed
+speRight Necrass/normal Eblana
+speLeft NPC/soldier Soldier
+dia “L-Leaders.”
+Doctor a
+dia The soldier stumbles over his words, realising his mistake. Still, he keeps his stance steady and his shoulders tense.
+Doctor a
+dia Behind Eblana, Reed manages to regain her composure. She lets out a heavy sigh at the sight, then grabs her sister’s shoulder, stepping forward while pulling her back.
+dia If this honest man still stays even at the sight of Eblana’s displeasure, something must have happened. And it is quite a big thing.
+speRight Necrass/normal Eblana
+dia “What’s wrong?”
+speRight2 Reed/normal Eblana
+speRight Necrass/stare Eblana
+speLeft NPC/soldier Soldier
+dia “We got ambushed! The enemies are closing in from the front and the rear of our camp”
+Doctor a
+dia Reed hears Eblana’s sharp inhale at the same time as her own, “!!”
+thanos
+speLeft Reed/normal Eblana
+speRight Necrass/stare Eblana
+Doctor a 
+dia They both immediately stride outside. Reed is about to find the place she left her staff earlier only to see Eblana already nudging it into her hand.
+dia Before she can even say anything, a series of gnarly, muddy explosions thump into the air.
+dia Right at the front. Reed can catch a glimpse of the Brigadier’s enhanced strikes glaring at the tall grasses around him, multiple silhouettes ganging up around the man and his subordinates.
+speRight Necrass/smile2 Eblana
+dia “Oh my, that’s quite the situation.”
+Doctor a 
+dia A soft rustle and a quick clang - Eblana is checking on her equipment - mainly her stash of cards, papers, talismans, and her lance - which she just hit onto Reed’s own staff.
+dia A calm, even amused smile stays on her face, and as much as Reed does not want to admit it, the sight calms her nerves and the soldiers around them too.
+speRight Necrass/youAreSoDead Eblana
+dia “Shall we go for a dance, Loughshinny?” 
+Doctor a
+dia If not for the seriousness trickling in between those words, spoken in a joking tone, Reed might have given her sister a firm rebuttal. Instead, she nods.
+speLeft Reed/serious Reed
+dia “We should be quick, Eblana.”
+Doctor a 
+dia And she takes that outstretched hand again, knowing the purple flames of death will never be extinguished from them.
+end
