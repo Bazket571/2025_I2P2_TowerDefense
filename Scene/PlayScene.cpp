@@ -329,22 +329,22 @@ void PlayScene::ReadMap()
     for (int i = 0; i < MapHeight; i++) {
         for (int j = 0; j < MapWidth; j++) {
             mapState[i][j] = mapData[i * MapWidth + j];
-            Engine::Point scale = { (float)BlockSize/2, (float)BlockSize/2, (float)BlockSize/2 };
+            Engine::Point scale = { (float)BlockSize/2, (float)BlockSize/2, 1 };
             //TODO Map has only 2 states, change this
             switch(mapState[i][j]){
                 case TILE_LOW:
                     //TileMapGroup->AddNewObject(new Engine::Image("play/floor.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
-                    FieldGroup->AddNewObject(new Object3D("Resource/3D/TileLow.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 2 }, scale));
+                    FieldGroup->AddNewObject(new Object3D("Resource/3D/lground black.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 2 }, scale));
                     break;
                 case TILE_HIGH:
-                    FieldGroup->AddNewObject(new Object3D("Resource/3D/TileHigh.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 4 }, scale));
+                    FieldGroup->AddNewObject(new Object3D("Resource/3D/hground white.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 4 }, scale));
                     break;
                 case TILE_LOW | TILE_FORBIDDEN:
                     //TileMapGroup->AddNewObject(new Engine::Image("play/floor.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
-                    FieldGroup->AddNewObject(new Object3D("Resource/3D/TileLow.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 2 }, scale));
+                    FieldGroup->AddNewObject(new Object3D("Resource/3D/lground white.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 2 }, scale));
                     break;
                 case TILE_HIGH | TILE_FORBIDDEN:
-                    FieldGroup->AddNewObject(new Object3D("Resource/3D/TileHigh.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 4 }, scale));
+                    FieldGroup->AddNewObject(new Object3D("Resource/3D/hground black.glb", { (float)j * BlockSize, (float)i * BlockSize, (float)-BlockSize / 4 }, scale));
                     break;
                 case TILE_SPAWN:
                     SpawnGridPoint[spawnIndexOrder.front()] = Engine::Point(j, i);
