@@ -38,4 +38,4 @@ This is my final project for the Introduction To Programming 2 course at Nationa
 
 ---
 
-All Operators' and Enemies' media, story background and NPCs' images are copyrighted by Hypergriph, Studio Montagne and YoStar. https://www.arknights.global/
+All Operators' and Enemies' media, story background and NPCs' images are copyrighted by Hypergryph, Studio Montagne and YoStar. https://www.arknights.global/
