@@ -97,5 +97,7 @@ void Enemy::Update(float delta)
             Velocity = normalized * remainSpeed / delta;
             remainSpeed = 0;
         }
+        if (Velocity.x < 0) skeleton->setScaleX(-Scale.x);
+        else if (Velocity.x > 0) skeleton->setScaleX(Scale.x);
     }
 }
